@@ -2,74 +2,83 @@ syntax = "proto3";
 
 package config;
 
-option go_package = "dataplane/grpc"
+option go_package = "dataplane/grpc";
 
 service ConfigService {
-    rpc GetGlobalConfig (GetGlobalConfigRequest) returns (GlobalConfig);
-    rpc UpdateGlobalConfig (UpdateGlobalConfigRequest) returns (UpdateGlobalConfigResponse);
-    rpc CheckConfigGeneration (CheckConfigGenerationRequest) returns (CheckConfigGenerationResponse);
+  rpc GetConfig (GetConfigRequest) returns (GlobalConfig);
+  rpc GetConfigGeneration (GetConfigGenerationRequest) returns (GetConfigGenerationResponse);
+  rpc UpdateConfig (UpdateConfigRequest) returns (UpdateConfigResponse);
 }
 
-message GetGlobalConfigRequest {}
+message GetConfigRequest {}
 
-message UpdateGlobalConfigRequest {
-    GlobalConfig config = 1;
+message UpdateConfigRequest {
+  GlobalConfig config = 1;
 }
 
-message UpdateGlobalConfigResponse {
-    bool status = 1;
-    string message = 2;
+message UpdateConfigResponse {
+  Error error = 1;
+  string message = 2;
+}
+
+enum Error {
+  ERROR_NONE = 0;
+  ERROR_VALIDATION_FAILED = 1;
+  ERROR_APPLY_FAILED = 2;
+  ERROR_UNKNOWN_ERROR = 3;
 }
 
 message CheckConfigGenerationRequest {}
 
 message CheckConfigGenerationResponse {
-    uint64 generation = 1;
+  uint64 generation = 1;
 }
 
 message Subnet {
-    string name = 1;
-    string prefix = 2;
-    uint32 vni = 3;
+  string cidr = 1;
+  string name = 2;
+  uint32 vni = 3;
 }
 
-message VRF {
-    string name = 1;
-    repeated Subnet subnets = 2;
+message VPC {
+  string id = 1;
+  string name = 2;
+  string vrf = 3;
+  uint32 vni = 4;
+  repeated Subnet subnets = 5;
 }
 
 message Interface {
-    string name = 1;
-    uint32 index = 2;
-    string type = 3;
-    string address = 4;
-    string pci = 5;
-    uint32 vni = 6;
+  uint32 index = 1;
+  string ipaddr = 2;
+  string name = 3;
+  string pciaddr = 4;
+  string type = 5;
 }
 
 message PeeringIPs {
-    repeated string cidr = 1;
-    repeated string not = 2;
+  string cidr = 1;
+  string not = 2;
 }
 
 message PeeringAs {
-    repeated string cidr = 1;
-    repeated string not = 2;
+  string cidr = 1;
+  string not = 2;
 }
 
 message PeeringEntry {
-    PeeringIPs ips = 1;
-    PeeringAs as = 2;
+  repeated PeeringAs as = 1;
+  repeated PeeringIPs ips = 2;
 }
 
 message Peering {
-    string name = 1;
-    map<string, PeeringEntry> entries = 2;
+  string name = 1;
+  map<string, PeeringEntry> entries = 2;
 }
 
 message GlobalConfig {
-    repeated VRF vrfs = 1;
-    repeated Interface interfaces = 2;
-    repeated Peering peerings = 3;
-    uint64 generation = 4;
+  uint64 generation = 1;
+  repeated Interface interfaces = 2;
+  repeated Peering peerings = 3;
+  repeated VPC vpcs = 4;
 }
