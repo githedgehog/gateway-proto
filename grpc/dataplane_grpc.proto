@@ -28,6 +28,12 @@ enum Error {
   ERROR_UNKNOWN_ERROR = 3;
 }
 
+enum IfType {
+  IF_TYPE_UPLINK = 0;
+  IF_TYPE_MANAGEMENT = 1;
+  IF_TYPE_VXLAN = 2;
+}
+
 message CheckConfigGenerationRequest {}
 
 message CheckConfigGenerationResponse {
@@ -53,7 +59,7 @@ message Interface {
   string ipaddr = 2;
   string name = 3;
   string pciaddr = 4;
-  string type = 5;
+  IfType type = 5;
 }
 
 message PeeringIPs {
