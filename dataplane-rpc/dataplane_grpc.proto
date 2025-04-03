@@ -52,6 +52,7 @@ message VPC {
   string id = 1;
   string name = 2;
   string vrf = 3;
+  uint32 vni = 4;
   repeated Subnet subnets = 5;
 }
 
@@ -116,7 +117,7 @@ message RouterConfig {
 message VRF {
   string name = 1;
   RouterConfig router = 2;
-  VPC vpcs = 3;
+  repeated VPC vpcs = 3;
 }
 
 message GatewayConfig {
