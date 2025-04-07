@@ -1,0 +1,7 @@
+To generate golang bindings:
+
+```
+cd <proto folder>
+protoc --go_out=. --go-grpc_out=. dataplane.proto
+cp -r dataplane/grpc ../go_client/.
+```
