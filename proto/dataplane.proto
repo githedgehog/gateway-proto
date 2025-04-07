@@ -51,8 +51,7 @@ message VPC {
   string id = 1;
   string name = 2;
   uint32 vni = 3;
-  string vrf = 4;
-  repeated Subnet subnets = 5;
+  repeated Subnet subnets = 4;
 }
 
 message Device {
