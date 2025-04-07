@@ -45,13 +45,13 @@ message GetConfigGenerationResponse {
 message Subnet {
   string cidr = 1;
   string name = 2;
-  uint32 vni = 3;
 }
 
 message VPC {
   string id = 1;
   string name = 2;
-  string vrf = 3;
+  uint32 vni = 3;
+  string vrf = 4;
   repeated Subnet subnets = 5;
 }
 
@@ -95,13 +95,13 @@ message BgpAddressFamilyOptions {
 message BgpNeighbor {
   string address = 1;
   string remote_asn = 2;
-  repeated string address_families = 3; // "ipv4", "l2vpn"
+  repeated string address_families = 3;
 }
 
 message RouteMap {
   string name = 1;
   repeated string match_prefix_lists = 2;
-  string action = 3; // "permit" or "deny"
+  string action = 3;
   uint32 sequence = 4;
 }
 
@@ -116,7 +116,7 @@ message RouterConfig {
 message VRF {
   string name = 1;
   RouterConfig router = 2;
-  VPC vpcs = 3;
+  VPC vpc = 3;
 }
 
 message GatewayConfig {
