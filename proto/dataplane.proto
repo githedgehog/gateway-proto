@@ -65,41 +65,37 @@ enum IfRole {
 /* ==== Overlay ==== */
 /* ================= */
 
-message PeeringIPs {
+message VpcSubnetAs {
   string cidr = 1;
-  string not = 2;
+  repeated string exclude = 2;
 }
-message PeeringAs {
-  string cidr = 1;
-  string not = 2;
+
+message VpcSubnet {
+  string name = 1; /* informational subnet name -- may be used for stats */
+  string cidr = 2;
+  repeated string exclude = 3;
+  optional VpcSubnetAs as = 4;
 }
 
 message PeeringEntryFor {
   string vpc = 1;
-  repeated PeeringIPs ips = 2;
-  repeated PeeringAs as = 3;
+  repeated VpcSubnet subnets = 2;
 }
 
-message Peering {
+message VpcPeering {
   string name = 1; /* unique: e.g. VPC-1--VPC-2 */
   repeated PeeringEntryFor = 2;
-}
-
-message Subnet {
-  string cidr = 1;
-  string name = 2; /* maybe used for stats - DP will ignore atm */
 }
 
 message VPC {
   string name = 1; /* unique (key) */
   uint32 vni = 2;
-  repeated Subnet subnets = 3;
-  repeated Interface interfaces = 4;
+  repeated Interface interfaces = 3;
 }
 
 message Overlay {
-  repeated Peering peerings = 1;
-  repeated VPC vpcs = 2;
+  repeated VPC vpcs = 1;
+  repeated VpcPeering peerings = 2;
 }
 
 /* ================== */
