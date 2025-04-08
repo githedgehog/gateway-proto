@@ -29,12 +29,6 @@ enum Error {
   ERROR_UNKNOWN_ERROR = 3;
 }
 
-enum IfType {
-  IF_TYPE_UPLINK = 0;
-  IF_TYPE_MANAGEMENT = 1;
-  IF_TYPE_VXLAN = 2;
-}
-
 message GetConfigGenerationRequest {
 }
 
@@ -42,59 +36,98 @@ message GetConfigGenerationResponse {
   uint64 generation = 1;
 }
 
-message Subnet {
-  string cidr = 1;
-  string name = 2;
-}
 
-message VPC {
-  string id = 1;
-  string name = 2;
-  uint32 vni = 3;
-  repeated Subnet subnets = 4;
-}
+/* ================================================ */
+/* ==== Interfaces (both underlat and overlay) ==== */
+/* ================================================ */
 
-message Device {
-  uint32 index = 1;
+message Interface {
+  string name = 1;
   string ipaddr = 2;
-  string name = 3;
-  string pciaddr = 4;
-  IfType type = 5;
+  IfType type = 3;
+  IfRole role = 4;
 }
+
+enum IfType {
+  IF_TYPE_ETHERNET = 0;
+  IF_TYPE_VLAN = 1;
+  IF_TYPE_LOOPBACK = 2;
+  IF_TYPE_VTEP = 3;
+}
+
+enum IfRole {
+  IF_ROLE_FABRIC = 0;
+  IF_ROLE_MANAGEMENT = 1;
+  IF_ROLE_EXTERNAL = 2;
+}
+
+/* ================= */
+/* ==== Overlay ==== */
+/* ================= */
 
 message PeeringIPs {
   string cidr = 1;
   string not = 2;
 }
-
 message PeeringAs {
   string cidr = 1;
   string not = 2;
 }
 
-message PeeringEntry {
-  repeated PeeringAs as = 1;
+message PeeringEntryFor {
+  string vpc = 1;
   repeated PeeringIPs ips = 2;
+  repeated PeeringAs as = 3;
 }
 
 message Peering {
-  string name = 1;
-  map<string, PeeringEntry> entries = 2;
+  string name = 1; /* unique: e.g. VPC-1--VPC-2 */
+  repeated PeeringEntryFor = 2;
 }
 
-message BgpAddressFamilyOptions {
+message Subnet {
+  string cidr = 1;
+  string name = 2; /* maybe used for stats - DP will ignore atm */
+}
+
+message VPC {
+  string name = 1; /* unique (key) */
+  uint32 vni = 2;
+  repeated Subnet subnets = 3;
+  repeated Interface interfaces = 4;
+}
+
+message Overlay {
+  repeated Peering peerings = 1;
+  repeated VPC vpcs = 2;
+}
+
+/* ================== */
+/* ==== Underlay ==== */
+/* ================== */
+
+message BgpAddressFamilyIPv4 {
   bool redistribute_connected = 1;
   bool redistribute_static = 2;
-  bool send_community = 3;
-  bool advertise_all_vni = 4;
-  bool ipv4_enable = 5;
-  bool l2vpn_enable = 6;
+}
+message BgpAddressFamilyIPv6 {
+  bool redistribute_connected = 1;
+  bool redistribute_static = 2;
+}
+message BgpAddressFamilyL2vpnEvpn {
+  bool advertise_all_vni = 1;
+}
+
+enum BgpAF {
+  IPV4_UNICAST = 0;
+  IPV6_UNICAST = 1;
+  L2VPN_EVPN = 2;
 }
 
 message BgpNeighbor {
   string address = 1;
   string remote_asn = 2;
-  repeated string address_families = 3;
+  repeated BgpAF af_activate = 3;
 }
 
 message RouteMap {
@@ -103,24 +136,71 @@ message RouteMap {
   string action = 3;
   uint32 sequence = 4;
 }
-
 message RouterConfig {
   string asn = 1;
   string router_id = 2;
   repeated BgpNeighbor neighbors = 3;
-  repeated BgpAddressFamilyOptions options = 4;
+  optional BgpAddressFamilyIPv4 ipv4_unicast = 4;
+  optional BgpAddressFamilyIPv6 ipv6_unicast = 5;
+  optional BgpAddressFamilyL2vpnEvpn l2vpn_evpn = 6;
   repeated RouteMap route_maps = 5;
 }
-
 message VRF {
   string name = 1;
-  RouterConfig router = 2;
-  VPC vpc = 3;
+  repeated Interface interfaces = 2;
+  optional RouterConfig router = 3;
 }
+message Underlay {
+  repeated VRF vrf = 1;
+}
+
+/* ================ */
+/* ==== Device ==== */
+/* ================ */
+
+message Ports {
+  string name = 1;
+  string pciaddr = 2;
+}
+
+message Eal {
+  // TODO:
+  // rte_eal params
+  // cpu list
+  // cpu affinities ...
+  // huge-pages
+}
+
+enum LogLevel {
+  ERROR = 0;
+  WARNING = 1;
+  INFO = 2;
+  DEBUG = 3;
+  TRACE = 4;
+}
+
+enum PacketDriver {
+  KERNEL = 0;
+  DPDK = 1;
+}
+
+
+message Device {
+  PacketDriver driver = 1;
+  Eal eal = 2;
+  repeated Ports ports = 3;
+  string hostname = 4;
+  LogLevel loglevel = 5;
+}
+
+/* ================ */
+/* ====== All ===== */
+/* ================ */
 
 message GatewayConfig {
   uint64 generation = 1;
-  repeated Device devices = 2;
-  repeated Peering peerings = 3;
-  repeated VRF vrfs = 4;
+  Device device = 2;
+  Underlay underlay = 3;
+  Overlay overlay = 4;
 }
+
