@@ -6,7 +6,7 @@ import (
 	"log"
 	"time"
 
-	pb "go_client/dataplane/grpc"
+	pb "go_client/dataplane/grpc" // adjust the import path as needed
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -18,12 +18,12 @@ func main() {
 		log.Fatalf("did not connect: %v", err)
 	}
 	defer conn.Close()
+
 	client := pb.NewConfigServiceClient(conn)
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	// 🔧 Constructing a minimal sane config
 	newConfig := &pb.GatewayConfig{
 		Devices: []*pb.Device{
 			{
@@ -39,15 +39,20 @@ func main() {
 				Name: "peer-group-1",
 				Entries: map[string]*pb.PeeringEntry{
 					"10.0.0.0/24": {
-						Ips: []*pb.PeeringIPs{{Cidr: "10.0.0.0/24"}},
-						As:  []*pb.PeeringAs{{Cidr: "65001"}},
+						Ips: []*pb.PeeringIPs{
+							{Rule: &pb.PeeringIPs_Cidr{Cidr: "10.0.0.0/24"}},
+							{Rule: &pb.PeeringIPs_Not{Not: "10.0.0.22/32"}},
+						},
+						As: []*pb.PeeringAs{
+							{Rule: &pb.PeeringAs_Cidr{Cidr: "192.168.4.4/32"}},
+						},
 					},
 				},
 			},
 		},
 		Vrfs: []*pb.VRF{
 			{
-				Name: "vrf-vpc-1",
+				Name: "blue",
 				Router: &pb.RouterConfig{
 					Asn:      "65000",
 					RouterId: "192.168.1.1",
@@ -67,15 +72,15 @@ func main() {
 					RouteMaps: []*pb.RouteMap{
 						{
 							Name:             "EXPORT_ALL",
-							MatchPrefixLists: []string{"0.0.0.0/0"},
+							MatchPrefixLists: []string{"ALL"},
 							Action:           "permit",
 							Sequence:         10,
 						},
 					},
 				},
 				Vpc: &pb.VPC{
-					Id:   "greatest-vpc-1",
-					Name: "vpc-1",
+					Id:   "vpc-1",
+					Name: "internal",
 					Vni:  1001,
 					Subnets: []*pb.Subnet{
 						{
@@ -88,14 +93,12 @@ func main() {
 		},
 	}
 
-	// 🔄 Send the new config
 	updateResp, err := client.UpdateConfig(ctx, &pb.UpdateConfigRequest{Config: newConfig})
 	if err != nil {
 		log.Fatalf("could not update config: %v", err)
 	}
 	fmt.Println("Update response:", updateResp.Message)
 
-	// ✅ Fetch updated config
 	res, err := client.GetConfig(ctx, &pb.GetConfigRequest{})
 	if err != nil {
 		log.Fatalf("could not get config: %v", err)

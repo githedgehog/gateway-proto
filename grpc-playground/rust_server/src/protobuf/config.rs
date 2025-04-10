@@ -53,17 +53,33 @@ pub struct Device {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PeeringIPs {
-    #[prost(string, tag = "1")]
-    pub cidr: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub not: ::prost::alloc::string::String,
+    #[prost(oneof = "peering_i_ps::Rule", tags = "1, 2")]
+    pub rule: ::core::option::Option<peering_i_ps::Rule>,
+}
+/// Nested message and enum types in `PeeringIPs`.
+pub mod peering_i_ps {
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Rule {
+        #[prost(string, tag = "1")]
+        Cidr(::prost::alloc::string::String),
+        #[prost(string, tag = "2")]
+        Not(::prost::alloc::string::String),
+    }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PeeringAs {
-    #[prost(string, tag = "1")]
-    pub cidr: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub not: ::prost::alloc::string::String,
+    #[prost(oneof = "peering_as::Rule", tags = "1, 2")]
+    pub rule: ::core::option::Option<peering_as::Rule>,
+}
+/// Nested message and enum types in `PeeringAs`.
+pub mod peering_as {
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Rule {
+        #[prost(string, tag = "1")]
+        Cidr(::prost::alloc::string::String),
+        #[prost(string, tag = "2")]
+        Not(::prost::alloc::string::String),
+    }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PeeringEntry {

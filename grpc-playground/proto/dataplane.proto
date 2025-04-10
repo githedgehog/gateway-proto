@@ -63,13 +63,17 @@ message Device {
 }
 
 message PeeringIPs {
-  string cidr = 1;
-  string not = 2;
+  oneof rule {
+    string cidr = 1;
+    string not = 2;
+  }
 }
 
 message PeeringAs {
-  string cidr = 1;
-  string not = 2;
+  oneof rule {
+    string cidr = 1;
+    string not = 2;
+  }
 }
 
 message PeeringEntry {
