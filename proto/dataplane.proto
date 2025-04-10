@@ -65,21 +65,24 @@ enum IfRole {
 /* ==== Overlay ==== */
 /* ================= */
 
-message VpcSubnetAs {
-  string cidr = 1;
-  repeated string exclude = 2;
+message PeeringIPs {
+  oneof rule {
+    string cidr = 1;
+    string not = 2;
+  }
 }
 
-message VpcSubnet {
-  string name = 1; /* informational subnet name -- may be used for stats */
-  string cidr = 2;
-  repeated string exclude = 3;
-  optional VpcSubnetAs as = 4;
+message PeeringAs {
+  oneof rule {
+    string cidr = 1;
+    string not = 2;
+  }
 }
 
 message PeeringEntryFor {
   string vpc = 1;
-  repeated VpcSubnet subnets = 2;
+  repeated PeeringIPs = 2;
+  repeated PeeringAs = 3;
 }
 
 message VpcPeering {
