@@ -1,8 +1,11 @@
+// Copyright 2025 Hedgehog
+// SPDX-License-Identifier: Apache-2.0
+
 syntax = "proto3";
 
 package config;
 
-option go_package = "dataplane/grpc";
+option go_package = "pkg/dataplane";
 
 service ConfigService {
   rpc GetConfig (GetConfigRequest) returns (GatewayConfig);
