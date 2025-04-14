@@ -36,9 +36,8 @@ message GetConfigGenerationResponse {
   uint64 generation = 1;
 }
 
-
 /* ================================================ */
-/* ==== Interfaces (both underlat and overlay) ==== */
+/* ==== Interfaces (both underlay and overlay) ==== */
 /* ================================================ */
 
 message Interface {
@@ -57,8 +56,7 @@ enum IfType {
 
 enum IfRole {
   IF_ROLE_FABRIC = 0;
-  IF_ROLE_MANAGEMENT = 1;
-  IF_ROLE_EXTERNAL = 2;
+  IF_ROLE_EXTERNAL = 1;
 }
 
 /* ================= */
@@ -80,18 +78,18 @@ message PeeringAs {
 }
 
 message Expose {
-  repeated PeeringIPs = 1;
-  repeated PeeringAs = 2;
+  repeated PeeringIPs ips = 1;
+  repeated PeeringAs as = 2;
 }
 
 message PeeringEntryFor {
   string vpc = 1;
-  repeated Expose = 2;
+  repeated Expose expose = 2;
 }
 
 message VpcPeering {
   string name = 1; /* unique: e.g. VPC-1--VPC-2 */
-  repeated PeeringEntryFor = 2;
+  repeated PeeringEntryFor for = 2;
 }
 
 message VPC {
@@ -113,10 +111,12 @@ message BgpAddressFamilyIPv4 {
   bool redistribute_connected = 1;
   bool redistribute_static = 2;
 }
+
 message BgpAddressFamilyIPv6 {
   bool redistribute_connected = 1;
   bool redistribute_static = 2;
 }
+
 message BgpAddressFamilyL2vpnEvpn {
   bool advertise_all_vni = 1;
 }
@@ -139,6 +139,7 @@ message RouteMap {
   string action = 3;
   uint32 sequence = 4;
 }
+
 message RouterConfig {
   string asn = 1;
   string router_id = 2;
@@ -146,13 +147,15 @@ message RouterConfig {
   optional BgpAddressFamilyIPv4 ipv4_unicast = 4;
   optional BgpAddressFamilyIPv6 ipv6_unicast = 5;
   optional BgpAddressFamilyL2vpnEvpn l2vpn_evpn = 6;
-  repeated RouteMap route_maps = 5;
+  repeated RouteMap route_maps = 7;
 }
+
 message VRF {
   string name = 1;
   repeated Interface interfaces = 2;
   optional RouterConfig router = 3;
 }
+
 message Underlay {
   repeated VRF vrf = 1;
 }
@@ -163,7 +166,7 @@ message Underlay {
 
 message Ports {
   string name = 1;
-  string pciaddr = 2;
+  string system_name = 2;
 }
 
 message Eal {
@@ -187,7 +190,6 @@ enum PacketDriver {
   DPDK = 1;
 }
 
-
 message Device {
   PacketDriver driver = 1;
   Eal eal = 2;
@@ -206,4 +208,3 @@ message GatewayConfig {
   Underlay underlay = 3;
   Overlay overlay = 4;
 }
-
