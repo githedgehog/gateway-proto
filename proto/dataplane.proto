@@ -79,10 +79,14 @@ message PeeringAs {
   }
 }
 
+message Expose {
+  repeated PeeringIPs = 1;
+  repeated PeeringAs = 2;
+}
+
 message PeeringEntryFor {
   string vpc = 1;
-  repeated PeeringIPs = 2;
-  repeated PeeringAs = 3;
+  repeated Expose = 2;
 }
 
 message VpcPeering {
