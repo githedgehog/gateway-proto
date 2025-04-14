@@ -2,107 +2,71 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"log"
 	"time"
 
-	pb "go_client/dataplane/grpc" // adjust the import path as needed
+	pb "gateway-client/dataplane/grpc"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
+var (
+	serverAddr = flag.String("server", "localhost:50051", "The server address in the format of host:port")
+)
+
 func main() {
-	conn, err := grpc.Dial("localhost:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	flag.Parse()
+
+	// Set up a connection to the server
+	conn, err := grpc.NewClient(*serverAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		log.Fatalf("did not connect: %v", err)
+		log.Fatalf("Failed to connect: %v", err)
 	}
 	defer conn.Close()
 
 	client := pb.NewConfigServiceClient(conn)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	// Create context with timeout
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
+	// Example: Get current config
+	config, err := client.GetConfig(ctx, &pb.GetConfigRequest{})
+	if err != nil {
+		log.Fatalf("Could not get config: %v", err)
+	}
+	fmt.Printf("Current config generation: %d\n", config.Generation)
+
+	// Example: Get config generation
+	genResponse, err := client.GetConfigGeneration(ctx, &pb.GetConfigGenerationRequest{})
+	if err != nil {
+		log.Fatalf("Could not get config generation: %v", err)
+	}
+	fmt.Printf("Config generation: %d\n", genResponse.Generation)
+
+	// Example: Update config (simplified)
+	// In a real client, you'd construct a more complete config
 	newConfig := &pb.GatewayConfig{
-		Devices: []*pb.Device{
-			{
-				Name:    "eth0",
-				Index:   1,
-				Ipaddr:  "192.168.1.10",
-				Pciaddr: "0000:03:00.0",
-				Type:    pb.IfType_IF_TYPE_UPLINK,
-			},
-		},
-		Peerings: []*pb.Peering{
-			{
-				Name: "peer-group-1",
-				Entries: map[string]*pb.PeeringEntry{
-					"10.0.0.0/24": {
-						Ips: []*pb.PeeringIPs{
-							{Rule: &pb.PeeringIPs_Cidr{Cidr: "10.0.0.0/24"}},
-							{Rule: &pb.PeeringIPs_Not{Not: "10.0.0.22/32"}},
-						},
-						As: []*pb.PeeringAs{
-							{Rule: &pb.PeeringAs_Cidr{Cidr: "192.168.4.4/32"}},
-						},
-					},
-				},
-			},
-		},
-		Vrfs: []*pb.VRF{
-			{
-				Name: "blue",
-				Router: &pb.RouterConfig{
-					Asn:      "65000",
-					RouterId: "192.168.1.1",
-					Neighbors: []*pb.BgpNeighbor{
-						{
-							Address:         "10.0.0.1",
-							RemoteAsn:       "65001",
-							AddressFamilies: []string{"ipv4"},
-						},
-					},
-					Options: []*pb.BgpAddressFamilyOptions{
-						{
-							RedistributeConnected: true,
-							Ipv4Enable:            true,
-						},
-					},
-					RouteMaps: []*pb.RouteMap{
-						{
-							Name:             "EXPORT_ALL",
-							MatchPrefixLists: []string{"ALL"},
-							Action:           "permit",
-							Sequence:         10,
-						},
-					},
-				},
-				Vpc: &pb.VPC{
-					Id:   "vpc-1",
-					Name: "internal",
-					Vni:  1001,
-					Subnets: []*pb.Subnet{
-						{
-							Cidr: "192.168.10.0/24",
-							Name: "subnet-1",
-						},
-					},
-				},
-			},
+		Generation: genResponse.Generation + 1,
+		Device: &pb.Device{
+			Hostname: "gateway-1",
+			Loglevel: pb.LogLevel_INFO,
+			Driver:   pb.PacketDriver_KERNEL,
 		},
 	}
 
-	updateResp, err := client.UpdateConfig(ctx, &pb.UpdateConfigRequest{Config: newConfig})
+	updateResponse, err := client.UpdateConfig(ctx, &pb.UpdateConfigRequest{Config: newConfig})
 	if err != nil {
-		log.Fatalf("could not update config: %v", err)
-	}
-	fmt.Println("Update response:", updateResp.Message)
-
-	res, err := client.GetConfig(ctx, &pb.GetConfigRequest{})
-	if err != nil {
-		log.Fatalf("could not get config: %v", err)
+		log.Fatalf("Could not update config: %v", err)
 	}
 
-	fmt.Printf("Updated GatewayConfig: %+v\n", res)
+	if updateResponse.Error == pb.Error_ERROR_NONE {
+		fmt.Println("Config updated successfully")
+	} else {
+		fmt.Printf("Config update failed: %s (error code: %v)\n",
+			updateResponse.Message, updateResponse.Error)
+	}
 }

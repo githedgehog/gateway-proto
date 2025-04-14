@@ -1,12 +1,10 @@
-module go_client
+module gateway-client
 
-go 1.22.0
-
-toolchain go1.22.2
+go 1.22.2
 
 require (
-	google.golang.org/grpc v1.64.1
-	google.golang.org/protobuf v1.36.4
+	google.golang.org/grpc v1.71.1
+	google.golang.org/protobuf v1.36.6
 )
 
 require (
