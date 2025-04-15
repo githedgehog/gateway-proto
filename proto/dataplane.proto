@@ -45,6 +45,9 @@ message Interface {
   string ipaddr = 2;
   IfType type = 3;
   IfRole role = 4;
+  uint32 vlan = 5;
+  string macaddr = 6;
+  string portname = 7;
 }
 
 enum IfType {
@@ -87,9 +90,10 @@ message PeeringEntryFor {
   repeated Expose expose = 2;
 }
 
+/* There can be only one peering per a pair of given VPCs */
 message VpcPeering {
   string name = 1; /* unique: e.g. VPC-1--VPC-2 */
-  repeated PeeringEntryFor for = 2;
+  repeated PeeringEntryFor for = 2; /* it's guaranteed that only two entries are present */
 }
 
 message VPC {
