@@ -19,3 +19,6 @@ lint: _license_headers _gotools
 _path := `echo $PATH`
 gen: _protoc _protoc_gen_go _protoc_gen_go_grpc && lint
   PATH={{_path}}:{{localbinpath}} {{protoc}} --go_out=. --go-grpc_out=. ./proto/dataplane.proto
+
+test: gen
+  go test -v ./...
