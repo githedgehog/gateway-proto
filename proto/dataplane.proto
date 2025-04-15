@@ -40,16 +40,18 @@ message GetConfigGenerationResponse {
 /* ==== Interfaces (both underlay and overlay) ==== */
 /* ================================================ */
 
+/* Defines a logical interface. May correlate with physical representation */
 message Interface {
   string name = 1;
   string ipaddr = 2;
   IfType type = 3;
   IfRole role = 4;
-  uint32 vlan = 5;
-  string macaddr = 6;
-  string portname = 7;
+  optional uint32 vlan = 5; /* only if VLAN role is defined */
+  optional string macaddr = 6; /* Base MAC address to be used to generate unified MAC for VTEP */
+  optional string system_name = 7; /* Parent interface for VLAN devices, only for VLAN role */
 }
 
+/* Defines interface representation on the Gateway */
 enum IfType {
   IF_TYPE_ETHERNET = 0;
   IF_TYPE_VLAN = 1;
@@ -57,6 +59,7 @@ enum IfType {
   IF_TYPE_VTEP = 3;
 }
 
+/* For physical interface - fabric-facing or external-facing */
 enum IfRole {
   IF_ROLE_FABRIC = 0;
   IF_ROLE_EXTERNAL = 1;
@@ -66,6 +69,7 @@ enum IfRole {
 /* ==== Overlay ==== */
 /* ================= */
 
+/* Defines the list of prefixes that VPCs can expose */
 message PeeringIPs {
   oneof rule {
     string cidr = 1;
@@ -73,6 +77,7 @@ message PeeringIPs {
   }
 }
 
+/* Defines the list of prefixes that exposing IPs will be translated to */
 message PeeringAs {
   oneof rule {
     string cidr = 1;
@@ -80,17 +85,20 @@ message PeeringAs {
   }
 }
 
+/* Defines a rule between exposing IP and translated */
 message Expose {
   repeated PeeringIPs ips = 1;
   repeated PeeringAs as = 2;
 }
 
+/* Defines a list of exposures per VPC */
 message PeeringEntryFor {
   string vpc = 1;
   repeated Expose expose = 2;
 }
 
-/* There can be only one peering per a pair of given VPCs */
+/* Defines peering relation between VPCs */
+/* There can be only one peering per pair of given VPCs */
 message VpcPeering {
   string name = 1; /* unique: e.g. VPC-1--VPC-2 */
   repeated PeeringEntryFor for = 2; /* it's guaranteed that only two entries are present */
@@ -102,6 +110,7 @@ message VPC {
   repeated Interface interfaces = 3;
 }
 
+/* Description of VPCs and Peerings between VPCs */
 message Overlay {
   repeated VPC vpcs = 1;
   repeated VpcPeering peerings = 2;
@@ -111,32 +120,38 @@ message Overlay {
 /* ==== Underlay ==== */
 /* ================== */
 
+/* BGP options for IPv4 UNICAST AFI */
 message BgpAddressFamilyIPv4 {
   bool redistribute_connected = 1;
   bool redistribute_static = 2;
 }
 
+/* BGP options for IPv6 UNICAST AFI */
 message BgpAddressFamilyIPv6 {
   bool redistribute_connected = 1;
   bool redistribute_static = 2;
 }
 
+/* BGP options for L2VPN EVPN AFI */
 message BgpAddressFamilyL2vpnEvpn {
   bool advertise_all_vni = 1;
 }
 
+/* AFIs supported for BGP peering */
 enum BgpAF {
   IPV4_UNICAST = 0;
   IPV6_UNICAST = 1;
   L2VPN_EVPN = 2;
 }
 
+/* BGP neighbor config */
 message BgpNeighbor {
   string address = 1;
   string remote_asn = 2;
   repeated BgpAF af_activate = 3;
 }
 
+/* IP Prefix filtering route map description */
 message RouteMap {
   string name = 1;
   repeated string match_prefix_lists = 2;
@@ -144,6 +159,7 @@ message RouteMap {
   uint32 sequence = 4;
 }
 
+/* BGP Router config description for VRFs */
 message RouterConfig {
   string asn = 1;
   string router_id = 2;
@@ -154,12 +170,14 @@ message RouterConfig {
   repeated RouteMap route_maps = 7;
 }
 
+/* VRF description with list of connected interfaces and its BGP config */
 message VRF {
   string name = 1;
   repeated Interface interfaces = 2;
   optional RouterConfig router = 3;
 }
 
+/* List of all non-VPC VRFs */
 message Underlay {
   repeated VRF vrf = 1;
 }
@@ -168,11 +186,13 @@ message Underlay {
 /* ==== Device ==== */
 /* ================ */
 
+/* Defines physical or system-level device */
 message Ports {
   string name = 1;
   string system_name = 2;
 }
 
+/* RTE EAL config options for DPDK */
 message Eal {
   // TODO:
   // rte_eal params
@@ -181,6 +201,7 @@ message Eal {
   // huge-pages
 }
 
+/* Log-level for dataplane and DPDK */
 enum LogLevel {
   ERROR = 0;
   WARNING = 1;
@@ -189,11 +210,13 @@ enum LogLevel {
   TRACE = 4;
 }
 
+/* Backend driver for packet processing */
 enum PacketDriver {
   KERNEL = 0;
   DPDK = 1;
 }
 
+/* System level config options */
 message Device {
   PacketDriver driver = 1;
   Eal eal = 2;
@@ -206,6 +229,7 @@ message Device {
 /* ====== All ===== */
 /* ================ */
 
+/* Complete Gateway config options */
 message GatewayConfig {
   uint64 generation = 1;
   Device device = 2;
