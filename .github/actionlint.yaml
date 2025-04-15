@@ -1,0 +1,6 @@
+self-hosted-runner:
+  labels:
+    - lab
+    - vlab
+    - lab-h
+    - vlab-h
