@@ -1,12 +1,12 @@
 [package]
 name = "gateway-config"
 version = "0.1.0"
-edition = "2021"
-liciense = "Apache-2.0"
+edition = "2024"
+license = "Apache-2.0"
 
 [features]
 default = []
-regenerate = ["dep:tonic-build"]
+regenerate = ["dep:tonic-build", "dep:protoc-bin-vendored"]
 
 [dependencies]
 tonic = "0.13"
@@ -21,6 +21,6 @@ serde_json = "1.0"
 tower = "0.5.2"
 tokio-stream = { version = "0.1", features = ["net"] }
 
-[build-dependencies.tonic-build]
-version = "0.13"
-optional = true
+[build-dependencies]
+tonic-build = {version = "0.13", optional = true }
+protoc-bin-vendored = { version = "3.1.0", optional = true }

@@ -48,6 +48,11 @@ jobs:
       - name: Setup Just
         uses: extractions/setup-just@v3
 
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: stable
+
       - name: Lint and generate code
         run: |
           just --timestamp lint-gha gen lint
@@ -64,8 +69,8 @@ jobs:
       # Don't remove it! We shouldn't allow CI to pass if there are any changes not committed after running gen/lint/test
       - name: Fail on dirty
         run: |
-          if ! git status --short ':(exclude)vendor' ':(exclude)src/generated' || ! git diff --quiet ':(exclude)vendor' ':(exclude)src/generated'; then
-            git --no-pager diff -- . ':(exclude)vendor' ':(exclude)src/generated'
+          if ! git status --short || ! git diff --quiet; then
+            git --no-pager diff -- . :^vendor
             echo "::error::Working directory is dirty. Please run 'just gen lint && go mod tidy && go mod vendor' and commit the changes."
             exit 1
           fi
