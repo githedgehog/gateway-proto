@@ -1,3 +1,6 @@
+// Copyright 2025 Hedgehog
+// SPDX-License-Identifier: Apache-2.0
+
 pub mod config {
     include!("generated/config.rs");
 }
@@ -5,6 +8,7 @@ pub mod config {
 pub use config::{
     // Service definitions
     config_service_server::{ConfigService, ConfigServiceServer},
+    config_service_client::ConfigServiceClient,
     
     // Request/Response types
     GetConfigRequest,

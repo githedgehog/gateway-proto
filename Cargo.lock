@@ -269,7 +269,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "gateway-server"
+name = "gateway-config"
 version = "0.1.0"
 dependencies = [
  "async-trait",
@@ -278,8 +278,10 @@ dependencies = [
  "serde",
  "serde_json",
  "tokio",
+ "tokio-stream",
  "tonic",
  "tonic-build",
+ "tower",
 ]
 
 [[package]]
