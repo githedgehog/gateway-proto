@@ -108,9 +108,10 @@ message VpcPeering {
 }
 
 message VPC {
-  string name = 1; /* unique (key) */
-  uint32 vni = 2;
-  repeated Interface interfaces = 3;
+  string id = 1; /* unique */
+  string name = 2; /* unique (key) */
+  uint32 vni = 3;
+  repeated Interface interfaces = 4;
 }
 
 /* Description of VPCs and Peerings between VPCs */

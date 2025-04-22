@@ -961,9 +961,10 @@ func (x *VpcPeering) GetFor() []*PeeringEntryFor {
 
 type VPC struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"` // unique (key)
-	Vni           uint32                 `protobuf:"varint,2,opt,name=vni,proto3" json:"vni,omitempty"`
-	Interfaces    []*Interface           `protobuf:"bytes,3,rep,name=interfaces,proto3" json:"interfaces,omitempty"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`     // unique
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"` // unique (key)
+	Vni           uint32                 `protobuf:"varint,3,opt,name=vni,proto3" json:"vni,omitempty"`
+	Interfaces    []*Interface           `protobuf:"bytes,4,rep,name=interfaces,proto3" json:"interfaces,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -996,6 +997,13 @@ func (x *VPC) ProtoReflect() protoreflect.Message {
 // Deprecated: Use VPC.ProtoReflect.Descriptor instead.
 func (*VPC) Descriptor() ([]byte, []int) {
 	return file_proto_dataplane_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *VPC) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
 }
 
 func (x *VPC) GetName() string {
@@ -1835,12 +1843,13 @@ const file_proto_dataplane_proto_rawDesc = "" +
 	"\n" +
 	"VpcPeering\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12)\n" +
-	"\x03for\x18\x02 \x03(\v2\x17.config.PeeringEntryForR\x03for\"^\n" +
-	"\x03VPC\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\x12\x10\n" +
-	"\x03vni\x18\x02 \x01(\rR\x03vni\x121\n" +
+	"\x03for\x18\x02 \x03(\v2\x17.config.PeeringEntryForR\x03for\"n\n" +
+	"\x03VPC\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x10\n" +
+	"\x03vni\x18\x03 \x01(\rR\x03vni\x121\n" +
 	"\n" +
-	"interfaces\x18\x03 \x03(\v2\x11.config.InterfaceR\n" +
+	"interfaces\x18\x04 \x03(\v2\x11.config.InterfaceR\n" +
 	"interfaces\"Z\n" +
 	"\aOverlay\x12\x1f\n" +
 	"\x04vpcs\x18\x01 \x03(\v2\v.config.VPCR\x04vpcs\x12.\n" +

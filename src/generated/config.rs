@@ -118,12 +118,15 @@ pub struct VpcPeering {
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Vpc {
-    /// unique (key)
+    /// unique
     #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+    /// unique (key)
+    #[prost(string, tag = "2")]
     pub name: ::prost::alloc::string::String,
-    #[prost(uint32, tag = "2")]
+    #[prost(uint32, tag = "3")]
     pub vni: u32,
-    #[prost(message, repeated, tag = "3")]
+    #[prost(message, repeated, tag = "4")]
     pub interfaces: ::prost::alloc::vec::Vec<Interface>,
 }
 /// Description of VPCs and Peerings between VPCs
