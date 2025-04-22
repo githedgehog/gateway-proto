@@ -57,9 +57,9 @@ jobs:
         run: |
           just --timestamp lint-gha gen lint
 
-      # - name: Run tests
-      #   run: |
-      #     just --timestamp test
+      - name: Run tests
+        run: |
+          just --timestamp test
 
       - name: Go mod tidy
         run: |
