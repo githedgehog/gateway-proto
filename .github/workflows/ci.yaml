@@ -91,6 +91,12 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: stable
+          cache: true
+
       # Bump gateway-proto in the gateway repository
 
       - name: Checkout gateway repository
