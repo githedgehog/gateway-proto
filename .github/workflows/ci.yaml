@@ -127,14 +127,14 @@ jobs:
         with:
           token: ${{ steps.gateway-app-token.outputs.token }}
           path: gateway-repo
-          branch: pr/auto/gateway-bump
+          branch: pr/auto/gateway-proto-bump
           commit-message: |
-            bump: gateway to ${{ github.ref_name }}
+            bump: gateway-proto to ${{ github.ref_name }}
 
             This is an automated commit created by GitHub Actions workflow,
             in the gateway-proto repository.
           signoff: true
-          title: "bump: gateway to ${{ github.ref_name }}"
+          title: "bump: gateway-proto to ${{ github.ref_name }}"
           body: |
             This is an automated Pull Request created by GitHub Actions workflow,
             in the gateway-proto repository.
