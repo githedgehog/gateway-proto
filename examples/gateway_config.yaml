@@ -1,0 +1,116 @@
+# Copyright 2025 Hedgehog
+# SPDX-License-Identifier: Apache-2.0
+
+generation: 1
+
+device:
+  driver: KERNEL
+  hostname: "GW1"
+  loglevel: DEBUG
+  ports: []
+
+underlay: 
+  vrf:
+    - name: "default"
+      interfaces:
+        - name: "eth0"
+          ipaddr: "10.0.0.14/30"
+          type: IF_TYPE_ETHERNET
+          role: IF_ROLE_FABRIC
+          ospf:
+            passive: false
+            area: "0.0.0.0"
+            network_type: POINT_TO_POINT
+
+        - name: "eth1"
+          ipaddr: "172.16.0.1/24"
+          type: IF_TYPE_ETHERNET
+          role: IF_ROLE_EXTERNAL
+          
+        - name: "eth2"
+          ipaddr: "10.0.1.14/30"
+          type: IF_TYPE_ETHERNET
+          role: IF_ROLE_FABRIC
+          ospf:
+            passive: false
+            area: "0.0.0.0"
+            network_type: POINT_TO_POINT
+
+        - name: "lo"
+          ipaddr: "7.0.0.100/32"
+          type: IF_TYPE_LOOPBACK
+          role: IF_ROLE_FABRIC
+          ospf:
+            passive: true
+            area: "0.0.0.0"
+      
+      ospf:
+        router_id: "7.0.0.100"
+      
+      router:
+        asn: "65000"
+        router_id: "7.0.0.100"
+
+        neighbors:
+          - address: "7.0.0.2"
+            remote_asn: "65000"
+            af_activate:
+              - L2VPN_EVPN
+
+        ipv4_unicast:
+          redistribute_connected: false
+          redistribute_static: false
+        
+        l2vpn_evpn:
+          advertise_all_vni: true
+
+overlay:
+  vpcs:
+    - id: "AAAAA"
+      name: "VPC-1"
+      vni: 3000
+      interfaces: []
+      
+    - id: "BBBBB"
+      name: "VPC-2"
+      vni: 4000
+      interfaces: []
+      
+    - id: "CCCCC"
+      name: "VPC-3"
+      vni: 2000
+      interfaces: []
+  
+  peerings:
+    - name: "VPC-1--VPC-2"
+      for:
+        - vpc: "VPC-1"
+          expose:
+            - ips:
+                - cidr: "192.168.50.0/24"
+                - not: "192.168.50.13/32"
+              as: []
+              
+        - vpc: "VPC-2"
+          expose:
+            - ips:
+                - cidr: "192.168.80.0/24"
+                - cidr: "192.168.90.0/24"
+                - not: "192.168.90.2/32"
+                - not: "192.168.90.7/32"
+              as: []
+    
+    - name: "VPC-1--VPC-3"
+      for:
+        - vpc: "VPC-1"
+          expose:
+            - ips:
+                - cidr: "192.168.60.0/24"
+              as: []
+              
+        - vpc: "VPC-3"
+          expose:
+            - ips:
+                - cidr: "192.168.128.0/27"
+              as: []
+
