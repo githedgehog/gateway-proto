@@ -25,7 +25,7 @@ pub use config::{
     Device, Ports, Eal, LogLevel, PacketDriver,
     
     // Interface related types
-    Interface, IfType, IfRole,
+    Interface, IfType, IfRole, OspfConfig, OspfInterface,
     
     // Underlay related types
     Underlay, Vrf, RouterConfig, BgpNeighbor, BgpAf, 

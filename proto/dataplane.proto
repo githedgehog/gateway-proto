@@ -40,6 +40,32 @@ message GetConfigGenerationResponse {
 }
 
 /* ================================================ */
+/* ==== OSPF Configuration                     ==== */
+/* ================================================ */
+
+/* OSPF Network Type */
+enum OspfNetworkType {
+  BROADCAST = 0;
+  NON_BROADCAST = 1;
+  POINT_TO_POINT = 2;
+  POINT_TO_MULTIPOINT = 3;
+}
+
+/* OSPF Interface configuration */
+message OspfInterface {
+  bool passive = 1;
+  string area = 2;
+  optional uint32 cost = 3;
+  optional OspfNetworkType network_type = 4;
+}
+
+/* OSPF process configuration */
+message OspfConfig {
+  string router_id = 1;
+  optional string vrf = 2;
+}
+
+/* ================================================ */
 /* ==== Interfaces (both underlay and overlay) ==== */
 /* ================================================ */
 
@@ -52,6 +78,7 @@ message Interface {
   optional uint32 vlan = 5; /* only if VLAN role is defined */
   optional string macaddr = 6; /* Base MAC address to be used to generate unified MAC for VTEP */
   optional string system_name = 7; /* Parent interface for VLAN devices, only for VLAN role */
+  optional OspfInterface ospf = 8; /* OSPF interface configuration if enabled */
 }
 
 /* Defines interface representation on the Gateway */
@@ -179,6 +206,7 @@ message VRF {
   string name = 1;
   repeated Interface interfaces = 2;
   optional RouterConfig router = 3;
+  optional OspfConfig ospf = 4; /* OSPF process configuration if enabled */
 }
 
 /* List of all non-VPC VRFs */
@@ -240,3 +268,4 @@ message GatewayConfig {
   Underlay underlay = 3;
   Overlay overlay = 4;
 }
+

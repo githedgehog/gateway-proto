@@ -28,6 +28,28 @@ pub struct GetConfigGenerationResponse {
     #[prost(uint64, tag = "1")]
     pub generation: u64,
 }
+/// OSPF Interface configuration
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OspfInterface {
+    #[prost(bool, tag = "1")]
+    pub passive: bool,
+    #[prost(string, tag = "2")]
+    pub area: ::prost::alloc::string::String,
+    #[prost(uint32, optional, tag = "3")]
+    pub cost: ::core::option::Option<u32>,
+    #[prost(enumeration = "OspfNetworkType", optional, tag = "4")]
+    pub network_type: ::core::option::Option<i32>,
+}
+/// OSPF process configuration
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OspfConfig {
+    #[prost(string, tag = "1")]
+    pub router_id: ::prost::alloc::string::String,
+    #[prost(string, optional, tag = "2")]
+    pub vrf: ::core::option::Option<::prost::alloc::string::String>,
+}
 /// Defines a logical interface. May correlate with physical representation
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -49,6 +71,9 @@ pub struct Interface {
     /// Parent interface for VLAN devices, only for VLAN role
     #[prost(string, optional, tag = "7")]
     pub system_name: ::core::option::Option<::prost::alloc::string::String>,
+    /// OSPF interface configuration if enabled
+    #[prost(message, optional, tag = "8")]
+    pub ospf: ::core::option::Option<OspfInterface>,
 }
 /// Defines the list of prefixes that VPCs can expose
 #[derive(::serde::Deserialize, ::serde::Serialize)]
@@ -216,6 +241,9 @@ pub struct Vrf {
     pub interfaces: ::prost::alloc::vec::Vec<Interface>,
     #[prost(message, optional, tag = "3")]
     pub router: ::core::option::Option<RouterConfig>,
+    /// OSPF process configuration if enabled
+    #[prost(message, optional, tag = "4")]
+    pub ospf: ::core::option::Option<OspfConfig>,
 }
 /// List of all non-VPC VRFs
 #[derive(::serde::Deserialize, ::serde::Serialize)]
@@ -300,6 +328,40 @@ impl Error {
             "ERROR_VALIDATION_FAILED" => Some(Self::ValidationFailed),
             "ERROR_APPLY_FAILED" => Some(Self::ApplyFailed),
             "ERROR_UNKNOWN_ERROR" => Some(Self::UnknownError),
+            _ => None,
+        }
+    }
+}
+/// OSPF Network Type
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum OspfNetworkType {
+    Broadcast = 0,
+    NonBroadcast = 1,
+    PointToPoint = 2,
+    PointToMultipoint = 3,
+}
+impl OspfNetworkType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Broadcast => "BROADCAST",
+            Self::NonBroadcast => "NON_BROADCAST",
+            Self::PointToPoint => "POINT_TO_POINT",
+            Self::PointToMultipoint => "POINT_TO_MULTIPOINT",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "BROADCAST" => Some(Self::Broadcast),
+            "NON_BROADCAST" => Some(Self::NonBroadcast),
+            "POINT_TO_POINT" => Some(Self::PointToPoint),
+            "POINT_TO_MULTIPOINT" => Some(Self::PointToMultipoint),
             _ => None,
         }
     }
