@@ -21,6 +21,7 @@ var (
 	serverAddr = flag.String("server", "localhost:20051", "The server address in the format of host:port")
 	configFile = flag.String("config", "gateway_config.yaml", "Path to YAML configuration file")
 	verifyOnly = flag.Bool("verify", false, "Verify configuration file without connecting to server")
+	genID      = flag.Int("gen", 1, "Generation ID for the configuration")
 )
 
 // SMATOV: gRPC don't support YAML directly, so we need to convert YAML to JSON
@@ -123,18 +124,12 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	genResponse, err := client.GetConfigGeneration(ctx, &pb.GetConfigGenerationRequest{})
-	if err != nil {
-		log.Fatalf("Could not get config generation: %v", err)
-	}
-	fmt.Printf("Current config generation: %d\n", genResponse.Generation)
-
 	config, err := loadConfigFromFile(*configFile)
 	if err != nil {
 		log.Fatalf("Failed to load configuration: %v", err)
 	}
 
-	config.Generation = genResponse.Generation + 1
+	config.Generation = uint64(*genID)
 	fmt.Printf("Updating with new config generation: %d\n", config.Generation)
 
 	updateResponse, err := client.UpdateConfig(ctx, &pb.UpdateConfigRequest{Config: config})
@@ -148,4 +143,13 @@ func main() {
 		fmt.Printf("Config update failed: %s (error code: %v)\n",
 			updateResponse.Message, updateResponse.Error)
 	}
+
+	genResponse, err := client.GetConfigGeneration(ctx, &pb.GetConfigGenerationRequest{})
+	if err != nil {
+		log.Fatalf("Could not get config generation: %v", err)
+	}
+	fmt.Printf("Current config generation: %d\n", genResponse.Generation)
+
+	time.Sleep(30 * time.Second)
+
 }
