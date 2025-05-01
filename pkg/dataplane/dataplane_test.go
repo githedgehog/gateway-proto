@@ -18,12 +18,12 @@ import (
 )
 
 func TestDataplaneClient(t *testing.T) {
-	l, err := net.Listen("tcp", ":0")
+	l, err := net.Listen("tcp", "127.0.0.1:0")
 	require.NoError(t, err, "failed to listen on port")
 	defer l.Close()
 
 	server := grpc.NewServer()
-	dataplane.RegisterConfigServiceServer(server, dataplane.NewMockConfigServiceServer())
+	dataplane.RegisterConfigServiceServer(server, dataplane.NewMockConfigServiceServer(nil))
 	defer server.Stop()
 
 	go func() {

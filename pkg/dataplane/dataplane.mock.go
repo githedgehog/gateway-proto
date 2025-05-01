@@ -9,42 +9,51 @@ import (
 
 type MockConfigServiceServer struct {
 	UnimplementedConfigServiceServer
-	cfg *GatewayConfig
+	cfg  *GatewayConfig
+	logF func(msg string, args ...any)
 }
 
-func NewMockConfigServiceServer() *MockConfigServiceServer {
+func NewMockConfigServiceServer(logF func(msg string, args ...any)) *MockConfigServiceServer {
 	return &MockConfigServiceServer{
 		cfg: &GatewayConfig{
 			Generation: 0,
 		},
+		logF: logF,
+	}
+}
+
+func (m *MockConfigServiceServer) GetObservedConfig() *GatewayConfig {
+	return m.cfg
+}
+
+func (m *MockConfigServiceServer) log(msg string, args ...any) {
+	if m.logF != nil {
+		m.logF(msg, args...)
 	}
 }
 
 var _ ConfigServiceServer = &MockConfigServiceServer{}
 
 func (m *MockConfigServiceServer) GetConfig(context.Context, *GetConfigRequest) (*GatewayConfig, error) {
+	m.log("GetConfig called", "gen", m.cfg.Generation)
+
 	return m.cfg, nil
 }
 
 func (m *MockConfigServiceServer) GetConfigGeneration(context.Context, *GetConfigGenerationRequest) (*GetConfigGenerationResponse, error) {
-	gen := uint64(0)
-	if m.cfg != nil {
-		gen = m.cfg.Generation
-	}
+	m.log("GetConfigGeneration called", "gen", m.cfg.Generation)
 
 	return &GetConfigGenerationResponse{
-		Generation: gen,
+		Generation: m.cfg.Generation,
 	}, nil
 }
 
 func (m *MockConfigServiceServer) UpdateConfig(_ context.Context, req *UpdateConfigRequest) (*UpdateConfigResponse, error) {
+	m.log("UpdateConfig called", "gen", m.cfg.Generation)
+
 	m.cfg = req.Config
 
 	return &UpdateConfigResponse{
 		Error: Error_ERROR_NONE,
 	}, nil
-}
-
-func (m *MockConfigServiceServer) GetObservedConfig() *GatewayConfig {
-	return m.cfg
 }
