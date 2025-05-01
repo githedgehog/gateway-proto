@@ -25,7 +25,7 @@ _localbin:
   @mkdir -p {{localbin}}
 
 # Download all tools locally
-tools: _protoc _protoc_gen_go _protoc_gen_go_grpc _actionlint _addlicense _skopeo
+tools: _protoc _protoc_gen_go _protoc_gen_go_grpc _actionlint _addlicense _skopeo _oras
 
 arch_raw := `uname -m`
 os_raw := `uname|tr '[:upper:]' '[:lower:]'`
@@ -92,6 +92,12 @@ skopeo := localbin / "skopeo" + "-" + skopeo_version
 @_skopeo: _localbin
   [ -f {{skopeo}} ] || just _goinstall "github.com/containers/skopeo/cmd/skopeo" {{skopeo_version}} "skopeo" {{skopeo}} "--tags containers_image_openpgp,exclude_graphdriver_btrfs"
 
+# oras
+oras_version := "v1.2.0"
+oras := localbin / "oras" + "-" + oras_version
+@_oras: _localbin
+  [ -f {{oras}} ] || just _goinstall "oras.land/oras/cmd/oras" {{oras_version}} "oras" {{oras}}
+
 #
 # Common recipes
 #
@@ -108,6 +114,7 @@ lint-gha: _actionlint
 #
 
 oci := ""
+oras_insecure := if oci == "http" { "--plain-http" } else { "" }
 skopeo_dest_insecure := if oci == "http" { "--dest-tls-verify=false" } else { "" }
 
 _docker-build bin: build

@@ -39,3 +39,13 @@ docker-build: build (_docker-build "gwtestctl") && version
 docker-push: docker-build (_docker-push "gwtestctl") && version
 
 push: docker-push && version
+
+_gwtestctl-build GOOS GOARCH: _license_headers _gotools gen
+  GOOS={{GOOS}} GOARCH={{GOARCH}} {{go_build}} -o ./bin/gwtestctl-{{GOOS}}-{{GOARCH}}/gwtestctl ./cmd/gwtestctl
+  cd bin && tar -czvf gwtestctl-{{GOOS}}-{{GOARCH}}-{{version}}.tar.gz gwtestctl-{{GOOS}}-{{GOARCH}}/gwtestctl
+
+_gwtestctl-push GOOS GOARCH: _oras (_gwtestctl-build GOOS GOARCH)
+  cd bin/gwtestctl-{{GOOS}}-{{GOARCH}} && oras push {{oras_insecure}} {{oci_repo}}/{{oci_prefix}}/gwtestctl-{{GOOS}}-{{GOARCH}}:{{version}} gwtestctl
+
+# Publish gwtestctl and other user-facing binaries for all supported OS/Arch
+push-multi: (_gwtestctl-push "linux" "amd64") (_gwtestctl-push "linux" "arm64") (_gwtestctl-push "darwin" "amd64") (_gwtestctl-push "darwin" "arm64") && version
