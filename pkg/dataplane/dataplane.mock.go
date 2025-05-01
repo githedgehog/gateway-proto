@@ -5,20 +5,24 @@ package dataplane
 
 import (
 	"context"
+	"fmt"
+	"log/slog"
+
+	"go.githedgehog.com/gateway-proto/pkg/protoyaml"
 )
 
 type MockConfigServiceServer struct {
 	UnimplementedConfigServiceServer
-	cfg  *GatewayConfig
-	logF func(msg string, args ...any)
+	cfg *GatewayConfig
+	log bool
 }
 
-func NewMockConfigServiceServer(logF func(msg string, args ...any)) *MockConfigServiceServer {
+func NewMockConfigServiceServer(log bool) *MockConfigServiceServer {
 	return &MockConfigServiceServer{
 		cfg: &GatewayConfig{
 			Generation: 0,
 		},
-		logF: logF,
+		log: log,
 	}
 }
 
@@ -26,22 +30,20 @@ func (m *MockConfigServiceServer) GetObservedConfig() *GatewayConfig {
 	return m.cfg
 }
 
-func (m *MockConfigServiceServer) log(msg string, args ...any) {
-	if m.logF != nil {
-		m.logF(msg, args...)
-	}
-}
-
 var _ ConfigServiceServer = &MockConfigServiceServer{}
 
 func (m *MockConfigServiceServer) GetConfig(context.Context, *GetConfigRequest) (*GatewayConfig, error) {
-	m.log("GetConfig called", "gen", m.cfg.Generation)
+	if m.log {
+		slog.Info("GetConfig called", "gen", m.cfg.Generation)
+	}
 
 	return m.cfg, nil
 }
 
 func (m *MockConfigServiceServer) GetConfigGeneration(context.Context, *GetConfigGenerationRequest) (*GetConfigGenerationResponse, error) {
-	m.log("GetConfigGeneration called", "gen", m.cfg.Generation)
+	if m.log {
+		slog.Info("GetConfigGeneration called", "gen", m.cfg.Generation)
+	}
 
 	return &GetConfigGenerationResponse{
 		Generation: m.cfg.Generation,
@@ -49,7 +51,17 @@ func (m *MockConfigServiceServer) GetConfigGeneration(context.Context, *GetConfi
 }
 
 func (m *MockConfigServiceServer) UpdateConfig(_ context.Context, req *UpdateConfigRequest) (*UpdateConfigResponse, error) {
-	m.log("UpdateConfig called", "gen", m.cfg.Generation)
+	if m.log {
+		slog.Info("UpdateConfig called", "gen", m.cfg.Generation)
+
+		data, err := protoyaml.MarshalYAML(req.Config)
+		if err != nil {
+			slog.Warn("failed to marshal config", "err", err)
+		} else {
+			fmt.Println("---")
+			fmt.Println(string(data))
+		}
+	}
 
 	m.cfg = req.Config
 

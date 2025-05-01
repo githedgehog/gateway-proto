@@ -40,7 +40,7 @@ func DoFakeServer(ctx context.Context, target string) error {
 	slog.Info("Starting fake server", "target", l.Addr().String())
 
 	server := grpc.NewServer()
-	dataplane.RegisterConfigServiceServer(server, dataplane.NewMockConfigServiceServer(slog.Info))
+	dataplane.RegisterConfigServiceServer(server, dataplane.NewMockConfigServiceServer(true))
 
 	if err := server.Serve(l); err != nil {
 		return fmt.Errorf("serving gRPC: %w", err)

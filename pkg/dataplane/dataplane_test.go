@@ -23,7 +23,7 @@ func TestDataplaneClient(t *testing.T) {
 	defer l.Close()
 
 	server := grpc.NewServer()
-	dataplane.RegisterConfigServiceServer(server, dataplane.NewMockConfigServiceServer(nil))
+	dataplane.RegisterConfigServiceServer(server, dataplane.NewMockConfigServiceServer(false))
 	defer server.Stop()
 
 	go func() {
