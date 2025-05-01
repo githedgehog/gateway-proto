@@ -54,6 +54,10 @@ jobs:
         run: |
           just --timestamp lint-gha gen lint
 
+      - name: Build everything
+        run: |
+          just --timestamp build docker-build
+
       - name: Run tests
         run: |
           just --timestamp test

@@ -24,3 +24,18 @@ gen: _protoc _protoc_gen_go _protoc_gen_go_grpc && lint
 test: gen
   go test -v ./...
   cargo test -- --nocapture
+
+go_build := "go build " + go_flags
+go_linux_build := "GOOS=linux GOARCH=amd64 " + go_build
+
+build: _license_headers _gotools gen && version
+  {{go_linux_build}} -o ./bin/gwtestctl ./cmd/gwtestctl
+
+oci_repo := "127.0.0.1:30000"
+oci_prefix := "githedgehog/gateway-proto"
+
+docker-build: build (_docker-build "gwtestctl") && version
+
+docker-push: docker-build (_docker-push "gwtestctl") && version
+
+push: docker-push && version

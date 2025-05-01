@@ -25,7 +25,7 @@ _localbin:
   @mkdir -p {{localbin}}
 
 # Download all tools locally
-tools: _protoc _actionlint _addlicense
+tools: _protoc _protoc_gen_go _protoc_gen_go_grpc _actionlint _addlicense _skopeo
 
 arch_raw := `uname -m`
 os_raw := `uname|tr '[:upper:]' '[:lower:]'`
@@ -86,6 +86,12 @@ protoc_gen_go_grpc := localbin / protoc_gen_go_grpc_bin
   [ -f {{protoc_gen_go_grpc}} ] || just _goinstall "google.golang.org/grpc/cmd/protoc-gen-go-grpc" {{protoc_gen_go_grpc_version}} "protoc-gen-go-grpc" {{protoc_gen_go_grpc}}
   ln -sf {{protoc_gen_go_grpc_bin}} {{localbin}}/protoc-gen-go-grpc
 
+# skopeo
+skopeo_version := "v1.16.1"
+skopeo := localbin / "skopeo" + "-" + skopeo_version
+@_skopeo: _localbin
+  [ -f {{skopeo}} ] || just _goinstall "github.com/containers/skopeo/cmd/skopeo" {{skopeo_version}} "skopeo" {{skopeo}} "--tags containers_image_openpgp,exclude_graphdriver_btrfs"
+
 #
 # Common recipes
 #
@@ -96,3 +102,18 @@ _license_headers: _addlicense
 # Run linter for GitHub Actions
 lint-gha: _actionlint
    {{actionlint}} -verbose
+
+#
+# Docker recipes
+#
+
+oci := ""
+skopeo_dest_insecure := if oci == "http" { "--dest-tls-verify=false" } else { "" }
+
+_docker-build bin: build
+  cp bin/{{bin}} config/docker/{{bin}}/
+  cd config/docker/{{bin}}/ && docker build --platform=linux/amd64 -t {{oci_repo}}/{{oci_prefix}}/{{bin}}:{{version}} -f Dockerfile .
+
+skopeo_copy_flags := if env("DOCKER_HOST", "") != "" { "--src-daemon-host " + env_var("DOCKER_HOST") } else { "" }
+_docker-push bin: _skopeo
+  {{skopeo}} --insecure-policy copy {{skopeo_copy_flags}} {{skopeo_dest_insecure}} docker-daemon:{{oci_repo}}/{{oci_prefix}}/{{bin}}:{{version}} docker://{{oci_repo}}/{{oci_prefix}}/{{bin}}:{{version}}
