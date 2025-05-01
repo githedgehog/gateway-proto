@@ -36,7 +36,7 @@ message GetConfigGenerationRequest {
 }
 
 message GetConfigGenerationResponse {
-  uint64 generation = 1;
+  int64 generation = 1;
 }
 
 /* ================================================ */
@@ -263,9 +263,8 @@ message Device {
 
 /* Complete Gateway config options */
 message GatewayConfig {
-  uint64 generation = 1;
+  int64 generation = 1;
   Device device = 2;
   Underlay underlay = 3;
   Overlay overlay = 4;
 }
-

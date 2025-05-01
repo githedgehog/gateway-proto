@@ -56,13 +56,13 @@ func TestDataplaneClient(t *testing.T) {
 		resp, err := client.GetConfig(ctx, &dataplane.GetConfigRequest{}, grpc.WaitForReady(true))
 		require.NoError(t, err, "failed to get config")
 		require.Equal(t, codes.OK, status.Code(err), "unexpected error code for get config")
-		require.Equal(t, uint64(42), resp.Generation, "unexpected response for get config")
+		require.Equal(t, int64(42), resp.Generation, "unexpected response for get config")
 	}
 
 	{
 		resp, err := client.GetConfigGeneration(ctx, &dataplane.GetConfigGenerationRequest{}, grpc.WaitForReady(true))
 		require.NoError(t, err, "failed to get config generation")
 		require.Equal(t, codes.OK, status.Code(err), "unexpected error code for get config generation")
-		require.Equal(t, uint64(42), resp.Generation, "unexpected response for get config generation")
+		require.Equal(t, int64(42), resp.Generation, "unexpected response for get config generation")
 	}
 }

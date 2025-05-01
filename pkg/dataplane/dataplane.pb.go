@@ -552,7 +552,7 @@ func (*GetConfigGenerationRequest) Descriptor() ([]byte, []int) {
 
 type GetConfigGenerationResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Generation    uint64                 `protobuf:"varint,1,opt,name=generation,proto3" json:"generation,omitempty"`
+	Generation    int64                  `protobuf:"varint,1,opt,name=generation,proto3" json:"generation,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -587,7 +587,7 @@ func (*GetConfigGenerationResponse) Descriptor() ([]byte, []int) {
 	return file_proto_dataplane_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *GetConfigGenerationResponse) GetGeneration() uint64 {
+func (x *GetConfigGenerationResponse) GetGeneration() int64 {
 	if x != nil {
 		return x.Generation
 	}
@@ -1921,7 +1921,7 @@ func (x *Device) GetLoglevel() LogLevel {
 // Complete Gateway config options
 type GatewayConfig struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Generation    uint64                 `protobuf:"varint,1,opt,name=generation,proto3" json:"generation,omitempty"`
+	Generation    int64                  `protobuf:"varint,1,opt,name=generation,proto3" json:"generation,omitempty"`
 	Device        *Device                `protobuf:"bytes,2,opt,name=device,proto3" json:"device,omitempty"`
 	Underlay      *Underlay              `protobuf:"bytes,3,opt,name=underlay,proto3" json:"underlay,omitempty"`
 	Overlay       *Overlay               `protobuf:"bytes,4,opt,name=overlay,proto3" json:"overlay,omitempty"`
@@ -1959,7 +1959,7 @@ func (*GatewayConfig) Descriptor() ([]byte, []int) {
 	return file_proto_dataplane_proto_rawDescGZIP(), []int{26}
 }
 
-func (x *GatewayConfig) GetGeneration() uint64 {
+func (x *GatewayConfig) GetGeneration() int64 {
 	if x != nil {
 		return x.Generation
 	}
@@ -2001,7 +2001,7 @@ const file_proto_dataplane_proto_rawDesc = "" +
 	"\x1aGetConfigGenerationRequest\"=\n" +
 	"\x1bGetConfigGenerationResponse\x12\x1e\n" +
 	"\n" +
-	"generation\x18\x01 \x01(\x04R\n" +
+	"generation\x18\x01 \x01(\x03R\n" +
 	"generation\"\xb1\x01\n" +
 	"\rOspfInterface\x12\x18\n" +
 	"\apassive\x18\x01 \x01(\bR\apassive\x12\x12\n" +
@@ -2115,7 +2115,7 @@ const file_proto_dataplane_proto_rawDesc = "" +
 	"\bloglevel\x18\x05 \x01(\x0e2\x10.config.LogLevelR\bloglevel\"\xb0\x01\n" +
 	"\rGatewayConfig\x12\x1e\n" +
 	"\n" +
-	"generation\x18\x01 \x01(\x04R\n" +
+	"generation\x18\x01 \x01(\x03R\n" +
 	"generation\x12&\n" +
 	"\x06device\x18\x02 \x01(\v2\x0e.config.DeviceR\x06device\x12,\n" +
 	"\bunderlay\x18\x03 \x01(\v2\x10.config.UnderlayR\bunderlay\x12)\n" +

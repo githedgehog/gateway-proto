@@ -25,8 +25,8 @@ pub struct GetConfigGenerationRequest {}
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct GetConfigGenerationResponse {
-    #[prost(uint64, tag = "1")]
-    pub generation: u64,
+    #[prost(int64, tag = "1")]
+    pub generation: i64,
 }
 /// OSPF Interface configuration
 #[derive(::serde::Deserialize, ::serde::Serialize)]
@@ -290,8 +290,8 @@ pub struct Device {
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GatewayConfig {
-    #[prost(uint64, tag = "1")]
-    pub generation: u64,
+    #[prost(int64, tag = "1")]
+    pub generation: i64,
     #[prost(message, optional, tag = "2")]
     pub device: ::core::option::Option<Device>,
     #[prost(message, optional, tag = "3")]
