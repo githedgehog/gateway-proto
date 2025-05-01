@@ -211,7 +211,7 @@ message VRF {
 
 /* List of all non-VPC VRFs */
 message Underlay {
-  repeated VRF vrf = 1;
+  repeated VRF vrfs = 1;
 }
 
 /* ================ */

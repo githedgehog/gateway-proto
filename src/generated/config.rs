@@ -250,7 +250,7 @@ pub struct Vrf {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Underlay {
     #[prost(message, repeated, tag = "1")]
-    pub vrf: ::prost::alloc::vec::Vec<Vrf>,
+    pub vrfs: ::prost::alloc::vec::Vec<Vrf>,
 }
 /// Defines physical or system-level device
 #[derive(::serde::Deserialize, ::serde::Serialize)]

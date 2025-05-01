@@ -1709,7 +1709,7 @@ func (x *VRF) GetOspf() *OspfConfig {
 // List of all non-VPC VRFs
 type Underlay struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Vrf           []*VRF                 `protobuf:"bytes,1,rep,name=vrf,proto3" json:"vrf,omitempty"`
+	Vrfs          []*VRF                 `protobuf:"bytes,1,rep,name=vrfs,proto3" json:"vrfs,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1744,9 +1744,9 @@ func (*Underlay) Descriptor() ([]byte, []int) {
 	return file_proto_dataplane_proto_rawDescGZIP(), []int{22}
 }
 
-func (x *Underlay) GetVrf() []*VRF {
+func (x *Underlay) GetVrfs() []*VRF {
 	if x != nil {
-		return x.Vrf
+		return x.Vrfs
 	}
 	return nil
 }
@@ -2099,9 +2099,9 @@ const file_proto_dataplane_proto_rawDesc = "" +
 	"\x06router\x18\x03 \x01(\v2\x14.config.RouterConfigH\x00R\x06router\x88\x01\x01\x12+\n" +
 	"\x04ospf\x18\x04 \x01(\v2\x12.config.OspfConfigH\x01R\x04ospf\x88\x01\x01B\t\n" +
 	"\a_routerB\a\n" +
-	"\x05_ospf\")\n" +
-	"\bUnderlay\x12\x1d\n" +
-	"\x03vrf\x18\x01 \x03(\v2\v.config.VRFR\x03vrf\"<\n" +
+	"\x05_ospf\"+\n" +
+	"\bUnderlay\x12\x1f\n" +
+	"\x04vrfs\x18\x01 \x03(\v2\v.config.VRFR\x04vrfs\"<\n" +
 	"\x05Ports\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x1f\n" +
 	"\vsystem_name\x18\x02 \x01(\tR\n" +
@@ -2232,7 +2232,7 @@ var file_proto_dataplane_proto_depIdxs = []int32{
 	14, // 19: config.VRF.interfaces:type_name -> config.Interface
 	27, // 20: config.VRF.router:type_name -> config.RouterConfig
 	13, // 21: config.VRF.ospf:type_name -> config.OspfConfig
-	28, // 22: config.Underlay.vrf:type_name -> config.VRF
+	28, // 22: config.Underlay.vrfs:type_name -> config.VRF
 	6,  // 23: config.Device.driver:type_name -> config.PacketDriver
 	31, // 24: config.Device.eal:type_name -> config.Eal
 	30, // 25: config.Device.ports:type_name -> config.Ports

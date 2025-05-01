@@ -22,7 +22,7 @@ func TestMarshalUnmarshalYAML(t *testing.T) {
 			input: &dataplane.GatewayConfig{
 				Generation: 42,
 				Underlay: &dataplane.Underlay{
-					Vrf: []*dataplane.VRF{
+					Vrfs: []*dataplane.VRF{
 						{
 							Name: "vrf1",
 							Interfaces: []*dataplane.Interface{
@@ -68,19 +68,19 @@ func TestUnmarshal(t *testing.T) {
 			input: `
 generation: 42
 underlay:
-  vrf:
+  vrfs:
   - interfaces:
     - name: eth0
       type: IF_TYPE_ETHERNET
     name: vrf1
 `,
 			check: func(t *testing.T, actual *dataplane.GatewayConfig) {
-				require.Equal(t, uint64(42), actual.Generation)
-				require.Len(t, actual.Underlay.Vrf, 1)
-				require.Equal(t, "vrf1", actual.Underlay.Vrf[0].Name)
-				require.Len(t, actual.Underlay.Vrf[0].Interfaces, 1)
-				require.Equal(t, "eth0", actual.Underlay.Vrf[0].Interfaces[0].Name)
-				require.Equal(t, dataplane.IfType_IF_TYPE_ETHERNET, actual.Underlay.Vrf[0].Interfaces[0].Type)
+				require.Equal(t, int64(42), actual.Generation)
+				require.Len(t, actual.Underlay.Vrfs, 1)
+				require.Equal(t, "vrf1", actual.Underlay.Vrfs[0].Name)
+				require.Len(t, actual.Underlay.Vrfs[0].Interfaces, 1)
+				require.Equal(t, "eth0", actual.Underlay.Vrfs[0].Interfaces[0].Name)
+				require.Equal(t, dataplane.IfType_IF_TYPE_ETHERNET, actual.Underlay.Vrfs[0].Interfaces[0].Type)
 			},
 		},
 		{
@@ -88,18 +88,18 @@ underlay:
 			input: `
 generation: 42
 underlay:
-  vrf:
+  vrfs:
   - interfaces:
     - name: eth0
     name: vrf1
 `,
 			check: func(t *testing.T, actual *dataplane.GatewayConfig) {
-				require.Equal(t, uint64(42), actual.Generation)
-				require.Len(t, actual.Underlay.Vrf, 1)
-				require.Equal(t, "vrf1", actual.Underlay.Vrf[0].Name)
-				require.Len(t, actual.Underlay.Vrf[0].Interfaces, 1)
-				require.Equal(t, "eth0", actual.Underlay.Vrf[0].Interfaces[0].Name)
-				require.Equal(t, dataplane.IfType_IF_TYPE_ETHERNET, actual.Underlay.Vrf[0].Interfaces[0].Type)
+				require.Equal(t, int64(42), actual.Generation)
+				require.Len(t, actual.Underlay.Vrfs, 1)
+				require.Equal(t, "vrf1", actual.Underlay.Vrfs[0].Name)
+				require.Len(t, actual.Underlay.Vrfs[0].Interfaces, 1)
+				require.Equal(t, "eth0", actual.Underlay.Vrfs[0].Interfaces[0].Name)
+				require.Equal(t, dataplane.IfType_IF_TYPE_ETHERNET, actual.Underlay.Vrfs[0].Interfaces[0].Type)
 			},
 		},
 		{
@@ -107,19 +107,19 @@ underlay:
 			input: `
 generation: 42
 underlay:
-  vrf:
+  vrfs:
   - interfaces:
     - name: eth0
       type: IF_TYPE_VLAN
     name: vrf1
 `,
 			check: func(t *testing.T, actual *dataplane.GatewayConfig) {
-				require.Equal(t, uint64(42), actual.Generation)
-				require.Len(t, actual.Underlay.Vrf, 1)
-				require.Equal(t, "vrf1", actual.Underlay.Vrf[0].Name)
-				require.Len(t, actual.Underlay.Vrf[0].Interfaces, 1)
-				require.Equal(t, "eth0", actual.Underlay.Vrf[0].Interfaces[0].Name)
-				require.Equal(t, dataplane.IfType_IF_TYPE_VLAN, actual.Underlay.Vrf[0].Interfaces[0].Type)
+				require.Equal(t, int64(42), actual.Generation)
+				require.Len(t, actual.Underlay.Vrfs, 1)
+				require.Equal(t, "vrf1", actual.Underlay.Vrfs[0].Name)
+				require.Len(t, actual.Underlay.Vrfs[0].Interfaces, 1)
+				require.Equal(t, "eth0", actual.Underlay.Vrfs[0].Interfaces[0].Name)
+				require.Equal(t, dataplane.IfType_IF_TYPE_VLAN, actual.Underlay.Vrfs[0].Interfaces[0].Type)
 			},
 		},
 		{
@@ -128,7 +128,7 @@ underlay:
 generation: "42"
 `,
 			check: func(t *testing.T, actual *dataplane.GatewayConfig) {
-				require.Equal(t, uint64(42), actual.Generation)
+				require.Equal(t, int64(42), actual.Generation)
 			},
 		},
 	} {
