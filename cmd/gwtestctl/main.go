@@ -105,15 +105,14 @@ func Run(ctx context.Context) error {
 		UsageText: strings.TrimSpace(strings.ReplaceAll(`
 			Run fake server:
 			  gwtestctl server -t unix://tmp/gateway.sock # unix socket
-			  gwtestctl server -t tcp://localhost:5123 # tcp socket
-			  gwtestctl server -t tcp://:5123 # tcp socket on all interfaces
-			  gwtestctl server -t tcp://:0 # tcp socket on all interfaces with random port
-
+			  gwtestctl server -t tcp://localhost:5123    # tcp socket
+			  gwtestctl server -t tcp://:5123             # tcp socket on all interfaces
+			  gwtestctl server -t tcp://:0                # tcp socket on all interfaces with random port
 			And run client:
-			  gwtestctl get-config -t unix://tmp/gateway.sock # read current config from server
-			  gwtestctl get-config -t tcp://:5123 > config.yaml # save current config to file
+			  gwtestctl get-config -t unix://tmp/gateway.sock       # read current config from server
+			  gwtestctl get-config -t tcp://:5123 > config.yaml     # save current config to file
 			  gwtestctl update-config -t tcp://:5123 -f config.yaml # update config on server
-			  gwtestctl get-config-gen -t tcp://:5123 # read current config generation from server
+			  gwtestctl get-config-gen -t tcp://:5123               # read current config generation from server
 
 			Config is a YAML representation of the GatewayConfig protobuf message, e.g.:
 			  generation: 42
