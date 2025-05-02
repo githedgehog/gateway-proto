@@ -36,14 +36,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Setup Just
+        uses: extractions/setup-just@v3
+
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
           go-version: stable
           cache: true
-
-      - name: Setup Just
-        uses: extractions/setup-just@v3
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@master
@@ -95,11 +95,19 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup Just
+        uses: extractions/setup-just@v3
+
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
           go-version: stable
           cache: true
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: stable
 
       - name: Login to ghcr.io
         uses: docker/login-action@v3
