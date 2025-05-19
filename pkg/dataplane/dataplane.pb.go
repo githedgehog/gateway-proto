@@ -720,7 +720,7 @@ func (x *OspfConfig) GetVrf() string {
 type Interface struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Ipaddr        string                 `protobuf:"bytes,2,opt,name=ipaddr,proto3" json:"ipaddr,omitempty"`
+	Ipaddrs       []string               `protobuf:"bytes,2,rep,name=ipaddrs,proto3" json:"ipaddrs,omitempty"`
 	Type          IfType                 `protobuf:"varint,3,opt,name=type,proto3,enum=config.IfType" json:"type,omitempty"`
 	Role          IfRole                 `protobuf:"varint,4,opt,name=role,proto3,enum=config.IfRole" json:"role,omitempty"`
 	Vlan          *uint32                `protobuf:"varint,5,opt,name=vlan,proto3,oneof" json:"vlan,omitempty"`                              // only if VLAN role is defined
@@ -768,11 +768,11 @@ func (x *Interface) GetName() string {
 	return ""
 }
 
-func (x *Interface) GetIpaddr() string {
+func (x *Interface) GetIpaddrs() []string {
 	if x != nil {
-		return x.Ipaddr
+		return x.Ipaddrs
 	}
-	return ""
+	return nil
 }
 
 func (x *Interface) GetType() IfType {
@@ -1420,6 +1420,7 @@ type BgpNeighbor struct {
 	Address       string                 `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 	RemoteAsn     string                 `protobuf:"bytes,2,opt,name=remote_asn,json=remoteAsn,proto3" json:"remote_asn,omitempty"`
 	AfActivate    []BgpAF                `protobuf:"varint,3,rep,packed,name=af_activate,json=afActivate,proto3,enum=config.BgpAF" json:"af_activate,omitempty"`
+	Networks      []string               `protobuf:"bytes,4,rep,name=networks,proto3" json:"networks,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1471,6 +1472,13 @@ func (x *BgpNeighbor) GetRemoteAsn() string {
 func (x *BgpNeighbor) GetAfActivate() []BgpAF {
 	if x != nil {
 		return x.AfActivate
+	}
+	return nil
+}
+
+func (x *BgpNeighbor) GetNetworks() []string {
+	if x != nil {
+		return x.Networks
 	}
 	return nil
 }
@@ -2014,10 +2022,10 @@ const file_proto_dataplane_proto_rawDesc = "" +
 	"OspfConfig\x12\x1b\n" +
 	"\trouter_id\x18\x01 \x01(\tR\brouterId\x12\x15\n" +
 	"\x03vrf\x18\x02 \x01(\tH\x00R\x03vrf\x88\x01\x01B\x06\n" +
-	"\x04_vrf\"\xbb\x02\n" +
+	"\x04_vrf\"\xbd\x02\n" +
 	"\tInterface\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\x12\x16\n" +
-	"\x06ipaddr\x18\x02 \x01(\tR\x06ipaddr\x12\"\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12\x18\n" +
+	"\aipaddrs\x18\x02 \x03(\tR\aipaddrs\x12\"\n" +
 	"\x04type\x18\x03 \x01(\x0e2\x0e.config.IfTypeR\x04type\x12\"\n" +
 	"\x04role\x18\x04 \x01(\x0e2\x0e.config.IfRoleR\x04role\x12\x17\n" +
 	"\x04vlan\x18\x05 \x01(\rH\x00R\x04vlan\x88\x01\x01\x12\x1d\n" +
@@ -2066,13 +2074,14 @@ const file_proto_dataplane_proto_rawDesc = "" +
 	"\x16redistribute_connected\x18\x01 \x01(\bR\x15redistributeConnected\x12/\n" +
 	"\x13redistribute_static\x18\x02 \x01(\bR\x12redistributeStatic\"G\n" +
 	"\x19BgpAddressFamilyL2vpnEvpn\x12*\n" +
-	"\x11advertise_all_vni\x18\x01 \x01(\bR\x0fadvertiseAllVni\"v\n" +
+	"\x11advertise_all_vni\x18\x01 \x01(\bR\x0fadvertiseAllVni\"\x92\x01\n" +
 	"\vBgpNeighbor\x12\x18\n" +
 	"\aaddress\x18\x01 \x01(\tR\aaddress\x12\x1d\n" +
 	"\n" +
 	"remote_asn\x18\x02 \x01(\tR\tremoteAsn\x12.\n" +
 	"\vaf_activate\x18\x03 \x03(\x0e2\r.config.BgpAFR\n" +
-	"afActivate\"\x80\x01\n" +
+	"afActivate\x12\x1a\n" +
+	"\bnetworks\x18\x04 \x03(\tR\bnetworks\"\x80\x01\n" +
 	"\bRouteMap\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12,\n" +
 	"\x12match_prefix_lists\x18\x02 \x03(\tR\x10matchPrefixLists\x12\x16\n" +
