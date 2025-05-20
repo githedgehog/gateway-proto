@@ -175,11 +175,20 @@ enum BgpAF {
   L2VPN_EVPN = 2;
 }
 
+message BgpNeighborUpdateSource {
+  oneof source {
+    string address = 1; /* ip address */
+    string interface = 2; /* name of interface - typically loopback */
+  }
+}
+
+
 /* BGP neighbor config */
 message BgpNeighbor {
   string address = 1;
   string remote_asn = 2;
   repeated BgpAF af_activate = 3;
+  BgpNeighborUpdateSource update_source = 4;
 }
 
 /* IP Prefix filtering route map description */

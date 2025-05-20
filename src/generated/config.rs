@@ -188,6 +188,25 @@ pub struct BgpAddressFamilyL2vpnEvpn {
     #[prost(bool, tag = "1")]
     pub advertise_all_vni: bool,
 }
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct BgpNeighborUpdateSource {
+    #[prost(oneof = "bgp_neighbor_update_source::Source", tags = "1, 2")]
+    pub source: ::core::option::Option<bgp_neighbor_update_source::Source>,
+}
+/// Nested message and enum types in `BgpNeighborUpdateSource`.
+pub mod bgp_neighbor_update_source {
+    #[derive(::serde::Deserialize, ::serde::Serialize)]
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Source {
+        /// ip address
+        #[prost(string, tag = "1")]
+        Address(::prost::alloc::string::String),
+        /// name of interface - typically loopback
+        #[prost(string, tag = "2")]
+        Interface(::prost::alloc::string::String),
+    }
+}
 /// BGP neighbor config
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -198,6 +217,8 @@ pub struct BgpNeighbor {
     pub remote_asn: ::prost::alloc::string::String,
     #[prost(enumeration = "BgpAf", repeated, tag = "3")]
     pub af_activate: ::prost::alloc::vec::Vec<i32>,
+    #[prost(message, optional, tag = "4")]
+    pub update_source: ::core::option::Option<BgpNeighborUpdateSource>,
 }
 /// IP Prefix filtering route map description
 #[derive(::serde::Deserialize, ::serde::Serialize)]
