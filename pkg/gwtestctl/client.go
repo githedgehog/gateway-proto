@@ -131,7 +131,7 @@ func getClient(target string) (dataplane.ConfigServiceClient, func() error, erro
 	}
 
 	if scheme == unixScheme {
-		target = fmt.Sprintf("unix-abstract:%s", target)
+		target = fmt.Sprintf("unix:%s", target)
 	}
 
 	conn, err := grpc.NewClient(target,
