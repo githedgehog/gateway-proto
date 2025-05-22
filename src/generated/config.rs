@@ -56,8 +56,8 @@ pub struct OspfConfig {
 pub struct Interface {
     #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub ipaddr: ::prost::alloc::string::String,
+    #[prost(string, repeated, tag = "2")]
+    pub ipaddrs: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     #[prost(enumeration = "IfType", tag = "3")]
     pub r#type: i32,
     #[prost(enumeration = "IfRole", tag = "4")]
@@ -198,6 +198,8 @@ pub struct BgpNeighbor {
     pub remote_asn: ::prost::alloc::string::String,
     #[prost(enumeration = "BgpAf", repeated, tag = "3")]
     pub af_activate: ::prost::alloc::vec::Vec<i32>,
+    #[prost(string, repeated, tag = "4")]
+    pub networks: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 /// IP Prefix filtering route map description
 #[derive(::serde::Deserialize, ::serde::Serialize)]

@@ -2,7 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 fn main() {
-    #[cfg(feature = "regenerate")] {
+    #[cfg(feature = "regenerate")]
+    {
         // We will use self-contained protoc binary, have to hack env param to force it to use
         unsafe {
             std::env::set_var("PROTOC", protoc_bin_vendored::protoc_bin_path().unwrap());
@@ -30,5 +31,4 @@ fn main() {
     {
         // Do nothing
     }
-
 }
