@@ -7,6 +7,7 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"net"
 	"os"
 	"time"
 
@@ -129,17 +130,28 @@ func getClient(target string) (dataplane.ConfigServiceClient, func() error, erro
 	if err != nil {
 		return nil, nil, fmt.Errorf("parsing target: %w", err)
 	}
+	var conn *grpc.ClientConn
 
 	if scheme == unixScheme {
-		target = fmt.Sprintf("unix-abstract:%s", target)
+		if target == "" {
+			return nil, nil, fmt.Errorf("unix socket target cannot be empty")
+		}
+		if target[0] != '/' {
+			target = "/" + target
+		}
+		dialer := func(ctx context.Context, addr string) (net.Conn, error) {
+			return net.Dial("unix", target)
+		}
+		conn, err = grpc.NewClient(
+			"unix:///ignored",
+			grpc.WithTransportCredentials(insecure.NewCredentials()),
+			grpc.WithContextDialer(dialer),
+		)
+	} else {
+		conn, err = grpc.NewClient(target,
+			grpc.WithTransportCredentials(insecure.NewCredentials()),
+		)
 	}
-
-	conn, err := grpc.NewClient(target,
-		grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		return nil, nil, fmt.Errorf("creating gRPC client: %w", err)
-	}
-
 	return dataplane.NewConfigServiceClient(conn), conn.Close, nil
 }
 
