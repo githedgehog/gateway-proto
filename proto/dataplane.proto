@@ -72,7 +72,7 @@ message OspfConfig {
 /* Defines a logical interface. May correlate with physical representation */
 message Interface {
   string name = 1;
-  string ipaddr = 2;
+  repeated string ipaddrs = 2;
   IfType type = 3;
   IfRole role = 4;
   optional uint32 vlan = 5; /* only if VLAN role is defined */
@@ -189,6 +189,7 @@ message BgpNeighbor {
   string remote_asn = 2;
   repeated BgpAF af_activate = 3;
   BgpNeighborUpdateSource update_source = 4;
+  repeated string networks = 5;
 }
 
 /* IP Prefix filtering route map description */
