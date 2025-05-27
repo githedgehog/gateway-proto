@@ -6,34 +6,54 @@ pub mod config {
 }
 
 pub use config::{
-    // Service definitions
-    config_service_server::{ConfigService, ConfigServiceServer},
-    config_service_client::ConfigServiceClient,
-    
-    // Request/Response types
-    GetConfigRequest,
+    BgpAddressFamilyIPv4,
+    BgpAddressFamilyIPv6,
+    BgpAddressFamilyL2vpnEvpn,
+    BgpAf,
+    BgpNeighbor,
+    // Device related types
+    Device,
+    Eal,
+    // Common types
+    Error,
+
+    Expose,
     GatewayConfig,
     GetConfigGenerationRequest,
     GetConfigGenerationResponse,
+    // Request/Response types
+    GetConfigRequest,
+    IfRole,
+    IfType,
+    // Interface related types
+    Interface,
+    LogLevel,
+    OspfConfig,
+    OspfInterface,
+
+    // Overlay related types
+    Overlay,
+    PacketDriver,
+
+    PeeringAs,
+    PeeringEntryFor,
+    PeeringIPs,
+    Ports,
+    RouteMap,
+
+    RouterConfig,
+    // Underlay related types
+    Underlay,
     UpdateConfigRequest,
     UpdateConfigResponse,
-    
-    // Common types
-    Error,
-    
-    // Device related types
-    Device, Ports, Eal, LogLevel, PacketDriver,
-    
-    // Interface related types
-    Interface, IfType, IfRole, OspfConfig, OspfInterface,
-    
-    // Underlay related types
-    Underlay, Vrf, RouterConfig, BgpNeighbor, BgpAf, 
-    BgpAddressFamilyIPv4, BgpAddressFamilyIPv6, BgpAddressFamilyL2vpnEvpn,
-    RouteMap,
-    
-    // Overlay related types
-    Overlay, Vpc, VpcPeering, PeeringEntryFor, Expose, PeeringIPs, PeeringAs,
+
+    Vpc,
+    VpcPeering,
+    Vrf,
+    config_service_client::ConfigServiceClient,
+
+    // Service definitions
+    config_service_server::{ConfigService, ConfigServiceServer},
 };
 
 pub fn get_proto_path() -> std::path::PathBuf {

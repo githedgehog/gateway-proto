@@ -5,8 +5,8 @@ use std::net::SocketAddr;
 use tonic::{Request, Response, Status};
 
 use gateway_config::{
-    ConfigService, ConfigServiceServer, ConfigServiceClient,
-    GetConfigGenerationRequest, GetConfigGenerationResponse,
+    ConfigService, ConfigServiceClient, ConfigServiceServer, GetConfigGenerationRequest,
+    GetConfigGenerationResponse,
 };
 
 struct SimpleConfigService {
@@ -35,14 +35,18 @@ impl ConfigService for SimpleConfigService {
         &self,
         _request: Request<gateway_config::GetConfigRequest>,
     ) -> Result<Response<gateway_config::GatewayConfig>, Status> {
-        Err(Status::unimplemented("get_config not implemented in this test"))
+        Err(Status::unimplemented(
+            "get_config not implemented in this test",
+        ))
     }
 
     async fn update_config(
         &self,
         _request: Request<gateway_config::UpdateConfigRequest>,
     ) -> Result<Response<gateway_config::UpdateConfigResponse>, Status> {
-        Err(Status::unimplemented("update_config not implemented in this test"))
+        Err(Status::unimplemented(
+            "update_config not implemented in this test",
+        ))
     }
 }
 
