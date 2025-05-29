@@ -6,9 +6,15 @@ license = "Apache-2.0"
 
 [features]
 default = []
+bolero = ["dep:bolero"]
 regenerate = ["dep:tonic-build", "dep:protoc-bin-vendored"]
 
 [dependencies]
+bolero = { version = "0.13.3", features = [
+    "alloc",
+    "arbitrary",
+    "std",
+], optional = true }
 tonic = "0.13"
 prost = "0.13.5"
 tokio = { version = "1.34", features = ["full"] }
