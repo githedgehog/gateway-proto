@@ -1,5 +1,5 @@
-// Copyright 2025 Hedgehog
 // SPDX-License-Identifier: Apache-2.0
+// Copyright 2025 Hedgehog
 
 pub mod config {
     include!("generated/config.rs");
