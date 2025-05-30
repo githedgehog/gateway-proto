@@ -164,6 +164,7 @@ pub struct Overlay {
     pub peerings: ::prost::alloc::vec::Vec<VpcPeering>,
 }
 /// BGP options for IPv4 UNICAST AFI
+#[cfg_attr(feature = "bolero", derive(::bolero::TypeGenerator))]
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct BgpAddressFamilyIPv4 {
@@ -173,6 +174,7 @@ pub struct BgpAddressFamilyIPv4 {
     pub redistribute_static: bool,
 }
 /// BGP options for IPv6 UNICAST AFI
+#[cfg_attr(feature = "bolero", derive(::bolero::TypeGenerator))]
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct BgpAddressFamilyIPv6 {
@@ -182,6 +184,7 @@ pub struct BgpAddressFamilyIPv6 {
     pub redistribute_static: bool,
 }
 /// BGP options for L2VPN EVPN AFI
+#[cfg_attr(feature = "bolero", derive(::bolero::TypeGenerator))]
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct BgpAddressFamilyL2vpnEvpn {
@@ -356,6 +359,7 @@ impl Error {
     }
 }
 /// OSPF Network Type
+#[cfg_attr(feature = "bolero", derive(::bolero::TypeGenerator))]
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -390,6 +394,7 @@ impl OspfNetworkType {
     }
 }
 /// Defines interface representation on the Gateway
+#[cfg_attr(feature = "bolero", derive(::bolero::TypeGenerator))]
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -424,6 +429,7 @@ impl IfType {
     }
 }
 /// For physical interface - fabric-facing or external-facing
+#[cfg_attr(feature = "bolero", derive(::bolero::TypeGenerator))]
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -452,6 +458,7 @@ impl IfRole {
     }
 }
 /// AFIs supported for BGP peering
+#[cfg_attr(feature = "bolero", derive(::bolero::TypeGenerator))]
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -483,6 +490,7 @@ impl BgpAf {
     }
 }
 /// Log-level for dataplane and DPDK
+#[cfg_attr(feature = "bolero", derive(::bolero::TypeGenerator))]
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -520,6 +528,7 @@ impl LogLevel {
     }
 }
 /// Backend driver for packet processing
+#[cfg_attr(feature = "bolero", derive(::bolero::TypeGenerator))]
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]

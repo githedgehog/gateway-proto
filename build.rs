@@ -1,6 +1,16 @@
 // Copyright 2025 Hedgehog
 // SPDX-License-Identifier: Apache-2.0
 
+#[cfg(feature = "regenerate")]
+fn add_type_generators(bld: tonic_build::Builder, types: &[&str]) -> tonic_build::Builder {
+    types.iter().fold(bld, |bld, t| {
+        bld.type_attribute(
+            t,
+            "#[cfg_attr(feature = \"bolero\", derive(::bolero::TypeGenerator))]",
+        )
+    })
+}
+
 fn main() {
     #[cfg(feature = "regenerate")]
     {
@@ -11,7 +21,22 @@ fn main() {
 
         let proto = "proto/dataplane.proto";
 
-        let res = tonic_build::configure()
+        let bld = tonic_build::configure();
+        let bld = add_type_generators(
+            bld,
+            &[
+                "BgpAddressFamilyIPv4",
+                "BgpAddressFamilyIPv6",
+                "BgpAddressFamilyL2vpnEvpn",
+                "BgpAF",
+                "IfType",
+                "IfRole",
+                "LogLevel",
+                "OspfNetworkType",
+                "PacketDriver",
+            ],
+        );
+        let res = bld
             .type_attribute(".", "#[derive(::serde::Deserialize, ::serde::Serialize)]")
             .build_server(true)
             .build_client(true)
