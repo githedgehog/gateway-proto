@@ -27,7 +27,7 @@ gen: _protoc _protoc_gen_go _protoc_gen_go_grpc && lint
 
 test: gen
   go test -v ./...
-  cargo test -- --nocapture
+  cargo test --features bolero -- --nocapture
 
 go_build := "go build " + go_flags
 go_linux_build := "GOOS=linux GOARCH=amd64 " + go_build
