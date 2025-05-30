@@ -17,9 +17,10 @@ _gotools:
 lint: _license_headers _gotools
 
 _path := `echo $PATH`
-gen: _protoc _protoc_gen_go _protoc_gen_go_grpc && lint
+gen: _protoc _protoc_gen_go _protoc_gen_go_grpc
   PATH={{_path}}:{{localbinpath}} {{protoc}} --go_out=. --go-grpc_out=. ./proto/dataplane.proto
   cargo build --features regenerate
+  just _license_headers
 
 test: gen
   go test -v ./...
