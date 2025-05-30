@@ -164,6 +164,7 @@ pub struct Overlay {
     pub peerings: ::prost::alloc::vec::Vec<VpcPeering>,
 }
 /// BGP options for IPv4 UNICAST AFI
+#[cfg_attr(feature = "bolero", derive(::bolero::TypeGenerator))]
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct BgpAddressFamilyIPv4 {
@@ -173,6 +174,7 @@ pub struct BgpAddressFamilyIPv4 {
     pub redistribute_static: bool,
 }
 /// BGP options for IPv6 UNICAST AFI
+#[cfg_attr(feature = "bolero", derive(::bolero::TypeGenerator))]
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct BgpAddressFamilyIPv6 {
@@ -182,6 +184,7 @@ pub struct BgpAddressFamilyIPv6 {
     pub redistribute_static: bool,
 }
 /// BGP options for L2VPN EVPN AFI
+#[cfg_attr(feature = "bolero", derive(::bolero::TypeGenerator))]
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct BgpAddressFamilyL2vpnEvpn {
