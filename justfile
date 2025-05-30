@@ -13,8 +13,12 @@ _gotools:
   go fmt ./...
   go vet {{go_flags}} ./...
 
+_rusttools: 
+  cargo fmt
+  cargo clippy --features bolero --all-targets -- -D warnings
+
 # Run linters against code (incl. license headers)
-lint: _license_headers _gotools
+lint: _license_headers _gotools _rusttools
 
 _path := `echo $PATH`
 gen: _protoc _protoc_gen_go _protoc_gen_go_grpc && lint
@@ -28,7 +32,7 @@ test: gen
 go_build := "go build " + go_flags
 go_linux_build := "GOOS=linux GOARCH=amd64 " + go_build
 
-build: _license_headers _gotools gen && version
+build: _license_headers _gotools _rusttools gen && version
   {{go_linux_build}} -o ./bin/gwtestctl ./cmd/gwtestctl
 
 oci_repo := "127.0.0.1:30000"

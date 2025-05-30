@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright 2025 Hedgehog
 
+#![deny(clippy::all, clippy::pedantic)]
+
+#[allow(clippy::pedantic)]
 pub mod config {
     include!("generated/config.rs");
 }
@@ -56,6 +59,7 @@ pub use config::{
     config_service_server::{ConfigService, ConfigServiceServer},
 };
 
+#[must_use]
 pub fn get_proto_path() -> std::path::PathBuf {
     std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("proto")
 }
