@@ -8,6 +8,8 @@ pub mod config {
     include!("generated/config.rs");
 }
 
+// Note(manishv): This is incomplete and not needed really, remove?
+// See https://github.com/githedgehog/gateway-proto/issues/28
 pub use config::{
     BgpAddressFamilyIPv4,
     BgpAddressFamilyIPv6,
