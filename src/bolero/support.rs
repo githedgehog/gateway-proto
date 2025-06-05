@@ -62,41 +62,6 @@ impl TypeGenerator for IpAddrString {
     }
 }
 
-mod unstable_unbounded_shift {
-    // Unbounded shift is unstable in Rust 1.86.0
-    // Remove when we upgrade to Rust 1.87.0
-    // We should get an unused trait error with 1.87.0
-    pub(crate) trait UnboundedShift {
-        fn unbounded_shl(self, rhs: u32) -> Self;
-        fn unbounded_shr(self, rhs: u32) -> Self;
-    }
-
-    impl UnboundedShift for u32 {
-        fn unbounded_shl(self, amt: u32) -> Self {
-            let (ret, overflow) = self.overflowing_shl(amt);
-            if overflow { 0 } else { ret }
-        }
-
-        fn unbounded_shr(self, amt: u32) -> Self {
-            let (ret, overflow) = self.overflowing_shr(amt);
-            if overflow { 0 } else { ret }
-        }
-    }
-
-    impl UnboundedShift for u128 {
-        fn unbounded_shl(self, amt: u32) -> Self {
-            let (ret, overflow) = self.overflowing_shl(amt);
-            if overflow { 0 } else { ret }
-        }
-
-        fn unbounded_shr(self, amt: u32) -> Self {
-            let (ret, overflow) = self.overflowing_shr(amt);
-            if overflow { 0 } else { ret }
-        }
-    }
-}
-use unstable_unbounded_shift::UnboundedShift;
-
 pub struct V4CidrString(pub String);
 pub struct V6CidrString(pub String);
 pub struct CidrString(pub String);

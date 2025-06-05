@@ -3,6 +3,7 @@ name = "gateway_config"
 version = "0.2.3"
 edition = "2024"
 license = "Apache-2.0"
+rust-version = "1.87.0"
 
 [features]
 default = []
