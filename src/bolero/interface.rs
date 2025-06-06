@@ -2,7 +2,8 @@
 // Copyright 2025 Hedgehog
 
 use crate::bolero::support::{
-    Ipv4AddrString, LinuxIfName, MacAddrString, UniqueV4CidrGenerator, UniqueV6CidrGenerator,
+    Ipv4AddrString, LinuxIfName, MacAddrString, UniqueV4InterfaceAddressGenerator,
+    UniqueV6InterfaceAddressGenerator,
 };
 use crate::config::{IfRole, IfType, Interface, OspfConfig, OspfInterface, OspfNetworkType};
 use bolero::{Driver, TypeGenerator, ValueGenerator};
@@ -42,11 +43,9 @@ impl TypeGenerator for Interface {
                 IfType::Ethernet | IfType::Loopback | IfType::Vlan => {
                     let count_v4 = d.gen_u16(Bound::Included(&0), Bound::Included(&10))?;
                     let count_v6 = d.gen_u16(Bound::Included(&0), Bound::Included(&10))?;
-                    let mask_v4 = d.gen_u8(Bound::Included(&1), Bound::Included(&32))?;
-                    let mask_v6 = d.gen_u8(Bound::Included(&1), Bound::Included(&128))?;
-                    let cidrs_v4 = UniqueV4CidrGenerator::new(count_v4, mask_v4).generate(d)?;
-                    let cidrs_v6 = UniqueV6CidrGenerator::new(count_v6, mask_v6).generate(d)?;
-                    cidrs_v4.into_iter().chain(cidrs_v6).collect()
+                    let addrs_v4 = UniqueV4InterfaceAddressGenerator::new(count_v4).generate(d)?;
+                    let addrs_v6 = UniqueV6InterfaceAddressGenerator::new(count_v6).generate(d)?;
+                    addrs_v4.into_iter().chain(addrs_v6).collect()
                 }
                 IfType::Vtep => vec![format!("{}/32", d.produce::<Ipv4AddrString>()?.0)],
             }
@@ -124,8 +123,8 @@ mod test {
                     intf.name,
                     intf.name.len()
                 );
-                assert!(intf.ipaddrs.iter().all(|cidr| {
-                    let (ip, _mask) = cidr.split_once('/').unwrap();
+                assert!(intf.ipaddrs.iter().all(|ifaddr| {
+                    let (ip, _mask) = ifaddr.split_once('/').unwrap();
                     ip.parse::<std::net::Ipv4Addr>().is_ok()
                         || ip.parse::<std::net::Ipv6Addr>().is_ok()
                 }));
