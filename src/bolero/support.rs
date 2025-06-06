@@ -225,6 +225,126 @@ impl TypeGenerator for CidrString {
     }
 }
 
+pub struct UniqueV4InterfaceAddressGenerator {
+    pub count: u16,
+}
+
+impl UniqueV4InterfaceAddressGenerator {
+    #[must_use]
+    pub fn new(count: u16) -> Self {
+        Self { count }
+    }
+}
+
+pub struct UniqueV6InterfaceAddressGenerator {
+    pub count: u16,
+}
+
+impl UniqueV6InterfaceAddressGenerator {
+    #[must_use]
+    pub fn new(count: u16) -> Self {
+        Self { count }
+    }
+}
+impl ValueGenerator for UniqueV4InterfaceAddressGenerator {
+    type Output = Vec<String>;
+
+    fn generate<D: Driver>(&self, d: &mut D) -> Option<Self::Output> {
+        if self.count == 0 {
+            return Some(vec![]);
+        }
+        // Calculate a mask so that we get a unique prefixes for each address to get a unique prefix
+        // plus 1 because all 0s for the first octect is not a valid prefix
+        let num_prefix_bits = u32::BITS - self.count.next_power_of_two().leading_zeros();
+        let largest_num_addr_bits = 32 - num_prefix_bits;
+        let smallest_mask = num_prefix_bits;
+
+        let largest_prefix = 1_u32.unbounded_shl(num_prefix_bits) - 1;
+        let mut prefix = d.gen_u32(Bound::Included(&0), Bound::Included(&largest_prefix))?;
+        let mut addrs = Vec::with_capacity(usize::from(self.count));
+        for _ in 0..self.count {
+            let mask_len = d.gen_u32(Bound::Included(&smallest_mask), Bound::Included(&32))?;
+            let current_num_prefix_bits = 32 - mask_len;
+            let addr_mask = u32::MAX.unbounded_shr(mask_len);
+            // /31 addresses are special case where the first and last address are not broadcast or network addresses
+            #[allow(clippy::bool_to_int_with_if)]
+            let smallest_addr = if current_num_prefix_bits == 0 || mask_len >= 31 {
+                0
+            } else {
+                1
+            };
+            #[allow(clippy::bool_to_int_with_if)]
+            let largest_addr = if current_num_prefix_bits == 0 {
+                0 // The address is all prefix, no address bits
+            } else {
+                addr_mask - (if mask_len >= 31 { 0 } else { 1 })
+            };
+            let addr_data = d.gen_u32(
+                Bound::Included(&smallest_addr),
+                Bound::Included(&largest_addr),
+            )?;
+
+            let addr_as_u32 = prefix.unbounded_shl(largest_num_addr_bits) | addr_data;
+            let addr = Ipv4Addr::from(addr_as_u32);
+            addrs.push(format!("{addr}/{mask_len}"));
+            prefix += 1;
+            if prefix > largest_prefix {
+                prefix = 0;
+            }
+        }
+        Some(addrs)
+    }
+}
+
+impl ValueGenerator for UniqueV6InterfaceAddressGenerator {
+    type Output = Vec<String>;
+
+    fn generate<D: Driver>(&self, d: &mut D) -> Option<Self::Output> {
+        if self.count == 0 {
+            return Some(vec![]);
+        }
+        // Calculate a mask so that we get a unique prefixes for each address to get a unique prefix
+        let num_prefix_bits = u128::BITS - self.count.next_power_of_two().leading_zeros();
+        let largest_num_addr_bits = 128 - num_prefix_bits;
+        let smallest_mask = num_prefix_bits;
+
+        let largest_prefix = 1_u128.unbounded_shl(num_prefix_bits) - 1;
+        let mut prefix = d.gen_u128(Bound::Excluded(&0), Bound::Included(&largest_prefix))?;
+        let mut addrs = Vec::with_capacity(usize::from(self.count));
+        for _ in 0..self.count {
+            let mask_len = d.gen_u32(Bound::Included(&smallest_mask), Bound::Included(&128))?;
+            let current_num_prefix_bits = 128 - mask_len;
+            let addr_mask = u128::MAX.unbounded_shr(mask_len);
+            // /127 addresses are special case where the first and last address are not broadcast or network addresses
+            #[allow(clippy::bool_to_int_with_if)]
+            let smallest_addr = if current_num_prefix_bits == 0 || mask_len >= 127 {
+                0
+            } else {
+                1
+            };
+            #[allow(clippy::bool_to_int_with_if)]
+            let largest_addr = if current_num_prefix_bits == 0 {
+                0 // The address is all prefix, no address bits
+            } else {
+                addr_mask - (if mask_len >= 127 { 0 } else { 1 })
+            };
+            let addr_data = d.gen_u128(
+                Bound::Included(&smallest_addr),
+                Bound::Included(&largest_addr),
+            )?;
+
+            let addr_as_u128 = prefix.unbounded_shl(largest_num_addr_bits) | addr_data;
+            let addr = Ipv6Addr::from(addr_as_u128);
+            addrs.push(format!("{addr}/{mask_len}"));
+            prefix += 1;
+            if prefix > largest_prefix {
+                prefix = 0;
+            }
+        }
+        Some(addrs)
+    }
+}
+
 pub const ALPHA_NUMERIC_CHARS: &str =
     "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -370,6 +490,77 @@ mod test {
                         assert!(mask.parse::<u8>().unwrap() <= 128);
                         ip.parse::<std::net::Ipv6Addr>().is_ok()
                     }));
+                });
+        }
+    }
+
+    #[test]
+    fn test_unique_v4_interface_address_generator() {
+        for count in [0, 1, 10, 16, 100] {
+            let generator = crate::bolero::support::UniqueV4InterfaceAddressGenerator::new(count);
+            bolero::check!()
+                .with_generator(generator)
+                .for_each(|addrs| {
+                    let mut seen = std::collections::HashSet::new();
+                    assert!(
+                        addrs.len() == usize::from(count),
+                        "Expected {count} addresses, got {}, {addrs:?}",
+                        addrs.len(),
+                    );
+                    for addr in addrs {
+                        let (ip_str, mask_str) = addr.split_once('/').unwrap();
+                        let mask = mask_str.parse::<u32>().unwrap();
+                        let ip = ip_str.parse::<std::net::Ipv4Addr>().unwrap();
+                        assert!(seen.insert(ip), "Duplicate address found: {addr}");
+                        if mask < 31 {
+                            let addr_mask = u32::MAX.unbounded_shr(mask);
+                            let addr_data = ip.to_bits();
+                            assert!(
+                                (addr_data & addr_mask) != 0 || mask == 0,
+                                "Address is network address: {addr}"
+                            );
+                            assert!(
+                                (addr_data & addr_mask) != addr_mask,
+                                "Address is broadcast address: {addr}"
+                            );
+                        }
+                    }
+                });
+        }
+    }
+
+    #[test]
+    fn test_unique_v6_interface_address_generator() {
+        for count in [0, 1, 10, 16, 100] {
+            let generator = crate::bolero::support::UniqueV6InterfaceAddressGenerator::new(count);
+            bolero::check!()
+                .with_generator(generator)
+                .for_each(|addrs| {
+                    let mut seen = std::collections::HashSet::new();
+                    assert!(
+                        addrs.len() == usize::from(count),
+                        "Expected {count} addresses, got {}, {addrs:?}",
+                        addrs.len(),
+                    );
+                    for addr in addrs {
+                        let (ip_str, mask_str) = addr.split_once('/').unwrap();
+                        let mask = mask_str.parse::<u32>().unwrap();
+                        let ip = ip_str.parse::<std::net::Ipv6Addr>().unwrap();
+                        assert!(seen.insert(ip), "Duplicate address found: {addr}");
+                        assert!(mask <= 128, "Invalid mask: {mask}");
+                        if mask < 127 {
+                            let addr_mask = u128::MAX.unbounded_shr(mask);
+                            let addr_data = u128::from(ip);
+                            assert!(
+                                (addr_data & addr_mask) != 0 || mask == 0,
+                                "Address is network address: {addr}"
+                            );
+                            assert!(
+                                (addr_data & addr_mask) != addr_mask,
+                                "Address is broadcast address: {addr}"
+                            );
+                        }
+                    }
                 });
         }
     }
