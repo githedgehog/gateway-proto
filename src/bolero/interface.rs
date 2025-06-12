@@ -2,7 +2,7 @@
 // Copyright 2025 Hedgehog
 
 use crate::bolero::support::{
-    Ipv4AddrString, LinuxIfName, MacAddrString, UniqueV4InterfaceAddressGenerator,
+    Ipv4AddrString, LinuxIfName, SourceMacAddrString, UniqueV4InterfaceAddressGenerator,
     UniqueV6InterfaceAddressGenerator,
 };
 use crate::config::{IfRole, IfType, Interface, OspfConfig, OspfInterface, OspfNetworkType};
@@ -62,8 +62,10 @@ impl TypeGenerator for Interface {
         };
 
         let macaddr = match r#type {
-            IfType::Ethernet | IfType::Vlan => Some(d.produce::<MacAddrString>()?.0),
-            _ => None,
+            IfType::Ethernet | IfType::Vlan | IfType::Vtep => {
+                Some(d.produce::<SourceMacAddrString>()?.as_ref().to_string())
+            }
+            IfType::Loopback => None,
         };
 
         let ospf = match r#type {
@@ -134,6 +136,14 @@ mod test {
                     // Dataplane only supports v4 VTEP IPs right now
                     assert!(ip.parse::<std::net::Ipv4Addr>().is_ok());
                     assert_eq!(mask, "32");
+                }
+                if let Some(macstr) = &intf.macaddr {
+                    let bytes = macstr
+                        .split(':')
+                        .map(|b| u8::from_str_radix(b, 16).unwrap())
+                        .collect::<Vec<u8>>();
+                    assert_eq!(bytes.len(), 6);
+                    assert_eq!(bytes[0] & 0x01, 0);
                 }
                 assert!(intf.macaddr.is_some() || intf.r#type != i32::from(IfType::Ethernet));
                 assert!(intf.vlan.is_some() || intf.r#type != i32::from(IfType::Vlan));

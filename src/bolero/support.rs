@@ -348,15 +348,32 @@ impl ValueGenerator for UniqueV6InterfaceAddressGenerator {
 pub const ALPHA_NUMERIC_CHARS: &str =
     "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-pub struct MacAddrString(pub String);
+pub struct SourceMacAddrString(String);
+impl SourceMacAddrString {
+    #[must_use]
+    pub fn inner(&self) -> &str {
+        &self.0
+    }
+}
+
+impl AsRef<str> for SourceMacAddrString {
+    fn as_ref(&self) -> &str {
+        &self.0
+    }
+}
 // Only generate lower case hex characters for mac addresses
 // because we cannot customize PartialEq for generated types
 // that use this, and we want to be able to compare generated
 // mac addresses with each other without concern for case.
-impl TypeGenerator for MacAddrString {
+impl TypeGenerator for SourceMacAddrString {
     fn generate<D: Driver>(d: &mut D) -> Option<Self> {
         // Generate a random 48-bit MAC address
-        let mac = d.gen_u64(Bound::Included(&1), Bound::Excluded(&0xffff_ffff_ffff_u64))?;
+        // Set the least significant bit of the mac to 0 for unicast
+        // Start at 2 so the we don't accidentally generate 01:00:00:00:00:00
+        // and then clear it to 00:00:00:00:00:00
+        let mac = d.gen_u64(Bound::Included(&2), Bound::Excluded(&0xffff_ffff_ffff_u64))?
+            & 0xffff_ffff_fffe;
+
         let bytes = [
             (mac & 0xff) as u8,
             ((mac >> 8) & 0xff) as u8,
@@ -369,7 +386,7 @@ impl TypeGenerator for MacAddrString {
             "{:02x}:{:02x}:{:02x}:{:02x}:{:02x}:{:02x}",
             bytes[0], bytes[1], bytes[2], bytes[3], bytes[4], bytes[5]
         );
-        Some(MacAddrString(mac_str))
+        Some(SourceMacAddrString(mac_str))
     }
 }
 
