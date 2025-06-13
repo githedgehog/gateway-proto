@@ -108,7 +108,8 @@ jobs:
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@master
         with:
-          toolchain: stable
+          toolchain: 1.87.0
+          components: rustfmt clippy
 
       - name: Login to ghcr.io
         uses: docker/login-action@v3
