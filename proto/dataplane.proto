@@ -96,6 +96,59 @@ enum IfRole {
 }
 
 /* ================= */
+/* ==== Firewall ==== */
+/* ================= */
+
+/* Firewall log configuration */
+message FirewallLog {
+  string level = 1;    // debug | info | warning | error
+  string message = 2;  // Custom log message
+}
+
+/* Source or destination matching for firewall rules */
+message FirewallEndpoint {
+  repeated string cidrs = 1;
+  repeated uint32 ports = 2;
+  repeated FirewallPortRange port_ranges = 3;
+}
+
+/* Port range definition */
+message FirewallPortRange {
+  uint32 start = 1;
+  uint32 end = 2;
+}
+
+/* Protocol-specific firewall rules */
+message FirewallProtocolRule {
+  optional FirewallEndpoint src = 1;   // Source matching
+  optional FirewallEndpoint dst = 2;   // Destination matching
+}
+
+/* Firewall rule actions */
+enum FirewallAction {
+  FIREWALL_ACTION_ALLOW = 0;
+  FIREWALL_ACTION_DENY = 1;
+}
+
+/* Individual firewall rule */
+message FirewallRule {
+  FirewallAction action = 1;           // allow | deny
+  bool stateless = 2;                  // Only stateless supported initially
+  optional FirewallLog log = 3;        // Logging configuration
+  
+  // Protocol-specific rules (only one should be set)
+  optional FirewallProtocolRule tcp = 4;
+  optional FirewallProtocolRule udp = 5;
+  optional FirewallProtocolRule icmp = 6;
+  optional uint32 protocol = 7;        // Raw IP protocol number
+}
+
+/* Firewall configuration for a VPC in peering */
+message PeeringFirewall { // SMATOV: different name maybe?
+  repeated FirewallRule rules = 1;
+}
+
+/* ================= */
 /* ==== Overlay ==== */
 /* ================= */
 
@@ -125,6 +178,7 @@ message Expose {
 message PeeringEntryFor {
   string vpc = 1;
   repeated Expose expose = 2;
+  optional PeeringFirewall firewall = 3;
 }
 
 /* Defines peering relation between VPCs */
@@ -181,7 +235,6 @@ message BgpNeighborUpdateSource {
     string interface = 2; /* name of interface - typically loopback */
   }
 }
-
 
 /* BGP neighbor config */
 message BgpNeighbor {

@@ -75,6 +75,81 @@ pub struct Interface {
     #[prost(message, optional, tag = "8")]
     pub ospf: ::core::option::Option<OspfInterface>,
 }
+/// Firewall log configuration
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct FirewallLog {
+    /// debug | info | warning | error
+    #[prost(string, tag = "1")]
+    pub level: ::prost::alloc::string::String,
+    /// Custom log message
+    #[prost(string, tag = "2")]
+    pub message: ::prost::alloc::string::String,
+}
+/// Source or destination matching for firewall rules
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct FirewallEndpoint {
+    #[prost(string, repeated, tag = "1")]
+    pub cidrs: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(uint32, repeated, tag = "2")]
+    pub ports: ::prost::alloc::vec::Vec<u32>,
+    #[prost(message, repeated, tag = "3")]
+    pub port_ranges: ::prost::alloc::vec::Vec<FirewallPortRange>,
+}
+/// Port range definition
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct FirewallPortRange {
+    #[prost(uint32, tag = "1")]
+    pub start: u32,
+    #[prost(uint32, tag = "2")]
+    pub end: u32,
+}
+/// Protocol-specific firewall rules
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct FirewallProtocolRule {
+    /// Source matching
+    #[prost(message, optional, tag = "1")]
+    pub src: ::core::option::Option<FirewallEndpoint>,
+    /// Destination matching
+    #[prost(message, optional, tag = "2")]
+    pub dst: ::core::option::Option<FirewallEndpoint>,
+}
+/// Individual firewall rule
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct FirewallRule {
+    /// allow | deny
+    #[prost(enumeration = "FirewallAction", tag = "1")]
+    pub action: i32,
+    /// Only stateless supported initially
+    #[prost(bool, tag = "2")]
+    pub stateless: bool,
+    /// Logging configuration
+    #[prost(message, optional, tag = "3")]
+    pub log: ::core::option::Option<FirewallLog>,
+    /// Protocol-specific rules (only one should be set)
+    #[prost(message, optional, tag = "4")]
+    pub tcp: ::core::option::Option<FirewallProtocolRule>,
+    #[prost(message, optional, tag = "5")]
+    pub udp: ::core::option::Option<FirewallProtocolRule>,
+    #[prost(message, optional, tag = "6")]
+    pub icmp: ::core::option::Option<FirewallProtocolRule>,
+    /// Raw IP protocol number
+    #[prost(uint32, optional, tag = "7")]
+    pub protocol: ::core::option::Option<u32>,
+}
+/// Firewall configuration for a VPC in peering
+///
+/// SMATOV: different name maybe?
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PeeringFirewall {
+    #[prost(message, repeated, tag = "1")]
+    pub rules: ::prost::alloc::vec::Vec<FirewallRule>,
+}
 /// Defines the list of prefixes that VPCs can expose
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -128,6 +203,8 @@ pub struct PeeringEntryFor {
     pub vpc: ::prost::alloc::string::String,
     #[prost(message, repeated, tag = "2")]
     pub expose: ::prost::alloc::vec::Vec<Expose>,
+    #[prost(message, optional, tag = "3")]
+    pub firewall: ::core::option::Option<PeeringFirewall>,
 }
 /// There can be only one peering per pair of given VPCs
 #[derive(::serde::Deserialize, ::serde::Serialize)]
@@ -453,6 +530,34 @@ impl IfRole {
         match value {
             "IF_ROLE_FABRIC" => Some(Self::Fabric),
             "IF_ROLE_EXTERNAL" => Some(Self::External),
+            _ => None,
+        }
+    }
+}
+/// Firewall rule actions
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum FirewallAction {
+    Allow = 0,
+    Deny = 1,
+}
+impl FirewallAction {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Allow => "FIREWALL_ACTION_ALLOW",
+            Self::Deny => "FIREWALL_ACTION_DENY",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "FIREWALL_ACTION_ALLOW" => Some(Self::Allow),
+            "FIREWALL_ACTION_DENY" => Some(Self::Deny),
             _ => None,
         }
     }

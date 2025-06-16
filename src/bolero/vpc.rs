@@ -10,6 +10,7 @@ impl TypeGenerator for PeeringEntryFor {
         Some(PeeringEntryFor {
             vpc: d.produce::<LinuxIfName>()?.0,
             expose: vec![d.produce::<Expose>()?],
+            firewall: None,
         })
     }
 }
