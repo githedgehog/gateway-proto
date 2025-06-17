@@ -61,11 +61,12 @@ impl TypeGenerator for Interface {
             )),
         };
 
-        let macaddr = match r#type {
-            IfType::Ethernet | IfType::Vlan | IfType::Vtep => {
-                Some(d.produce::<SourceMacAddrString>()?.as_ref().to_string())
-            }
-            IfType::Loopback => None,
+        let (macaddr, mtu) = match r#type {
+            IfType::Ethernet | IfType::Vlan | IfType::Vtep => (
+                Some(d.produce::<SourceMacAddrString>()?.as_ref().to_string()),
+                Some(d.gen_u32(Bound::Included(&68), Bound::Included(&9000))?),
+            ),
+            IfType::Loopback => (None, None),
         };
 
         let ospf = match r#type {
@@ -87,6 +88,7 @@ impl TypeGenerator for Interface {
             vlan,
             macaddr,
             ospf,
+            mtu,
             system_name: None, // We do not support system names right now
         })
     }
@@ -136,6 +138,7 @@ mod test {
                     // Dataplane only supports v4 VTEP IPs right now
                     assert!(ip.parse::<std::net::Ipv4Addr>().is_ok());
                     assert_eq!(mask, "32");
+                    assert!(intf.mtu.is_some());
                 }
                 if let Some(macstr) = &intf.macaddr {
                     let bytes = macstr
@@ -144,6 +147,9 @@ mod test {
                         .collect::<Vec<u8>>();
                     assert_eq!(bytes.len(), 6);
                     assert_eq!(bytes[0] & 0x01, 0);
+                }
+                if let Some(mtu) = intf.mtu {
+                    assert!((68_u32..=9000_u32).contains(&mtu));
                 }
                 assert!(intf.macaddr.is_some() || intf.r#type != i32::from(IfType::Ethernet));
                 assert!(intf.vlan.is_some() || intf.r#type != i32::from(IfType::Vlan));
