@@ -229,6 +229,53 @@ func (IfRole) EnumDescriptor() ([]byte, []int) {
 	return file_proto_dataplane_proto_rawDescGZIP(), []int{3}
 }
 
+// Firewall rule actions
+type FirewallAction int32
+
+const (
+	FirewallAction_FIREWALL_ACTION_ALLOW FirewallAction = 0
+	FirewallAction_FIREWALL_ACTION_DENY  FirewallAction = 1
+)
+
+// Enum value maps for FirewallAction.
+var (
+	FirewallAction_name = map[int32]string{
+		0: "FIREWALL_ACTION_ALLOW",
+		1: "FIREWALL_ACTION_DENY",
+	}
+	FirewallAction_value = map[string]int32{
+		"FIREWALL_ACTION_ALLOW": 0,
+		"FIREWALL_ACTION_DENY":  1,
+	}
+)
+
+func (x FirewallAction) Enum() *FirewallAction {
+	p := new(FirewallAction)
+	*p = x
+	return p
+}
+
+func (x FirewallAction) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (FirewallAction) Descriptor() protoreflect.EnumDescriptor {
+	return file_proto_dataplane_proto_enumTypes[4].Descriptor()
+}
+
+func (FirewallAction) Type() protoreflect.EnumType {
+	return &file_proto_dataplane_proto_enumTypes[4]
+}
+
+func (x FirewallAction) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use FirewallAction.Descriptor instead.
+func (FirewallAction) EnumDescriptor() ([]byte, []int) {
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{4}
+}
+
 // AFIs supported for BGP peering
 type BgpAF int32
 
@@ -263,11 +310,11 @@ func (x BgpAF) String() string {
 }
 
 func (BgpAF) Descriptor() protoreflect.EnumDescriptor {
-	return file_proto_dataplane_proto_enumTypes[4].Descriptor()
+	return file_proto_dataplane_proto_enumTypes[5].Descriptor()
 }
 
 func (BgpAF) Type() protoreflect.EnumType {
-	return &file_proto_dataplane_proto_enumTypes[4]
+	return &file_proto_dataplane_proto_enumTypes[5]
 }
 
 func (x BgpAF) Number() protoreflect.EnumNumber {
@@ -276,7 +323,7 @@ func (x BgpAF) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use BgpAF.Descriptor instead.
 func (BgpAF) EnumDescriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{4}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{5}
 }
 
 // Log-level for dataplane and DPDK
@@ -319,11 +366,11 @@ func (x LogLevel) String() string {
 }
 
 func (LogLevel) Descriptor() protoreflect.EnumDescriptor {
-	return file_proto_dataplane_proto_enumTypes[5].Descriptor()
+	return file_proto_dataplane_proto_enumTypes[6].Descriptor()
 }
 
 func (LogLevel) Type() protoreflect.EnumType {
-	return &file_proto_dataplane_proto_enumTypes[5]
+	return &file_proto_dataplane_proto_enumTypes[6]
 }
 
 func (x LogLevel) Number() protoreflect.EnumNumber {
@@ -332,7 +379,7 @@ func (x LogLevel) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use LogLevel.Descriptor instead.
 func (LogLevel) EnumDescriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{5}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{6}
 }
 
 // Backend driver for packet processing
@@ -366,11 +413,11 @@ func (x PacketDriver) String() string {
 }
 
 func (PacketDriver) Descriptor() protoreflect.EnumDescriptor {
-	return file_proto_dataplane_proto_enumTypes[6].Descriptor()
+	return file_proto_dataplane_proto_enumTypes[7].Descriptor()
 }
 
 func (PacketDriver) Type() protoreflect.EnumType {
-	return &file_proto_dataplane_proto_enumTypes[6]
+	return &file_proto_dataplane_proto_enumTypes[7]
 }
 
 func (x PacketDriver) Number() protoreflect.EnumNumber {
@@ -379,7 +426,7 @@ func (x PacketDriver) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use PacketDriver.Descriptor instead.
 func (PacketDriver) EnumDescriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{6}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{7}
 }
 
 type GetConfigRequest struct {
@@ -817,6 +864,365 @@ func (x *Interface) GetOspf() *OspfInterface {
 	return nil
 }
 
+// Firewall log configuration
+type FirewallLog struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Level         string                 `protobuf:"bytes,1,opt,name=level,proto3" json:"level,omitempty"`     // debug | info | warning | error
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"` // Custom log message
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FirewallLog) Reset() {
+	*x = FirewallLog{}
+	mi := &file_proto_dataplane_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FirewallLog) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FirewallLog) ProtoMessage() {}
+
+func (x *FirewallLog) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_dataplane_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FirewallLog.ProtoReflect.Descriptor instead.
+func (*FirewallLog) Descriptor() ([]byte, []int) {
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *FirewallLog) GetLevel() string {
+	if x != nil {
+		return x.Level
+	}
+	return ""
+}
+
+func (x *FirewallLog) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+// Source or destination matching for firewall rules
+type FirewallEndpoint struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Cidrs         []string               `protobuf:"bytes,1,rep,name=cidrs,proto3" json:"cidrs,omitempty"`
+	Ports         []uint32               `protobuf:"varint,2,rep,packed,name=ports,proto3" json:"ports,omitempty"`
+	PortRanges    []*FirewallPortRange   `protobuf:"bytes,3,rep,name=port_ranges,json=portRanges,proto3" json:"port_ranges,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FirewallEndpoint) Reset() {
+	*x = FirewallEndpoint{}
+	mi := &file_proto_dataplane_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FirewallEndpoint) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FirewallEndpoint) ProtoMessage() {}
+
+func (x *FirewallEndpoint) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_dataplane_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FirewallEndpoint.ProtoReflect.Descriptor instead.
+func (*FirewallEndpoint) Descriptor() ([]byte, []int) {
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *FirewallEndpoint) GetCidrs() []string {
+	if x != nil {
+		return x.Cidrs
+	}
+	return nil
+}
+
+func (x *FirewallEndpoint) GetPorts() []uint32 {
+	if x != nil {
+		return x.Ports
+	}
+	return nil
+}
+
+func (x *FirewallEndpoint) GetPortRanges() []*FirewallPortRange {
+	if x != nil {
+		return x.PortRanges
+	}
+	return nil
+}
+
+// Port range definition
+type FirewallPortRange struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Start         uint32                 `protobuf:"varint,1,opt,name=start,proto3" json:"start,omitempty"`
+	End           uint32                 `protobuf:"varint,2,opt,name=end,proto3" json:"end,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FirewallPortRange) Reset() {
+	*x = FirewallPortRange{}
+	mi := &file_proto_dataplane_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FirewallPortRange) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FirewallPortRange) ProtoMessage() {}
+
+func (x *FirewallPortRange) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_dataplane_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FirewallPortRange.ProtoReflect.Descriptor instead.
+func (*FirewallPortRange) Descriptor() ([]byte, []int) {
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *FirewallPortRange) GetStart() uint32 {
+	if x != nil {
+		return x.Start
+	}
+	return 0
+}
+
+func (x *FirewallPortRange) GetEnd() uint32 {
+	if x != nil {
+		return x.End
+	}
+	return 0
+}
+
+// Protocol-specific firewall rules
+type FirewallProtocolRule struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Src           *FirewallEndpoint      `protobuf:"bytes,1,opt,name=src,proto3,oneof" json:"src,omitempty"` // Source matching
+	Dst           *FirewallEndpoint      `protobuf:"bytes,2,opt,name=dst,proto3,oneof" json:"dst,omitempty"` // Destination matching
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FirewallProtocolRule) Reset() {
+	*x = FirewallProtocolRule{}
+	mi := &file_proto_dataplane_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FirewallProtocolRule) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FirewallProtocolRule) ProtoMessage() {}
+
+func (x *FirewallProtocolRule) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_dataplane_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FirewallProtocolRule.ProtoReflect.Descriptor instead.
+func (*FirewallProtocolRule) Descriptor() ([]byte, []int) {
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *FirewallProtocolRule) GetSrc() *FirewallEndpoint {
+	if x != nil {
+		return x.Src
+	}
+	return nil
+}
+
+func (x *FirewallProtocolRule) GetDst() *FirewallEndpoint {
+	if x != nil {
+		return x.Dst
+	}
+	return nil
+}
+
+// Individual firewall rule
+type FirewallRule struct {
+	state     protoimpl.MessageState `protogen:"open.v1"`
+	Action    FirewallAction         `protobuf:"varint,1,opt,name=action,proto3,enum=config.FirewallAction" json:"action,omitempty"` // allow | deny
+	Stateless bool                   `protobuf:"varint,2,opt,name=stateless,proto3" json:"stateless,omitempty"`                      // Only stateless supported initially
+	Log       *FirewallLog           `protobuf:"bytes,3,opt,name=log,proto3,oneof" json:"log,omitempty"`                             // Logging configuration
+	// Protocol-specific rules (only one should be set)
+	Tcp           *FirewallProtocolRule `protobuf:"bytes,4,opt,name=tcp,proto3,oneof" json:"tcp,omitempty"`
+	Udp           *FirewallProtocolRule `protobuf:"bytes,5,opt,name=udp,proto3,oneof" json:"udp,omitempty"`
+	Icmp          *FirewallProtocolRule `protobuf:"bytes,6,opt,name=icmp,proto3,oneof" json:"icmp,omitempty"`
+	Protocol      *uint32               `protobuf:"varint,7,opt,name=protocol,proto3,oneof" json:"protocol,omitempty"` // Raw IP protocol number
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FirewallRule) Reset() {
+	*x = FirewallRule{}
+	mi := &file_proto_dataplane_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FirewallRule) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FirewallRule) ProtoMessage() {}
+
+func (x *FirewallRule) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_dataplane_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FirewallRule.ProtoReflect.Descriptor instead.
+func (*FirewallRule) Descriptor() ([]byte, []int) {
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *FirewallRule) GetAction() FirewallAction {
+	if x != nil {
+		return x.Action
+	}
+	return FirewallAction_FIREWALL_ACTION_ALLOW
+}
+
+func (x *FirewallRule) GetStateless() bool {
+	if x != nil {
+		return x.Stateless
+	}
+	return false
+}
+
+func (x *FirewallRule) GetLog() *FirewallLog {
+	if x != nil {
+		return x.Log
+	}
+	return nil
+}
+
+func (x *FirewallRule) GetTcp() *FirewallProtocolRule {
+	if x != nil {
+		return x.Tcp
+	}
+	return nil
+}
+
+func (x *FirewallRule) GetUdp() *FirewallProtocolRule {
+	if x != nil {
+		return x.Udp
+	}
+	return nil
+}
+
+func (x *FirewallRule) GetIcmp() *FirewallProtocolRule {
+	if x != nil {
+		return x.Icmp
+	}
+	return nil
+}
+
+func (x *FirewallRule) GetProtocol() uint32 {
+	if x != nil && x.Protocol != nil {
+		return *x.Protocol
+	}
+	return 0
+}
+
+// Firewall configuration for a VPC in peering
+type PeeringFirewall struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Rules         []*FirewallRule        `protobuf:"bytes,1,rep,name=rules,proto3" json:"rules,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PeeringFirewall) Reset() {
+	*x = PeeringFirewall{}
+	mi := &file_proto_dataplane_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PeeringFirewall) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PeeringFirewall) ProtoMessage() {}
+
+func (x *PeeringFirewall) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_dataplane_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PeeringFirewall.ProtoReflect.Descriptor instead.
+func (*PeeringFirewall) Descriptor() ([]byte, []int) {
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *PeeringFirewall) GetRules() []*FirewallRule {
+	if x != nil {
+		return x.Rules
+	}
+	return nil
+}
+
 // Defines the list of prefixes that VPCs can expose
 type PeeringIPs struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -831,7 +1237,7 @@ type PeeringIPs struct {
 
 func (x *PeeringIPs) Reset() {
 	*x = PeeringIPs{}
-	mi := &file_proto_dataplane_proto_msgTypes[8]
+	mi := &file_proto_dataplane_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -843,7 +1249,7 @@ func (x *PeeringIPs) String() string {
 func (*PeeringIPs) ProtoMessage() {}
 
 func (x *PeeringIPs) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[8]
+	mi := &file_proto_dataplane_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -856,7 +1262,7 @@ func (x *PeeringIPs) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PeeringIPs.ProtoReflect.Descriptor instead.
 func (*PeeringIPs) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{8}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *PeeringIPs) GetRule() isPeeringIPs_Rule {
@@ -914,7 +1320,7 @@ type PeeringAs struct {
 
 func (x *PeeringAs) Reset() {
 	*x = PeeringAs{}
-	mi := &file_proto_dataplane_proto_msgTypes[9]
+	mi := &file_proto_dataplane_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -926,7 +1332,7 @@ func (x *PeeringAs) String() string {
 func (*PeeringAs) ProtoMessage() {}
 
 func (x *PeeringAs) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[9]
+	mi := &file_proto_dataplane_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -939,7 +1345,7 @@ func (x *PeeringAs) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PeeringAs.ProtoReflect.Descriptor instead.
 func (*PeeringAs) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{9}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *PeeringAs) GetRule() isPeeringAs_Rule {
@@ -994,7 +1400,7 @@ type Expose struct {
 
 func (x *Expose) Reset() {
 	*x = Expose{}
-	mi := &file_proto_dataplane_proto_msgTypes[10]
+	mi := &file_proto_dataplane_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1006,7 +1412,7 @@ func (x *Expose) String() string {
 func (*Expose) ProtoMessage() {}
 
 func (x *Expose) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[10]
+	mi := &file_proto_dataplane_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1019,7 +1425,7 @@ func (x *Expose) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Expose.ProtoReflect.Descriptor instead.
 func (*Expose) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{10}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *Expose) GetIps() []*PeeringIPs {
@@ -1041,13 +1447,14 @@ type PeeringEntryFor struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Vpc           string                 `protobuf:"bytes,1,opt,name=vpc,proto3" json:"vpc,omitempty"`
 	Expose        []*Expose              `protobuf:"bytes,2,rep,name=expose,proto3" json:"expose,omitempty"`
+	Firewall      *PeeringFirewall       `protobuf:"bytes,3,opt,name=firewall,proto3,oneof" json:"firewall,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *PeeringEntryFor) Reset() {
 	*x = PeeringEntryFor{}
-	mi := &file_proto_dataplane_proto_msgTypes[11]
+	mi := &file_proto_dataplane_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1059,7 +1466,7 @@ func (x *PeeringEntryFor) String() string {
 func (*PeeringEntryFor) ProtoMessage() {}
 
 func (x *PeeringEntryFor) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[11]
+	mi := &file_proto_dataplane_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1072,7 +1479,7 @@ func (x *PeeringEntryFor) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PeeringEntryFor.ProtoReflect.Descriptor instead.
 func (*PeeringEntryFor) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{11}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *PeeringEntryFor) GetVpc() string {
@@ -1089,6 +1496,13 @@ func (x *PeeringEntryFor) GetExpose() []*Expose {
 	return nil
 }
 
+func (x *PeeringEntryFor) GetFirewall() *PeeringFirewall {
+	if x != nil {
+		return x.Firewall
+	}
+	return nil
+}
+
 // There can be only one peering per pair of given VPCs
 type VpcPeering struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -1100,7 +1514,7 @@ type VpcPeering struct {
 
 func (x *VpcPeering) Reset() {
 	*x = VpcPeering{}
-	mi := &file_proto_dataplane_proto_msgTypes[12]
+	mi := &file_proto_dataplane_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1112,7 +1526,7 @@ func (x *VpcPeering) String() string {
 func (*VpcPeering) ProtoMessage() {}
 
 func (x *VpcPeering) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[12]
+	mi := &file_proto_dataplane_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1125,7 +1539,7 @@ func (x *VpcPeering) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VpcPeering.ProtoReflect.Descriptor instead.
 func (*VpcPeering) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{12}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *VpcPeering) GetName() string {
@@ -1154,7 +1568,7 @@ type VPC struct {
 
 func (x *VPC) Reset() {
 	*x = VPC{}
-	mi := &file_proto_dataplane_proto_msgTypes[13]
+	mi := &file_proto_dataplane_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1166,7 +1580,7 @@ func (x *VPC) String() string {
 func (*VPC) ProtoMessage() {}
 
 func (x *VPC) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[13]
+	mi := &file_proto_dataplane_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1179,7 +1593,7 @@ func (x *VPC) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VPC.ProtoReflect.Descriptor instead.
 func (*VPC) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{13}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *VPC) GetId() string {
@@ -1221,7 +1635,7 @@ type Overlay struct {
 
 func (x *Overlay) Reset() {
 	*x = Overlay{}
-	mi := &file_proto_dataplane_proto_msgTypes[14]
+	mi := &file_proto_dataplane_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1233,7 +1647,7 @@ func (x *Overlay) String() string {
 func (*Overlay) ProtoMessage() {}
 
 func (x *Overlay) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[14]
+	mi := &file_proto_dataplane_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1246,7 +1660,7 @@ func (x *Overlay) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Overlay.ProtoReflect.Descriptor instead.
 func (*Overlay) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{14}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *Overlay) GetVpcs() []*VPC {
@@ -1274,7 +1688,7 @@ type BgpAddressFamilyIPv4 struct {
 
 func (x *BgpAddressFamilyIPv4) Reset() {
 	*x = BgpAddressFamilyIPv4{}
-	mi := &file_proto_dataplane_proto_msgTypes[15]
+	mi := &file_proto_dataplane_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1286,7 +1700,7 @@ func (x *BgpAddressFamilyIPv4) String() string {
 func (*BgpAddressFamilyIPv4) ProtoMessage() {}
 
 func (x *BgpAddressFamilyIPv4) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[15]
+	mi := &file_proto_dataplane_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1299,7 +1713,7 @@ func (x *BgpAddressFamilyIPv4) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BgpAddressFamilyIPv4.ProtoReflect.Descriptor instead.
 func (*BgpAddressFamilyIPv4) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{15}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *BgpAddressFamilyIPv4) GetRedistributeConnected() bool {
@@ -1327,7 +1741,7 @@ type BgpAddressFamilyIPv6 struct {
 
 func (x *BgpAddressFamilyIPv6) Reset() {
 	*x = BgpAddressFamilyIPv6{}
-	mi := &file_proto_dataplane_proto_msgTypes[16]
+	mi := &file_proto_dataplane_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1339,7 +1753,7 @@ func (x *BgpAddressFamilyIPv6) String() string {
 func (*BgpAddressFamilyIPv6) ProtoMessage() {}
 
 func (x *BgpAddressFamilyIPv6) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[16]
+	mi := &file_proto_dataplane_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1352,7 +1766,7 @@ func (x *BgpAddressFamilyIPv6) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BgpAddressFamilyIPv6.ProtoReflect.Descriptor instead.
 func (*BgpAddressFamilyIPv6) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{16}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *BgpAddressFamilyIPv6) GetRedistributeConnected() bool {
@@ -1379,7 +1793,7 @@ type BgpAddressFamilyL2VpnEvpn struct {
 
 func (x *BgpAddressFamilyL2VpnEvpn) Reset() {
 	*x = BgpAddressFamilyL2VpnEvpn{}
-	mi := &file_proto_dataplane_proto_msgTypes[17]
+	mi := &file_proto_dataplane_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1391,7 +1805,7 @@ func (x *BgpAddressFamilyL2VpnEvpn) String() string {
 func (*BgpAddressFamilyL2VpnEvpn) ProtoMessage() {}
 
 func (x *BgpAddressFamilyL2VpnEvpn) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[17]
+	mi := &file_proto_dataplane_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1404,7 +1818,7 @@ func (x *BgpAddressFamilyL2VpnEvpn) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BgpAddressFamilyL2VpnEvpn.ProtoReflect.Descriptor instead.
 func (*BgpAddressFamilyL2VpnEvpn) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{17}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *BgpAddressFamilyL2VpnEvpn) GetAdvertiseAllVni() bool {
@@ -1427,7 +1841,7 @@ type BgpNeighborUpdateSource struct {
 
 func (x *BgpNeighborUpdateSource) Reset() {
 	*x = BgpNeighborUpdateSource{}
-	mi := &file_proto_dataplane_proto_msgTypes[18]
+	mi := &file_proto_dataplane_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1439,7 +1853,7 @@ func (x *BgpNeighborUpdateSource) String() string {
 func (*BgpNeighborUpdateSource) ProtoMessage() {}
 
 func (x *BgpNeighborUpdateSource) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[18]
+	mi := &file_proto_dataplane_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1452,7 +1866,7 @@ func (x *BgpNeighborUpdateSource) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BgpNeighborUpdateSource.ProtoReflect.Descriptor instead.
 func (*BgpNeighborUpdateSource) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{18}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *BgpNeighborUpdateSource) GetSource() isBgpNeighborUpdateSource_Source {
@@ -1510,7 +1924,7 @@ type BgpNeighbor struct {
 
 func (x *BgpNeighbor) Reset() {
 	*x = BgpNeighbor{}
-	mi := &file_proto_dataplane_proto_msgTypes[19]
+	mi := &file_proto_dataplane_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1522,7 +1936,7 @@ func (x *BgpNeighbor) String() string {
 func (*BgpNeighbor) ProtoMessage() {}
 
 func (x *BgpNeighbor) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[19]
+	mi := &file_proto_dataplane_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1535,7 +1949,7 @@ func (x *BgpNeighbor) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BgpNeighbor.ProtoReflect.Descriptor instead.
 func (*BgpNeighbor) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{19}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *BgpNeighbor) GetAddress() string {
@@ -1586,7 +2000,7 @@ type RouteMap struct {
 
 func (x *RouteMap) Reset() {
 	*x = RouteMap{}
-	mi := &file_proto_dataplane_proto_msgTypes[20]
+	mi := &file_proto_dataplane_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1598,7 +2012,7 @@ func (x *RouteMap) String() string {
 func (*RouteMap) ProtoMessage() {}
 
 func (x *RouteMap) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[20]
+	mi := &file_proto_dataplane_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1611,7 +2025,7 @@ func (x *RouteMap) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RouteMap.ProtoReflect.Descriptor instead.
 func (*RouteMap) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{20}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *RouteMap) GetName() string {
@@ -1658,7 +2072,7 @@ type RouterConfig struct {
 
 func (x *RouterConfig) Reset() {
 	*x = RouterConfig{}
-	mi := &file_proto_dataplane_proto_msgTypes[21]
+	mi := &file_proto_dataplane_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1670,7 +2084,7 @@ func (x *RouterConfig) String() string {
 func (*RouterConfig) ProtoMessage() {}
 
 func (x *RouterConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[21]
+	mi := &file_proto_dataplane_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1683,7 +2097,7 @@ func (x *RouterConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RouterConfig.ProtoReflect.Descriptor instead.
 func (*RouterConfig) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{21}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *RouterConfig) GetAsn() string {
@@ -1748,7 +2162,7 @@ type VRF struct {
 
 func (x *VRF) Reset() {
 	*x = VRF{}
-	mi := &file_proto_dataplane_proto_msgTypes[22]
+	mi := &file_proto_dataplane_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1760,7 +2174,7 @@ func (x *VRF) String() string {
 func (*VRF) ProtoMessage() {}
 
 func (x *VRF) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[22]
+	mi := &file_proto_dataplane_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1773,7 +2187,7 @@ func (x *VRF) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VRF.ProtoReflect.Descriptor instead.
 func (*VRF) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{22}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *VRF) GetName() string {
@@ -1814,7 +2228,7 @@ type Underlay struct {
 
 func (x *Underlay) Reset() {
 	*x = Underlay{}
-	mi := &file_proto_dataplane_proto_msgTypes[23]
+	mi := &file_proto_dataplane_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1826,7 +2240,7 @@ func (x *Underlay) String() string {
 func (*Underlay) ProtoMessage() {}
 
 func (x *Underlay) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[23]
+	mi := &file_proto_dataplane_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1839,7 +2253,7 @@ func (x *Underlay) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Underlay.ProtoReflect.Descriptor instead.
 func (*Underlay) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{23}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *Underlay) GetVrfs() []*VRF {
@@ -1860,7 +2274,7 @@ type Ports struct {
 
 func (x *Ports) Reset() {
 	*x = Ports{}
-	mi := &file_proto_dataplane_proto_msgTypes[24]
+	mi := &file_proto_dataplane_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1872,7 +2286,7 @@ func (x *Ports) String() string {
 func (*Ports) ProtoMessage() {}
 
 func (x *Ports) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[24]
+	mi := &file_proto_dataplane_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1885,7 +2299,7 @@ func (x *Ports) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Ports.ProtoReflect.Descriptor instead.
 func (*Ports) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{24}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *Ports) GetName() string {
@@ -1911,7 +2325,7 @@ type Eal struct {
 
 func (x *Eal) Reset() {
 	*x = Eal{}
-	mi := &file_proto_dataplane_proto_msgTypes[25]
+	mi := &file_proto_dataplane_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1923,7 +2337,7 @@ func (x *Eal) String() string {
 func (*Eal) ProtoMessage() {}
 
 func (x *Eal) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[25]
+	mi := &file_proto_dataplane_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1936,7 +2350,7 @@ func (x *Eal) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Eal.ProtoReflect.Descriptor instead.
 func (*Eal) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{25}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{31}
 }
 
 // System level config options
@@ -1953,7 +2367,7 @@ type Device struct {
 
 func (x *Device) Reset() {
 	*x = Device{}
-	mi := &file_proto_dataplane_proto_msgTypes[26]
+	mi := &file_proto_dataplane_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1965,7 +2379,7 @@ func (x *Device) String() string {
 func (*Device) ProtoMessage() {}
 
 func (x *Device) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[26]
+	mi := &file_proto_dataplane_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1978,7 +2392,7 @@ func (x *Device) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Device.ProtoReflect.Descriptor instead.
 func (*Device) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{26}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{32}
 }
 
 func (x *Device) GetDriver() PacketDriver {
@@ -2029,7 +2443,7 @@ type GatewayConfig struct {
 
 func (x *GatewayConfig) Reset() {
 	*x = GatewayConfig{}
-	mi := &file_proto_dataplane_proto_msgTypes[27]
+	mi := &file_proto_dataplane_proto_msgTypes[33]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2041,7 +2455,7 @@ func (x *GatewayConfig) String() string {
 func (*GatewayConfig) ProtoMessage() {}
 
 func (x *GatewayConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[27]
+	mi := &file_proto_dataplane_proto_msgTypes[33]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2054,7 +2468,7 @@ func (x *GatewayConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GatewayConfig.ProtoReflect.Descriptor instead.
 func (*GatewayConfig) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{27}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{33}
 }
 
 func (x *GatewayConfig) GetGeneration() int64 {
@@ -2127,7 +2541,38 @@ const file_proto_dataplane_proto_rawDesc = "" +
 	"\n" +
 	"\b_macaddrB\x0e\n" +
 	"\f_system_nameB\a\n" +
-	"\x05_ospf\">\n" +
+	"\x05_ospf\"=\n" +
+	"\vFirewallLog\x12\x14\n" +
+	"\x05level\x18\x01 \x01(\tR\x05level\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\"z\n" +
+	"\x10FirewallEndpoint\x12\x14\n" +
+	"\x05cidrs\x18\x01 \x03(\tR\x05cidrs\x12\x14\n" +
+	"\x05ports\x18\x02 \x03(\rR\x05ports\x12:\n" +
+	"\vport_ranges\x18\x03 \x03(\v2\x19.config.FirewallPortRangeR\n" +
+	"portRanges\";\n" +
+	"\x11FirewallPortRange\x12\x14\n" +
+	"\x05start\x18\x01 \x01(\rR\x05start\x12\x10\n" +
+	"\x03end\x18\x02 \x01(\rR\x03end\"\x88\x01\n" +
+	"\x14FirewallProtocolRule\x12/\n" +
+	"\x03src\x18\x01 \x01(\v2\x18.config.FirewallEndpointH\x00R\x03src\x88\x01\x01\x12/\n" +
+	"\x03dst\x18\x02 \x01(\v2\x18.config.FirewallEndpointH\x01R\x03dst\x88\x01\x01B\x06\n" +
+	"\x04_srcB\x06\n" +
+	"\x04_dst\"\xf8\x02\n" +
+	"\fFirewallRule\x12.\n" +
+	"\x06action\x18\x01 \x01(\x0e2\x16.config.FirewallActionR\x06action\x12\x1c\n" +
+	"\tstateless\x18\x02 \x01(\bR\tstateless\x12*\n" +
+	"\x03log\x18\x03 \x01(\v2\x13.config.FirewallLogH\x00R\x03log\x88\x01\x01\x123\n" +
+	"\x03tcp\x18\x04 \x01(\v2\x1c.config.FirewallProtocolRuleH\x01R\x03tcp\x88\x01\x01\x123\n" +
+	"\x03udp\x18\x05 \x01(\v2\x1c.config.FirewallProtocolRuleH\x02R\x03udp\x88\x01\x01\x125\n" +
+	"\x04icmp\x18\x06 \x01(\v2\x1c.config.FirewallProtocolRuleH\x03R\x04icmp\x88\x01\x01\x12\x1f\n" +
+	"\bprotocol\x18\a \x01(\rH\x04R\bprotocol\x88\x01\x01B\x06\n" +
+	"\x04_logB\x06\n" +
+	"\x04_tcpB\x06\n" +
+	"\x04_udpB\a\n" +
+	"\x05_icmpB\v\n" +
+	"\t_protocol\"=\n" +
+	"\x0fPeeringFirewall\x12*\n" +
+	"\x05rules\x18\x01 \x03(\v2\x14.config.FirewallRuleR\x05rules\">\n" +
 	"\n" +
 	"PeeringIPs\x12\x14\n" +
 	"\x04cidr\x18\x01 \x01(\tH\x00R\x04cidr\x12\x12\n" +
@@ -2139,10 +2584,12 @@ const file_proto_dataplane_proto_rawDesc = "" +
 	"\x04rule\"Q\n" +
 	"\x06Expose\x12$\n" +
 	"\x03ips\x18\x01 \x03(\v2\x12.config.PeeringIPsR\x03ips\x12!\n" +
-	"\x02as\x18\x02 \x03(\v2\x11.config.PeeringAsR\x02as\"K\n" +
+	"\x02as\x18\x02 \x03(\v2\x11.config.PeeringAsR\x02as\"\x92\x01\n" +
 	"\x0fPeeringEntryFor\x12\x10\n" +
 	"\x03vpc\x18\x01 \x01(\tR\x03vpc\x12&\n" +
-	"\x06expose\x18\x02 \x03(\v2\x0e.config.ExposeR\x06expose\"K\n" +
+	"\x06expose\x18\x02 \x03(\v2\x0e.config.ExposeR\x06expose\x128\n" +
+	"\bfirewall\x18\x03 \x01(\v2\x17.config.PeeringFirewallH\x00R\bfirewall\x88\x01\x01B\v\n" +
+	"\t_firewall\"K\n" +
 	"\n" +
 	"VpcPeering\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12)\n" +
@@ -2242,7 +2689,10 @@ const file_proto_dataplane_proto_rawDesc = "" +
 	"\fIF_TYPE_VTEP\x10\x03*2\n" +
 	"\x06IfRole\x12\x12\n" +
 	"\x0eIF_ROLE_FABRIC\x10\x00\x12\x14\n" +
-	"\x10IF_ROLE_EXTERNAL\x10\x01*;\n" +
+	"\x10IF_ROLE_EXTERNAL\x10\x01*E\n" +
+	"\x0eFirewallAction\x12\x19\n" +
+	"\x15FIREWALL_ACTION_ALLOW\x10\x00\x12\x18\n" +
+	"\x14FIREWALL_ACTION_DENY\x10\x01*;\n" +
 	"\x05BgpAF\x12\x10\n" +
 	"\fIPV4_UNICAST\x10\x00\x12\x10\n" +
 	"\fIPV6_UNICAST\x10\x01\x12\x0e\n" +
@@ -2275,88 +2725,105 @@ func file_proto_dataplane_proto_rawDescGZIP() []byte {
 	return file_proto_dataplane_proto_rawDescData
 }
 
-var file_proto_dataplane_proto_enumTypes = make([]protoimpl.EnumInfo, 7)
-var file_proto_dataplane_proto_msgTypes = make([]protoimpl.MessageInfo, 28)
+var file_proto_dataplane_proto_enumTypes = make([]protoimpl.EnumInfo, 8)
+var file_proto_dataplane_proto_msgTypes = make([]protoimpl.MessageInfo, 34)
 var file_proto_dataplane_proto_goTypes = []any{
 	(Error)(0),                          // 0: config.Error
 	(OspfNetworkType)(0),                // 1: config.OspfNetworkType
 	(IfType)(0),                         // 2: config.IfType
 	(IfRole)(0),                         // 3: config.IfRole
-	(BgpAF)(0),                          // 4: config.BgpAF
-	(LogLevel)(0),                       // 5: config.LogLevel
-	(PacketDriver)(0),                   // 6: config.PacketDriver
-	(*GetConfigRequest)(nil),            // 7: config.GetConfigRequest
-	(*UpdateConfigRequest)(nil),         // 8: config.UpdateConfigRequest
-	(*UpdateConfigResponse)(nil),        // 9: config.UpdateConfigResponse
-	(*GetConfigGenerationRequest)(nil),  // 10: config.GetConfigGenerationRequest
-	(*GetConfigGenerationResponse)(nil), // 11: config.GetConfigGenerationResponse
-	(*OspfInterface)(nil),               // 12: config.OspfInterface
-	(*OspfConfig)(nil),                  // 13: config.OspfConfig
-	(*Interface)(nil),                   // 14: config.Interface
-	(*PeeringIPs)(nil),                  // 15: config.PeeringIPs
-	(*PeeringAs)(nil),                   // 16: config.PeeringAs
-	(*Expose)(nil),                      // 17: config.Expose
-	(*PeeringEntryFor)(nil),             // 18: config.PeeringEntryFor
-	(*VpcPeering)(nil),                  // 19: config.VpcPeering
-	(*VPC)(nil),                         // 20: config.VPC
-	(*Overlay)(nil),                     // 21: config.Overlay
-	(*BgpAddressFamilyIPv4)(nil),        // 22: config.BgpAddressFamilyIPv4
-	(*BgpAddressFamilyIPv6)(nil),        // 23: config.BgpAddressFamilyIPv6
-	(*BgpAddressFamilyL2VpnEvpn)(nil),   // 24: config.BgpAddressFamilyL2vpnEvpn
-	(*BgpNeighborUpdateSource)(nil),     // 25: config.BgpNeighborUpdateSource
-	(*BgpNeighbor)(nil),                 // 26: config.BgpNeighbor
-	(*RouteMap)(nil),                    // 27: config.RouteMap
-	(*RouterConfig)(nil),                // 28: config.RouterConfig
-	(*VRF)(nil),                         // 29: config.VRF
-	(*Underlay)(nil),                    // 30: config.Underlay
-	(*Ports)(nil),                       // 31: config.Ports
-	(*Eal)(nil),                         // 32: config.Eal
-	(*Device)(nil),                      // 33: config.Device
-	(*GatewayConfig)(nil),               // 34: config.GatewayConfig
+	(FirewallAction)(0),                 // 4: config.FirewallAction
+	(BgpAF)(0),                          // 5: config.BgpAF
+	(LogLevel)(0),                       // 6: config.LogLevel
+	(PacketDriver)(0),                   // 7: config.PacketDriver
+	(*GetConfigRequest)(nil),            // 8: config.GetConfigRequest
+	(*UpdateConfigRequest)(nil),         // 9: config.UpdateConfigRequest
+	(*UpdateConfigResponse)(nil),        // 10: config.UpdateConfigResponse
+	(*GetConfigGenerationRequest)(nil),  // 11: config.GetConfigGenerationRequest
+	(*GetConfigGenerationResponse)(nil), // 12: config.GetConfigGenerationResponse
+	(*OspfInterface)(nil),               // 13: config.OspfInterface
+	(*OspfConfig)(nil),                  // 14: config.OspfConfig
+	(*Interface)(nil),                   // 15: config.Interface
+	(*FirewallLog)(nil),                 // 16: config.FirewallLog
+	(*FirewallEndpoint)(nil),            // 17: config.FirewallEndpoint
+	(*FirewallPortRange)(nil),           // 18: config.FirewallPortRange
+	(*FirewallProtocolRule)(nil),        // 19: config.FirewallProtocolRule
+	(*FirewallRule)(nil),                // 20: config.FirewallRule
+	(*PeeringFirewall)(nil),             // 21: config.PeeringFirewall
+	(*PeeringIPs)(nil),                  // 22: config.PeeringIPs
+	(*PeeringAs)(nil),                   // 23: config.PeeringAs
+	(*Expose)(nil),                      // 24: config.Expose
+	(*PeeringEntryFor)(nil),             // 25: config.PeeringEntryFor
+	(*VpcPeering)(nil),                  // 26: config.VpcPeering
+	(*VPC)(nil),                         // 27: config.VPC
+	(*Overlay)(nil),                     // 28: config.Overlay
+	(*BgpAddressFamilyIPv4)(nil),        // 29: config.BgpAddressFamilyIPv4
+	(*BgpAddressFamilyIPv6)(nil),        // 30: config.BgpAddressFamilyIPv6
+	(*BgpAddressFamilyL2VpnEvpn)(nil),   // 31: config.BgpAddressFamilyL2vpnEvpn
+	(*BgpNeighborUpdateSource)(nil),     // 32: config.BgpNeighborUpdateSource
+	(*BgpNeighbor)(nil),                 // 33: config.BgpNeighbor
+	(*RouteMap)(nil),                    // 34: config.RouteMap
+	(*RouterConfig)(nil),                // 35: config.RouterConfig
+	(*VRF)(nil),                         // 36: config.VRF
+	(*Underlay)(nil),                    // 37: config.Underlay
+	(*Ports)(nil),                       // 38: config.Ports
+	(*Eal)(nil),                         // 39: config.Eal
+	(*Device)(nil),                      // 40: config.Device
+	(*GatewayConfig)(nil),               // 41: config.GatewayConfig
 }
 var file_proto_dataplane_proto_depIdxs = []int32{
-	34, // 0: config.UpdateConfigRequest.config:type_name -> config.GatewayConfig
+	41, // 0: config.UpdateConfigRequest.config:type_name -> config.GatewayConfig
 	0,  // 1: config.UpdateConfigResponse.error:type_name -> config.Error
 	1,  // 2: config.OspfInterface.network_type:type_name -> config.OspfNetworkType
 	2,  // 3: config.Interface.type:type_name -> config.IfType
 	3,  // 4: config.Interface.role:type_name -> config.IfRole
-	12, // 5: config.Interface.ospf:type_name -> config.OspfInterface
-	15, // 6: config.Expose.ips:type_name -> config.PeeringIPs
-	16, // 7: config.Expose.as:type_name -> config.PeeringAs
-	17, // 8: config.PeeringEntryFor.expose:type_name -> config.Expose
-	18, // 9: config.VpcPeering.for:type_name -> config.PeeringEntryFor
-	14, // 10: config.VPC.interfaces:type_name -> config.Interface
-	20, // 11: config.Overlay.vpcs:type_name -> config.VPC
-	19, // 12: config.Overlay.peerings:type_name -> config.VpcPeering
-	4,  // 13: config.BgpNeighbor.af_activate:type_name -> config.BgpAF
-	25, // 14: config.BgpNeighbor.update_source:type_name -> config.BgpNeighborUpdateSource
-	26, // 15: config.RouterConfig.neighbors:type_name -> config.BgpNeighbor
-	22, // 16: config.RouterConfig.ipv4_unicast:type_name -> config.BgpAddressFamilyIPv4
-	23, // 17: config.RouterConfig.ipv6_unicast:type_name -> config.BgpAddressFamilyIPv6
-	24, // 18: config.RouterConfig.l2vpn_evpn:type_name -> config.BgpAddressFamilyL2vpnEvpn
-	27, // 19: config.RouterConfig.route_maps:type_name -> config.RouteMap
-	14, // 20: config.VRF.interfaces:type_name -> config.Interface
-	28, // 21: config.VRF.router:type_name -> config.RouterConfig
-	13, // 22: config.VRF.ospf:type_name -> config.OspfConfig
-	29, // 23: config.Underlay.vrfs:type_name -> config.VRF
-	6,  // 24: config.Device.driver:type_name -> config.PacketDriver
-	32, // 25: config.Device.eal:type_name -> config.Eal
-	31, // 26: config.Device.ports:type_name -> config.Ports
-	5,  // 27: config.Device.loglevel:type_name -> config.LogLevel
-	33, // 28: config.GatewayConfig.device:type_name -> config.Device
-	30, // 29: config.GatewayConfig.underlay:type_name -> config.Underlay
-	21, // 30: config.GatewayConfig.overlay:type_name -> config.Overlay
-	7,  // 31: config.ConfigService.GetConfig:input_type -> config.GetConfigRequest
-	10, // 32: config.ConfigService.GetConfigGeneration:input_type -> config.GetConfigGenerationRequest
-	8,  // 33: config.ConfigService.UpdateConfig:input_type -> config.UpdateConfigRequest
-	34, // 34: config.ConfigService.GetConfig:output_type -> config.GatewayConfig
-	11, // 35: config.ConfigService.GetConfigGeneration:output_type -> config.GetConfigGenerationResponse
-	9,  // 36: config.ConfigService.UpdateConfig:output_type -> config.UpdateConfigResponse
-	34, // [34:37] is the sub-list for method output_type
-	31, // [31:34] is the sub-list for method input_type
-	31, // [31:31] is the sub-list for extension type_name
-	31, // [31:31] is the sub-list for extension extendee
-	0,  // [0:31] is the sub-list for field type_name
+	13, // 5: config.Interface.ospf:type_name -> config.OspfInterface
+	18, // 6: config.FirewallEndpoint.port_ranges:type_name -> config.FirewallPortRange
+	17, // 7: config.FirewallProtocolRule.src:type_name -> config.FirewallEndpoint
+	17, // 8: config.FirewallProtocolRule.dst:type_name -> config.FirewallEndpoint
+	4,  // 9: config.FirewallRule.action:type_name -> config.FirewallAction
+	16, // 10: config.FirewallRule.log:type_name -> config.FirewallLog
+	19, // 11: config.FirewallRule.tcp:type_name -> config.FirewallProtocolRule
+	19, // 12: config.FirewallRule.udp:type_name -> config.FirewallProtocolRule
+	19, // 13: config.FirewallRule.icmp:type_name -> config.FirewallProtocolRule
+	20, // 14: config.PeeringFirewall.rules:type_name -> config.FirewallRule
+	22, // 15: config.Expose.ips:type_name -> config.PeeringIPs
+	23, // 16: config.Expose.as:type_name -> config.PeeringAs
+	24, // 17: config.PeeringEntryFor.expose:type_name -> config.Expose
+	21, // 18: config.PeeringEntryFor.firewall:type_name -> config.PeeringFirewall
+	25, // 19: config.VpcPeering.for:type_name -> config.PeeringEntryFor
+	15, // 20: config.VPC.interfaces:type_name -> config.Interface
+	27, // 21: config.Overlay.vpcs:type_name -> config.VPC
+	26, // 22: config.Overlay.peerings:type_name -> config.VpcPeering
+	5,  // 23: config.BgpNeighbor.af_activate:type_name -> config.BgpAF
+	32, // 24: config.BgpNeighbor.update_source:type_name -> config.BgpNeighborUpdateSource
+	33, // 25: config.RouterConfig.neighbors:type_name -> config.BgpNeighbor
+	29, // 26: config.RouterConfig.ipv4_unicast:type_name -> config.BgpAddressFamilyIPv4
+	30, // 27: config.RouterConfig.ipv6_unicast:type_name -> config.BgpAddressFamilyIPv6
+	31, // 28: config.RouterConfig.l2vpn_evpn:type_name -> config.BgpAddressFamilyL2vpnEvpn
+	34, // 29: config.RouterConfig.route_maps:type_name -> config.RouteMap
+	15, // 30: config.VRF.interfaces:type_name -> config.Interface
+	35, // 31: config.VRF.router:type_name -> config.RouterConfig
+	14, // 32: config.VRF.ospf:type_name -> config.OspfConfig
+	36, // 33: config.Underlay.vrfs:type_name -> config.VRF
+	7,  // 34: config.Device.driver:type_name -> config.PacketDriver
+	39, // 35: config.Device.eal:type_name -> config.Eal
+	38, // 36: config.Device.ports:type_name -> config.Ports
+	6,  // 37: config.Device.loglevel:type_name -> config.LogLevel
+	40, // 38: config.GatewayConfig.device:type_name -> config.Device
+	37, // 39: config.GatewayConfig.underlay:type_name -> config.Underlay
+	28, // 40: config.GatewayConfig.overlay:type_name -> config.Overlay
+	8,  // 41: config.ConfigService.GetConfig:input_type -> config.GetConfigRequest
+	11, // 42: config.ConfigService.GetConfigGeneration:input_type -> config.GetConfigGenerationRequest
+	9,  // 43: config.ConfigService.UpdateConfig:input_type -> config.UpdateConfigRequest
+	41, // 44: config.ConfigService.GetConfig:output_type -> config.GatewayConfig
+	12, // 45: config.ConfigService.GetConfigGeneration:output_type -> config.GetConfigGenerationResponse
+	10, // 46: config.ConfigService.UpdateConfig:output_type -> config.UpdateConfigResponse
+	44, // [44:47] is the sub-list for method output_type
+	41, // [41:44] is the sub-list for method input_type
+	41, // [41:41] is the sub-list for extension type_name
+	41, // [41:41] is the sub-list for extension extendee
+	0,  // [0:41] is the sub-list for field type_name
 }
 
 func init() { file_proto_dataplane_proto_init() }
@@ -2367,27 +2834,30 @@ func file_proto_dataplane_proto_init() {
 	file_proto_dataplane_proto_msgTypes[5].OneofWrappers = []any{}
 	file_proto_dataplane_proto_msgTypes[6].OneofWrappers = []any{}
 	file_proto_dataplane_proto_msgTypes[7].OneofWrappers = []any{}
-	file_proto_dataplane_proto_msgTypes[8].OneofWrappers = []any{
+	file_proto_dataplane_proto_msgTypes[11].OneofWrappers = []any{}
+	file_proto_dataplane_proto_msgTypes[12].OneofWrappers = []any{}
+	file_proto_dataplane_proto_msgTypes[14].OneofWrappers = []any{
 		(*PeeringIPs_Cidr)(nil),
 		(*PeeringIPs_Not)(nil),
 	}
-	file_proto_dataplane_proto_msgTypes[9].OneofWrappers = []any{
+	file_proto_dataplane_proto_msgTypes[15].OneofWrappers = []any{
 		(*PeeringAs_Cidr)(nil),
 		(*PeeringAs_Not)(nil),
 	}
-	file_proto_dataplane_proto_msgTypes[18].OneofWrappers = []any{
+	file_proto_dataplane_proto_msgTypes[17].OneofWrappers = []any{}
+	file_proto_dataplane_proto_msgTypes[24].OneofWrappers = []any{
 		(*BgpNeighborUpdateSource_Address)(nil),
 		(*BgpNeighborUpdateSource_Interface)(nil),
 	}
-	file_proto_dataplane_proto_msgTypes[21].OneofWrappers = []any{}
-	file_proto_dataplane_proto_msgTypes[22].OneofWrappers = []any{}
+	file_proto_dataplane_proto_msgTypes[27].OneofWrappers = []any{}
+	file_proto_dataplane_proto_msgTypes[28].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_dataplane_proto_rawDesc), len(file_proto_dataplane_proto_rawDesc)),
-			NumEnums:      7,
-			NumMessages:   28,
+			NumEnums:      8,
+			NumMessages:   34,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
