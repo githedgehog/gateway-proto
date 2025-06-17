@@ -79,6 +79,7 @@ message Interface {
   optional string macaddr = 6; /* Base MAC address to be used to generate unified MAC for VTEP */
   optional string system_name = 7; /* Parent interface for VLAN devices, only for VLAN role */
   optional OspfInterface ospf = 8; /* OSPF interface configuration if enabled */
+  optional uint32 mtu = 9; /* MTU for the interface */
 }
 
 /* Defines interface representation on the Gateway */

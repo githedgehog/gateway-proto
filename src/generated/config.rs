@@ -74,6 +74,9 @@ pub struct Interface {
     /// OSPF interface configuration if enabled
     #[prost(message, optional, tag = "8")]
     pub ospf: ::core::option::Option<OspfInterface>,
+    /// MTU for the interface
+    #[prost(uint32, optional, tag = "9")]
+    pub mtu: ::core::option::Option<u32>,
 }
 /// Defines the list of prefixes that VPCs can expose
 #[derive(::serde::Deserialize, ::serde::Serialize)]
