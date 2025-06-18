@@ -64,7 +64,8 @@ impl TypeGenerator for Interface {
         let (macaddr, mtu) = match r#type {
             IfType::Ethernet | IfType::Vlan | IfType::Vtep => (
                 Some(d.produce::<SourceMacAddrString>()?.as_ref().to_string()),
-                Some(d.gen_u32(Bound::Included(&68), Bound::Included(&9000))?),
+                // 1280 is the minimum MTU for IPv6
+                Some(d.gen_u32(Bound::Included(&1280), Bound::Included(&9000))?),
             ),
             IfType::Loopback => (None, None),
         };
@@ -149,7 +150,7 @@ mod test {
                     assert_eq!(bytes[0] & 0x01, 0);
                 }
                 if let Some(mtu) = intf.mtu {
-                    assert!((68_u32..=9000_u32).contains(&mtu));
+                    assert!((1280_u32..=9000_u32).contains(&mtu));
                 }
                 assert!(intf.macaddr.is_some() || intf.r#type != i32::from(IfType::Ethernet));
                 assert!(intf.vlan.is_some() || intf.r#type != i32::from(IfType::Vlan));
