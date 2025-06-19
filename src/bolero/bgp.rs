@@ -2,13 +2,14 @@
 // Copyright 2025 Hedgehog
 
 use crate::bolero::support::{
-    CidrString, IpAddrString, Ipv4AddrString, K8sObjectNameString, LinuxIfName, choose,
+    CidrString, IpAddrString, Ipv4AddrString, K8sObjectNameString, LinuxIfName,
+    UniqueV4CidrGenerator, UniqueV6CidrGenerator, choose,
 };
 use crate::config::{
     BgpAddressFamilyIPv4, BgpAddressFamilyIPv6, BgpAddressFamilyL2vpnEvpn, BgpAf, BgpNeighbor,
     BgpNeighborUpdateSource, RouteMap, RouterConfig, bgp_neighbor_update_source,
 };
-use bolero::{Driver, TypeGenerator};
+use bolero::{Driver, TypeGenerator, ValueGenerator};
 use std::ops::Bound;
 
 #[derive(Clone, Copy, PartialEq, TypeGenerator)]
@@ -19,20 +20,28 @@ enum BgpNeighborUpdateSourceType {
 
 impl TypeGenerator for BgpAddressFamilyIPv4 {
     fn generate<D: Driver>(d: &mut D) -> Option<Self> {
+        let v4_prefix_generator = UniqueV4CidrGenerator::new(
+            d.gen_u16(Bound::Included(&0), Bound::Included(&10))?,
+            d.gen_u8(Bound::Included(&1), Bound::Included(&32))?,
+        );
         Some(BgpAddressFamilyIPv4 {
             redistribute_connected: d.gen_bool(None)?,
             redistribute_static: d.gen_bool(None)?,
-            networks: vec![],
+            networks: v4_prefix_generator.generate(d)?,
         })
     }
 }
 
 impl TypeGenerator for BgpAddressFamilyIPv6 {
     fn generate<D: Driver>(d: &mut D) -> Option<Self> {
+        let v6_prefix_generator = UniqueV6CidrGenerator::new(
+            d.gen_u16(Bound::Included(&0), Bound::Included(&10))?,
+            d.gen_u8(Bound::Included(&1), Bound::Included(&128))?,
+        );
         Some(BgpAddressFamilyIPv6 {
             redistribute_connected: d.gen_bool(None)?,
             redistribute_static: d.gen_bool(None)?,
-            networks: vec![],
+            networks: v6_prefix_generator.generate(d)?,
         })
     }
 }
@@ -149,5 +158,39 @@ mod test {
             .for_each(|router_config| {
                 assert!(router_config.asn.parse::<u32>().is_ok());
             });
+    }
+
+    #[test]
+    fn test_bgp_address_family_ipv4() {
+        let mut some_networks = false;
+        bolero::check!()
+            .with_type::<BgpAddressFamilyIPv4>()
+            .for_each(|bgp_address_family_ipv4| {
+                if !bgp_address_family_ipv4.networks.is_empty() {
+                    some_networks = true;
+                    let mut seen = std::collections::HashSet::new();
+                    for network in &bgp_address_family_ipv4.networks {
+                        assert!(seen.insert(network), "Duplicate network found: {network}");
+                    }
+                }
+            });
+        assert!(some_networks);
+    }
+
+    #[test]
+    fn test_bgp_address_family_ipv6() {
+        let mut some_networks = false;
+        bolero::check!()
+            .with_type::<BgpAddressFamilyIPv6>()
+            .for_each(|bgp_address_family_ipv6| {
+                if !bgp_address_family_ipv6.networks.is_empty() {
+                    some_networks = true;
+                    let mut seen = std::collections::HashSet::new();
+                    for network in &bgp_address_family_ipv6.networks {
+                        assert!(seen.insert(network), "Duplicate network found: {network}");
+                    }
+                }
+            });
+        assert!(some_networks);
     }
 }
