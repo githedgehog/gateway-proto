@@ -167,24 +167,26 @@ pub struct Overlay {
     pub peerings: ::prost::alloc::vec::Vec<VpcPeering>,
 }
 /// BGP options for IPv4 UNICAST AFI
-#[cfg_attr(feature = "bolero", derive(::bolero::TypeGenerator))]
 #[derive(::serde::Deserialize, ::serde::Serialize)]
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct BgpAddressFamilyIPv4 {
     #[prost(bool, tag = "1")]
     pub redistribute_connected: bool,
     #[prost(bool, tag = "2")]
     pub redistribute_static: bool,
+    #[prost(string, repeated, tag = "3")]
+    pub networks: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 /// BGP options for IPv6 UNICAST AFI
-#[cfg_attr(feature = "bolero", derive(::bolero::TypeGenerator))]
 #[derive(::serde::Deserialize, ::serde::Serialize)]
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct BgpAddressFamilyIPv6 {
     #[prost(bool, tag = "1")]
     pub redistribute_connected: bool,
     #[prost(bool, tag = "2")]
     pub redistribute_static: bool,
+    #[prost(string, repeated, tag = "3")]
+    pub networks: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 /// BGP options for L2VPN EVPN AFI
 #[cfg_attr(feature = "bolero", derive(::bolero::TypeGenerator))]
@@ -225,8 +227,6 @@ pub struct BgpNeighbor {
     pub af_activate: ::prost::alloc::vec::Vec<i32>,
     #[prost(message, optional, tag = "4")]
     pub update_source: ::core::option::Option<BgpNeighborUpdateSource>,
-    #[prost(string, repeated, tag = "5")]
-    pub networks: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 /// IP Prefix filtering route map description
 #[derive(::serde::Deserialize, ::serde::Serialize)]

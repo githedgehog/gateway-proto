@@ -17,6 +17,26 @@ enum BgpNeighborUpdateSourceType {
     Interface,
 }
 
+impl TypeGenerator for BgpAddressFamilyIPv4 {
+    fn generate<D: Driver>(d: &mut D) -> Option<Self> {
+        Some(BgpAddressFamilyIPv4 {
+            redistribute_connected: d.gen_bool(None)?,
+            redistribute_static: d.gen_bool(None)?,
+            networks: vec![],
+        })
+    }
+}
+
+impl TypeGenerator for BgpAddressFamilyIPv6 {
+    fn generate<D: Driver>(d: &mut D) -> Option<Self> {
+        Some(BgpAddressFamilyIPv6 {
+            redistribute_connected: d.gen_bool(None)?,
+            redistribute_static: d.gen_bool(None)?,
+            networks: vec![],
+        })
+    }
+}
+
 impl TypeGenerator for bgp_neighbor_update_source::Source {
     fn generate<D: Driver>(d: &mut D) -> Option<Self> {
         let source: BgpNeighborUpdateSourceType = d.produce()?;
@@ -43,7 +63,6 @@ impl TypeGenerator for BgpNeighborUpdateSource {
 impl TypeGenerator for BgpNeighbor {
     fn generate<D: Driver>(d: &mut D) -> Option<Self> {
         let naf = d.gen_usize(Bound::Included(&0), Bound::Included(&2))?;
-        let nnetworks = d.gen_usize(Bound::Included(&0), Bound::Included(&10))?;
         let af_activate_set: std::collections::HashSet<_> = (0..naf)
             .map(|_| d.produce::<BgpAf>())
             .collect::<Option<std::collections::HashSet<_>>>()?;
@@ -53,9 +72,6 @@ impl TypeGenerator for BgpNeighbor {
             #[allow(clippy::redundant_closure_for_method_calls)]
             af_activate: af_activate_set.into_iter().map(|af| af.into()).collect(),
             update_source: Some(d.produce::<BgpNeighborUpdateSource>()?),
-            networks: (0..nnetworks)
-                .map(|_| d.produce::<CidrString>().map(|cidr| cidr.0))
-                .collect::<Option<Vec<_>>>()?,
         })
     }
 }
@@ -114,20 +130,15 @@ mod test {
 
     #[test]
     fn test_bgp_neighbor() {
-        let mut some_nets = false;
         let mut some_afs = false;
         bolero::check!()
             .with_type::<BgpNeighbor>()
             .for_each(|bgp_neighbor| {
                 assert!(bgp_neighbor.remote_asn.parse::<u32>().is_ok());
-                if !bgp_neighbor.networks.is_empty() {
-                    some_nets = true;
-                }
                 if !bgp_neighbor.af_activate.is_empty() {
                     some_afs = true;
                 }
             });
-        assert!(some_nets);
         assert!(some_afs);
     }
 

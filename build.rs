@@ -25,8 +25,6 @@ fn main() {
         let bld = add_type_generators(
             bld,
             &[
-                "BgpAddressFamilyIPv4",
-                "BgpAddressFamilyIPv6",
                 "BgpAddressFamilyL2vpnEvpn",
                 "BgpAF",
                 "IfType",
