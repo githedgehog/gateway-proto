@@ -156,12 +156,14 @@ message Overlay {
 message BgpAddressFamilyIPv4 {
   bool redistribute_connected = 1;
   bool redistribute_static = 2;
+  repeated string networks = 3;
 }
 
 /* BGP options for IPv6 UNICAST AFI */
 message BgpAddressFamilyIPv6 {
   bool redistribute_connected = 1;
   bool redistribute_static = 2;
+  repeated string networks = 3;
 }
 
 /* BGP options for L2VPN EVPN AFI */
@@ -190,7 +192,6 @@ message BgpNeighbor {
   string remote_asn = 2;
   repeated BgpAF af_activate = 3;
   BgpNeighborUpdateSource update_source = 4;
-  repeated string networks = 5;
 }
 
 /* IP Prefix filtering route map description */
