@@ -50,6 +50,44 @@ pub struct OspfConfig {
     #[prost(string, optional, tag = "2")]
     pub vrf: ::core::option::Option<::prost::alloc::string::String>,
 }
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetDataplaneStatusRequest {}
+/// TODO: Consider adding an optional string field to InterfaceStatus for additional error messages or descriptions.
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct InterfaceStatus {
+    #[prost(string, tag = "1")]
+    pub ifname: ::prost::alloc::string::String,
+    #[prost(enumeration = "InterfaceStatusType", tag = "2")]
+    pub status: i32,
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct FrrStatus {
+    #[prost(enumeration = "FrrStatusType", tag = "1")]
+    pub status: i32,
+    #[prost(uint32, tag = "2")]
+    pub applied_config_id: u32,
+    #[prost(uint32, tag = "3")]
+    pub restarts: u32,
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct DataplaneStatusInfo {
+    #[prost(enumeration = "DataplaneStatusType", tag = "1")]
+    pub status: i32,
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetDataplaneStatusResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub interface_statuses: ::prost::alloc::vec::Vec<InterfaceStatus>,
+    #[prost(message, optional, tag = "2")]
+    pub frr_status: ::core::option::Option<FrrStatus>,
+    #[prost(message, optional, tag = "3")]
+    pub dataplane_status: ::core::option::Option<DataplaneStatusInfo>,
+}
 /// Defines a logical interface. May correlate with physical representation
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
@@ -426,6 +464,110 @@ impl OspfNetworkType {
         }
     }
 }
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum InterfaceStatusType {
+    InterfaceStatusUnknown = 0,
+    InterfaceStatusUp = 1,
+    InterfaceStatusDown = 2,
+    InterfaceStatusAdminDown = 3,
+    InterfaceStatusError = 4,
+}
+impl InterfaceStatusType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::InterfaceStatusUnknown => "INTERFACE_STATUS_UNKNOWN",
+            Self::InterfaceStatusUp => "INTERFACE_STATUS_UP",
+            Self::InterfaceStatusDown => "INTERFACE_STATUS_DOWN",
+            Self::InterfaceStatusAdminDown => "INTERFACE_STATUS_ADMIN_DOWN",
+            Self::InterfaceStatusError => "INTERFACE_STATUS_ERROR",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "INTERFACE_STATUS_UNKNOWN" => Some(Self::InterfaceStatusUnknown),
+            "INTERFACE_STATUS_UP" => Some(Self::InterfaceStatusUp),
+            "INTERFACE_STATUS_DOWN" => Some(Self::InterfaceStatusDown),
+            "INTERFACE_STATUS_ADMIN_DOWN" => Some(Self::InterfaceStatusAdminDown),
+            "INTERFACE_STATUS_ERROR" => Some(Self::InterfaceStatusError),
+            _ => None,
+        }
+    }
+}
+/// TODO: Consider adding additional states such as FRR_STATUS_STARTING, FRR_STATUS_STOPPING,
+/// or other states that might be relevant for tracking the lifecycle of FRR processes.
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum FrrStatusType {
+    FrrStatusUnknown = 0,
+    FrrStatusActive = 1,
+    FrrStatusError = 2,
+    FrrStatusCrashed = 3,
+}
+impl FrrStatusType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::FrrStatusUnknown => "FRR_STATUS_UNKNOWN",
+            Self::FrrStatusActive => "FRR_STATUS_ACTIVE",
+            Self::FrrStatusError => "FRR_STATUS_ERROR",
+            Self::FrrStatusCrashed => "FRR_STATUS_CRASHED",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "FRR_STATUS_UNKNOWN" => Some(Self::FrrStatusUnknown),
+            "FRR_STATUS_ACTIVE" => Some(Self::FrrStatusActive),
+            "FRR_STATUS_ERROR" => Some(Self::FrrStatusError),
+            "FRR_STATUS_CRASHED" => Some(Self::FrrStatusCrashed),
+            _ => None,
+        }
+    }
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum DataplaneStatusType {
+    DataplaneStatusUnknown = 0,
+    DataplaneStatusHealthy = 1,
+    DataplaneStatusInit = 2,
+    DataplaneStatusError = 3,
+}
+impl DataplaneStatusType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::DataplaneStatusUnknown => "DATAPLANE_STATUS_UNKNOWN",
+            Self::DataplaneStatusHealthy => "DATAPLANE_STATUS_HEALTHY",
+            Self::DataplaneStatusInit => "DATAPLANE_STATUS_INIT",
+            Self::DataplaneStatusError => "DATAPLANE_STATUS_ERROR",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "DATAPLANE_STATUS_UNKNOWN" => Some(Self::DataplaneStatusUnknown),
+            "DATAPLANE_STATUS_HEALTHY" => Some(Self::DataplaneStatusHealthy),
+            "DATAPLANE_STATUS_INIT" => Some(Self::DataplaneStatusInit),
+            "DATAPLANE_STATUS_ERROR" => Some(Self::DataplaneStatusError),
+            _ => None,
+        }
+    }
+}
 /// Defines interface representation on the Gateway
 #[cfg_attr(any(feature = "bolero", test), derive(::bolero::TypeGenerator))]
 #[derive(::serde::Deserialize, ::serde::Serialize)]
@@ -752,6 +894,30 @@ pub mod config_service_client {
                 .insert(GrpcMethod::new("config.ConfigService", "UpdateConfig"));
             self.inner.unary(req, path, codec).await
         }
+        pub async fn get_dataplane_status(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetDataplaneStatusRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetDataplaneStatusResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/config.ConfigService/GetDataplaneStatus",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("config.ConfigService", "GetDataplaneStatus"));
+            self.inner.unary(req, path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -783,6 +949,13 @@ pub mod config_service_server {
             request: tonic::Request<super::UpdateConfigRequest>,
         ) -> std::result::Result<
             tonic::Response<super::UpdateConfigResponse>,
+            tonic::Status,
+        >;
+        async fn get_dataplane_status(
+            &self,
+            request: tonic::Request<super::GetDataplaneStatusRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetDataplaneStatusResponse>,
             tonic::Status,
         >;
     }
@@ -983,6 +1156,52 @@ pub mod config_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let method = UpdateConfigSvc(inner);
+                        let codec = tonic_prost::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/config.ConfigService/GetDataplaneStatus" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetDataplaneStatusSvc<T: ConfigService>(pub Arc<T>);
+                    impl<
+                        T: ConfigService,
+                    > tonic::server::UnaryService<super::GetDataplaneStatusRequest>
+                    for GetDataplaneStatusSvc<T> {
+                        type Response = super::GetDataplaneStatusResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::GetDataplaneStatusRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as ConfigService>::get_dataplane_status(&inner, request)
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let method = GetDataplaneStatusSvc(inner);
                         let codec = tonic_prost::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

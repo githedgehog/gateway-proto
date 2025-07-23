@@ -8,6 +8,7 @@ mod gateway_config;
 mod impl_peering_as;
 mod impl_peering_i_ps;
 mod interface;
+mod status;
 pub mod support;
 #[cfg(test)]
 pub mod test_support;

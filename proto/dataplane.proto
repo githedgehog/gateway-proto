@@ -13,6 +13,7 @@ service ConfigService {
   rpc GetConfig (GetConfigRequest) returns (GatewayConfig);
   rpc GetConfigGeneration (GetConfigGenerationRequest) returns (GetConfigGenerationResponse);
   rpc UpdateConfig (UpdateConfigRequest) returns (UpdateConfigResponse);
+  rpc GetDataplaneStatus (GetDataplaneStatusRequest) returns (GetDataplaneStatusResponse);
 }
 
 message GetConfigRequest {
@@ -65,6 +66,60 @@ message OspfInterface {
 message OspfConfig {
   string router_id = 1;
   optional string vrf = 2;
+}
+
+/* ========================== */
+/* ==== Dataplane Status ==== */
+/* ========================== */
+
+enum InterfaceStatusType {
+  INTERFACE_STATUS_UNKNOWN = 0;
+  INTERFACE_STATUS_UP = 1;
+  INTERFACE_STATUS_DOWN = 2;
+  INTERFACE_STATUS_ADMIN_DOWN = 3;
+  INTERFACE_STATUS_ERROR = 4;
+}
+
+
+/* TODO: Consider adding additional states such as FRR_STATUS_STARTING, FRR_STATUS_STOPPING, 
+   or other states that might be relevant for tracking the lifecycle of FRR processes. */
+enum FrrStatusType {
+  FRR_STATUS_UNKNOWN = 0;
+  FRR_STATUS_ACTIVE = 1;
+  FRR_STATUS_ERROR = 2;
+  FRR_STATUS_CRASHED = 3;
+}
+
+enum DataplaneStatusType {
+  DATAPLANE_STATUS_UNKNOWN = 0;
+  DATAPLANE_STATUS_HEALTHY = 1;
+  DATAPLANE_STATUS_INIT = 2;
+  DATAPLANE_STATUS_ERROR = 3;
+}
+
+message GetDataplaneStatusRequest {
+}
+
+/* TODO: Consider adding an optional string field to InterfaceStatus for additional error messages or descriptions. */
+message InterfaceStatus {
+  string ifname = 1;
+  InterfaceStatusType status = 2;
+}
+
+message FrrStatus {
+  FrrStatusType status = 1;
+  uint32 applied_config_id = 2;
+  uint32 restarts = 3;
+}
+
+message DataplaneStatusInfo {
+  DataplaneStatusType status = 1;
+}
+
+message GetDataplaneStatusResponse {
+  repeated InterfaceStatus interface_statuses = 1;
+  FrrStatus frr_status = 2;
+  DataplaneStatusInfo dataplane_status = 3;
 }
 
 /* ================================================ */

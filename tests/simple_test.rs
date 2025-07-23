@@ -5,8 +5,9 @@ use std::net::SocketAddr;
 use tonic::{Request, Response, Status};
 
 use gateway_config::{
-    ConfigService, ConfigServiceClient, ConfigServiceServer, GetConfigGenerationRequest,
-    GetConfigGenerationResponse,
+    ConfigService, ConfigServiceClient, ConfigServiceServer, DataplaneStatusType, FrrStatusType,
+    GetConfigGenerationRequest, GetConfigGenerationResponse, GetDataplaneStatusRequest,
+    GetDataplaneStatusResponse,
 };
 
 struct SimpleConfigService {
@@ -28,6 +29,24 @@ impl ConfigService for SimpleConfigService {
         println!("Server received get_config_generation request");
         Ok(Response::new(GetConfigGenerationResponse {
             generation: self.generation,
+        }))
+    }
+
+    async fn get_dataplane_status(
+        &self,
+        _request: Request<GetDataplaneStatusRequest>,
+    ) -> Result<Response<GetDataplaneStatusResponse>, Status> {
+        println!("Server received get_dataplane_status request");
+        Ok(Response::new(GetDataplaneStatusResponse {
+            interface_statuses: vec![],
+            frr_status: Some(gateway_config::FrrStatus {
+                status: FrrStatusType::FrrStatusActive as i32,
+                restarts: 0,
+                applied_config_id: 1,
+            }),
+            dataplane_status: Some(gateway_config::DataplaneStatusInfo {
+                status: DataplaneStatusType::DataplaneStatusHealthy as i32,
+            }),
         }))
     }
 
