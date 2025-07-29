@@ -74,10 +74,15 @@ message OspfConfig {
 
 enum InterfaceStatusType {
   INTERFACE_STATUS_UNKNOWN = 0;
-  INTERFACE_STATUS_UP = 1;
-  INTERFACE_STATUS_DOWN = 2;
-  INTERFACE_STATUS_ADMIN_DOWN = 3;
-  INTERFACE_STATUS_ERROR = 4;
+  INTERFACE_STATUS_OPER_UP = 1;
+  INTERFACE_STATUS_OPER_DOWN = 2;
+  INTERFACE_STATUS_ERROR = 3;
+}
+
+enum InterfaceAdminStatusType {
+  INTERFACE_ADMIN_STATUS_UNKNOWN = 0;
+  INTERFACE_ADMIN_STATUS_UP = 1;
+  INTERFACE_ADMIN_STATUS_DOWN = 2;
 }
 
 
@@ -87,7 +92,6 @@ enum FrrStatusType {
   FRR_STATUS_UNKNOWN = 0;
   FRR_STATUS_ACTIVE = 1;
   FRR_STATUS_ERROR = 2;
-  FRR_STATUS_CRASHED = 3;
 }
 
 enum DataplaneStatusType {
@@ -104,11 +108,12 @@ message GetDataplaneStatusRequest {
 message InterfaceStatus {
   string ifname = 1;
   InterfaceStatusType status = 2;
+  InterfaceAdminStatusType admin_status = 3;
 }
 
 message FrrStatus {
   FrrStatusType status = 1;
-  uint32 applied_config_id = 2;
+  uint32 applied_config_gen = 2;
   uint32 restarts = 3;
 }
 
