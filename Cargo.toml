@@ -11,7 +11,7 @@ bolero = ["dep:bolero"]
 regenerate = ["dep:tonic-build", "dep:protoc-bin-vendored"]
 
 [dependencies]
-bolero = { version = "0.13.3", features = [
+bolero = { version = "0.13.4", features = [
     "alloc",
     "arbitrary",
     "std",
