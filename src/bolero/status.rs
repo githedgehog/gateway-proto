@@ -4,7 +4,7 @@
 use crate::bolero::support::{LinuxIfName, choose};
 use crate::config::{
     DataplaneStatusInfo, DataplaneStatusType, FrrStatus, FrrStatusType, GetDataplaneStatusRequest,
-    GetDataplaneStatusResponse, InterfaceStatus, InterfaceStatusType,
+    GetDataplaneStatusResponse, InterfaceAdminStatusType, InterfaceStatus, InterfaceStatusType,
 };
 use bolero::{Driver, TypeGenerator};
 use std::ops::Bound;
@@ -13,10 +13,22 @@ impl TypeGenerator for InterfaceStatusType {
     fn generate<D: Driver>(d: &mut D) -> Option<Self> {
         let variants = [
             InterfaceStatusType::InterfaceStatusUnknown,
-            InterfaceStatusType::InterfaceStatusUp,
-            InterfaceStatusType::InterfaceStatusDown,
-            InterfaceStatusType::InterfaceStatusAdminDown,
+            InterfaceStatusType::InterfaceStatusOperUp,
+            InterfaceStatusType::InterfaceStatusOperDown,
             InterfaceStatusType::InterfaceStatusError,
+        ];
+
+        let index = d.gen_usize(Bound::Included(&0), Bound::Included(&(variants.len() - 1)))?;
+        Some(variants[index])
+    }
+}
+
+impl TypeGenerator for InterfaceAdminStatusType {
+    fn generate<D: Driver>(d: &mut D) -> Option<Self> {
+        let variants = [
+            InterfaceAdminStatusType::InterfaceAdminStatusUnknown,
+            InterfaceAdminStatusType::InterfaceAdminStatusUp,
+            InterfaceAdminStatusType::InterfaceAdminStatusDown,
         ];
 
         let index = d.gen_usize(Bound::Included(&0), Bound::Included(&(variants.len() - 1)))?;
@@ -30,7 +42,6 @@ impl TypeGenerator for FrrStatusType {
             FrrStatusType::FrrStatusUnknown,
             FrrStatusType::FrrStatusActive,
             FrrStatusType::FrrStatusError,
-            FrrStatusType::FrrStatusCrashed,
         ];
 
         let index = d.gen_usize(Bound::Included(&0), Bound::Included(&(variants.len() - 1)))?;
@@ -64,6 +75,7 @@ impl TypeGenerator for InterfaceStatus {
         Some(InterfaceStatus {
             ifname: d.produce::<LinuxIfName>()?.0,
             status: d.produce::<InterfaceStatusType>()?.into(),
+            admin_status: d.produce::<InterfaceAdminStatusType>()?.into(),
         })
     }
 }
@@ -81,7 +93,7 @@ impl TypeGenerator for FrrStatus {
 
         Some(FrrStatus {
             status: d.produce::<FrrStatusType>()?.into(),
-            applied_config_id: d.produce::<u32>()?,
+            applied_config_gen: d.produce::<u32>()?,
             restarts,
         })
     }
@@ -152,6 +164,16 @@ mod test {
             .with_type::<FrrStatusType>()
             .for_each(|frr_status_type| {
                 let status_num = i32::from(*frr_status_type);
+                assert!((0..=3).contains(&status_num));
+            });
+    }
+
+    #[test]
+    fn test_interface_admin_status_type() {
+        bolero::check!()
+            .with_type::<InterfaceAdminStatusType>()
+            .for_each(|interface_admin_status_type| {
+                let status_num = i32::from(*interface_admin_status_type);
                 assert!((0..=3).contains(&status_num));
             });
     }

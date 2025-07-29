@@ -61,6 +61,8 @@ pub struct InterfaceStatus {
     pub ifname: ::prost::alloc::string::String,
     #[prost(enumeration = "InterfaceStatusType", tag = "2")]
     pub status: i32,
+    #[prost(enumeration = "InterfaceAdminStatusType", tag = "3")]
+    pub admin_status: i32,
 }
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
@@ -68,7 +70,7 @@ pub struct FrrStatus {
     #[prost(enumeration = "FrrStatusType", tag = "1")]
     pub status: i32,
     #[prost(uint32, tag = "2")]
-    pub applied_config_id: u32,
+    pub applied_config_gen: u32,
     #[prost(uint32, tag = "3")]
     pub restarts: u32,
 }
@@ -469,10 +471,9 @@ impl OspfNetworkType {
 #[repr(i32)]
 pub enum InterfaceStatusType {
     InterfaceStatusUnknown = 0,
-    InterfaceStatusUp = 1,
-    InterfaceStatusDown = 2,
-    InterfaceStatusAdminDown = 3,
-    InterfaceStatusError = 4,
+    InterfaceStatusOperUp = 1,
+    InterfaceStatusOperDown = 2,
+    InterfaceStatusError = 3,
 }
 impl InterfaceStatusType {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -482,9 +483,8 @@ impl InterfaceStatusType {
     pub fn as_str_name(&self) -> &'static str {
         match self {
             Self::InterfaceStatusUnknown => "INTERFACE_STATUS_UNKNOWN",
-            Self::InterfaceStatusUp => "INTERFACE_STATUS_UP",
-            Self::InterfaceStatusDown => "INTERFACE_STATUS_DOWN",
-            Self::InterfaceStatusAdminDown => "INTERFACE_STATUS_ADMIN_DOWN",
+            Self::InterfaceStatusOperUp => "INTERFACE_STATUS_OPER_UP",
+            Self::InterfaceStatusOperDown => "INTERFACE_STATUS_OPER_DOWN",
             Self::InterfaceStatusError => "INTERFACE_STATUS_ERROR",
         }
     }
@@ -492,10 +492,39 @@ impl InterfaceStatusType {
     pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
         match value {
             "INTERFACE_STATUS_UNKNOWN" => Some(Self::InterfaceStatusUnknown),
-            "INTERFACE_STATUS_UP" => Some(Self::InterfaceStatusUp),
-            "INTERFACE_STATUS_DOWN" => Some(Self::InterfaceStatusDown),
-            "INTERFACE_STATUS_ADMIN_DOWN" => Some(Self::InterfaceStatusAdminDown),
+            "INTERFACE_STATUS_OPER_UP" => Some(Self::InterfaceStatusOperUp),
+            "INTERFACE_STATUS_OPER_DOWN" => Some(Self::InterfaceStatusOperDown),
             "INTERFACE_STATUS_ERROR" => Some(Self::InterfaceStatusError),
+            _ => None,
+        }
+    }
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum InterfaceAdminStatusType {
+    InterfaceAdminStatusUnknown = 0,
+    InterfaceAdminStatusUp = 1,
+    InterfaceAdminStatusDown = 2,
+}
+impl InterfaceAdminStatusType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::InterfaceAdminStatusUnknown => "INTERFACE_ADMIN_STATUS_UNKNOWN",
+            Self::InterfaceAdminStatusUp => "INTERFACE_ADMIN_STATUS_UP",
+            Self::InterfaceAdminStatusDown => "INTERFACE_ADMIN_STATUS_DOWN",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "INTERFACE_ADMIN_STATUS_UNKNOWN" => Some(Self::InterfaceAdminStatusUnknown),
+            "INTERFACE_ADMIN_STATUS_UP" => Some(Self::InterfaceAdminStatusUp),
+            "INTERFACE_ADMIN_STATUS_DOWN" => Some(Self::InterfaceAdminStatusDown),
             _ => None,
         }
     }
@@ -509,7 +538,6 @@ pub enum FrrStatusType {
     FrrStatusUnknown = 0,
     FrrStatusActive = 1,
     FrrStatusError = 2,
-    FrrStatusCrashed = 3,
 }
 impl FrrStatusType {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -521,7 +549,6 @@ impl FrrStatusType {
             Self::FrrStatusUnknown => "FRR_STATUS_UNKNOWN",
             Self::FrrStatusActive => "FRR_STATUS_ACTIVE",
             Self::FrrStatusError => "FRR_STATUS_ERROR",
-            Self::FrrStatusCrashed => "FRR_STATUS_CRASHED",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -530,7 +557,6 @@ impl FrrStatusType {
             "FRR_STATUS_UNKNOWN" => Some(Self::FrrStatusUnknown),
             "FRR_STATUS_ACTIVE" => Some(Self::FrrStatusActive),
             "FRR_STATUS_ERROR" => Some(Self::FrrStatusError),
-            "FRR_STATUS_CRASHED" => Some(Self::FrrStatusCrashed),
             _ => None,
         }
     }
