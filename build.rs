@@ -2,7 +2,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 #[cfg(feature = "regenerate")]
-fn add_type_generators(bld: tonic_build::Builder, types: &[&str]) -> tonic_build::Builder {
+fn add_type_generators(
+    bld: tonic_prost_build::Builder,
+    types: &[&str],
+) -> tonic_prost_build::Builder {
     types.iter().fold(bld, |bld, t| {
         bld.type_attribute(
             t,
@@ -21,7 +24,7 @@ fn main() {
 
         let proto = "proto/dataplane.proto";
 
-        let bld = tonic_build::configure();
+        let bld = tonic_prost_build::configure();
         let bld = add_type_generators(
             bld,
             &[
