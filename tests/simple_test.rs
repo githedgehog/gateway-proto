@@ -42,7 +42,7 @@ impl ConfigService for SimpleConfigService {
             frr_status: Some(gateway_config::FrrStatus {
                 status: FrrStatusType::FrrStatusActive as i32,
                 restarts: 0,
-                applied_config_id: 1,
+                applied_config_gen: 1,
             }),
             dataplane_status: Some(gateway_config::DataplaneStatusInfo {
                 status: DataplaneStatusType::DataplaneStatusHealthy as i32,
