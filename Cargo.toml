@@ -17,7 +17,7 @@ bolero = { version = "0.13.4", features = [
     "std",
 ], optional = true }
 tonic = "0.14"
-prost = "0.13.5"
+prost = "0.14.1"
 tokio = { version = "1.34", features = ["full"] }
 futures = "0.3"
 async-trait = "0.1"
