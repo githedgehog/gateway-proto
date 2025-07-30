@@ -85,13 +85,16 @@ enum InterfaceAdminStatusType {
   INTERFACE_ADMIN_STATUS_DOWN = 2;
 }
 
-
 /* TODO: Consider adding additional states such as FRR_STATUS_STARTING, FRR_STATUS_STOPPING, 
    or other states that might be relevant for tracking the lifecycle of FRR processes. */
-enum FrrStatusType {
-  FRR_STATUS_UNKNOWN = 0;
-  FRR_STATUS_ACTIVE = 1;
-  FRR_STATUS_ERROR = 2;
+enum ZebraStatusType {
+  ZEBRA_STATUS_NOT_CONNECTED = 0;
+  ZEBRA_STATUS_CONNECTED = 1;
+}
+
+enum FrrAgentStatusType {
+  FRR_AGENT_STATUS_NOT_CONNECTED = 0;
+  FRR_AGENT_STATUS_CONNECTED = 1;
 }
 
 enum DataplaneStatusType {
@@ -112,19 +115,137 @@ message InterfaceStatus {
 }
 
 message FrrStatus {
-  FrrStatusType status = 1;
-  uint32 applied_config_gen = 2;
-  uint32 restarts = 3;
+  ZebraStatusType zebra_status = 1;
+  FrrAgentStatusType frr_agent_status = 2;
+  uint32 applied_config_gen = 3;
+  uint32 restarts = 4;
+  uint32 applied_configs = 5;
+  uint32 failed_configs = 6;
 }
 
 message DataplaneStatusInfo {
   DataplaneStatusType status = 1;
 }
 
+/* ===================================================== */
+/* ================= Extended status =================== */
+/* ===================================================== */
+
+/* ---- Interface status details ---- */
+
+message InterfaceCounters {
+  uint64 tx_bits = 1;
+  double tx_bps = 2; // Maybe don't include that
+  uint64 tx_errors = 3;
+  uint64 rx_bits = 4;
+  double rx_bps = 5;  // Here as well
+  uint64 rx_errors = 6;
+}
+
+message InterfaceRuntimeStatus {
+  InterfaceAdminStatusType admin_status = 1;
+  InterfaceStatusType oper_status = 2;
+  string mac = 3;
+  uint32 mtu = 4;
+  InterfaceCounters counters = 5;
+}
+
+/* ---- BGP status ---- */
+
+enum BgpNeighborSessionState {
+  BGP_STATE_UNSET = 0;
+  BGP_STATE_IDLE = 1;
+  BGP_STATE_CONNECT = 2;
+  BGP_STATE_ACTIVE = 3;
+  BGP_STATE_OPEN = 4;
+  BGP_STATE_ESTABLISHED = 5;
+}
+
+message BgpMessageCounters {
+  uint64 capability = 1;
+  uint64 keepalive = 2;
+  uint64 notification = 3;
+  uint64 open = 4;
+  uint64 route_refresh = 5;
+  uint64 update = 6;
+}
+
+message BgpMessages {
+  BgpMessageCounters received = 1;
+  BgpMessageCounters sent = 2;
+}
+
+message BgpNeighborPrefixes {
+  uint32 received = 1;
+  uint32 received_pre_policy = 2;
+  uint32 sent = 3;
+}
+
+message BgpNeighborStatus {
+  bool enabled = 1;
+  uint32 local_as = 2;
+  uint32 peer_as = 3;
+  uint32 peer_port = 4;
+  string peer_group = 5;
+  string remote_router_id = 6;
+  BgpNeighborSessionState session_state = 7;
+  uint64 connections_dropped = 8;
+  uint64 established_transitions = 9;
+  string last_reset_reason = 10;
+  BgpMessages messages = 11;
+  // e.g. "IPV4_UNICAST", "IPV6_UNICAST", "L2VPN_EVPN"
+  map<string, BgpNeighborPrefixes> prefixes = 12;
+}
+
+message BgpVrfStatus {
+  // key: neighbor address (IP string)
+  map<string, BgpNeighborStatus> neighbors = 1;
+}
+
+message BgpStatus {
+  // key: VRF name
+  map<string, BgpVrfStatus> vrfs = 1;
+}
+
+message VpcInterfaceStatus {
+  string ifname = 1;
+  InterfaceAdminStatusType admin_status = 2;
+  InterfaceStatusType oper_status = 3;
+}
+
+message VpcStatus {
+  string id = 1;      // matches VPC.id
+  string name = 2;    // matches VPC.name
+  uint32 vni = 3;
+  uint32 route_count = 4;       // routes inside AF_UNICAST, TODO: add more later
+  // key: interface name
+  map<string, VpcInterfaceStatus> interfaces = 7;
+}
+
+/* ---- VPC↔VPC dataplane counters ---- */
+
+message VpcPeeringCounters {
+  string name = 1;
+  string src_vpc = 2;
+  string dst_vpc = 3;
+  uint64 packets = 4;
+  uint64 bytes = 5;
+  uint64 drops = 6;
+  double pps = 7;
+  uint64 active_flows = 8; // Nice to have thingy if we are doing flow tracking
+}
+
 message GetDataplaneStatusResponse {
   repeated InterfaceStatus interface_statuses = 1;
   FrrStatus frr_status = 2;
   DataplaneStatusInfo dataplane_status = 3;
+  // key: ifname
+  map<string, InterfaceRuntimeStatus> interface_runtime = 4;
+  BgpStatus bgp = 5;
+  // key: VPC name
+  map<string, VpcStatus> vpcs = 6;
+  // key: peering name
+  map<string, VpcPeeringCounters> vpc_peering_counters = 7;
 }
 
 /* ================================================ */
@@ -255,7 +376,6 @@ message BgpNeighborUpdateSource {
     string interface = 2; /* name of interface - typically loopback */
   }
 }
-
 
 /* BGP neighbor config */
 message BgpNeighbor {

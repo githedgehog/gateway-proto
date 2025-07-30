@@ -30,8 +30,8 @@ pub use config::{
     Error,
 
     Expose,
+    FrrAgentStatusType,
     FrrStatus,
-    FrrStatusType,
     GatewayConfig,
     GetConfigGenerationRequest,
     GetConfigGenerationResponse,
@@ -68,6 +68,7 @@ pub use config::{
     Vpc,
     VpcPeering,
     Vrf,
+    ZebraStatusType,
     config_service_client::ConfigServiceClient,
 
     // Service definitions

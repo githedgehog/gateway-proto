@@ -67,18 +67,191 @@ pub struct InterfaceStatus {
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct FrrStatus {
-    #[prost(enumeration = "FrrStatusType", tag = "1")]
-    pub status: i32,
-    #[prost(uint32, tag = "2")]
-    pub applied_config_gen: u32,
+    #[prost(enumeration = "ZebraStatusType", tag = "1")]
+    pub zebra_status: i32,
+    #[prost(enumeration = "FrrAgentStatusType", tag = "2")]
+    pub frr_agent_status: i32,
     #[prost(uint32, tag = "3")]
+    pub applied_config_gen: u32,
+    #[prost(uint32, tag = "4")]
     pub restarts: u32,
+    #[prost(uint32, tag = "5")]
+    pub applied_configs: u32,
+    #[prost(uint32, tag = "6")]
+    pub failed_configs: u32,
 }
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct DataplaneStatusInfo {
     #[prost(enumeration = "DataplaneStatusType", tag = "1")]
     pub status: i32,
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct InterfaceCounters {
+    #[prost(uint64, tag = "1")]
+    pub tx_bits: u64,
+    /// Maybe don't include that
+    #[prost(double, tag = "2")]
+    pub tx_bps: f64,
+    #[prost(uint64, tag = "3")]
+    pub tx_errors: u64,
+    #[prost(uint64, tag = "4")]
+    pub rx_bits: u64,
+    /// Here as well
+    #[prost(double, tag = "5")]
+    pub rx_bps: f64,
+    #[prost(uint64, tag = "6")]
+    pub rx_errors: u64,
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct InterfaceRuntimeStatus {
+    #[prost(enumeration = "InterfaceAdminStatusType", tag = "1")]
+    pub admin_status: i32,
+    #[prost(enumeration = "InterfaceStatusType", tag = "2")]
+    pub oper_status: i32,
+    #[prost(string, tag = "3")]
+    pub mac: ::prost::alloc::string::String,
+    #[prost(uint32, tag = "4")]
+    pub mtu: u32,
+    #[prost(message, optional, tag = "5")]
+    pub counters: ::core::option::Option<InterfaceCounters>,
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct BgpMessageCounters {
+    #[prost(uint64, tag = "1")]
+    pub capability: u64,
+    #[prost(uint64, tag = "2")]
+    pub keepalive: u64,
+    #[prost(uint64, tag = "3")]
+    pub notification: u64,
+    #[prost(uint64, tag = "4")]
+    pub open: u64,
+    #[prost(uint64, tag = "5")]
+    pub route_refresh: u64,
+    #[prost(uint64, tag = "6")]
+    pub update: u64,
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct BgpMessages {
+    #[prost(message, optional, tag = "1")]
+    pub received: ::core::option::Option<BgpMessageCounters>,
+    #[prost(message, optional, tag = "2")]
+    pub sent: ::core::option::Option<BgpMessageCounters>,
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct BgpNeighborPrefixes {
+    #[prost(uint32, tag = "1")]
+    pub received: u32,
+    #[prost(uint32, tag = "2")]
+    pub received_pre_policy: u32,
+    #[prost(uint32, tag = "3")]
+    pub sent: u32,
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct BgpNeighborStatus {
+    #[prost(bool, tag = "1")]
+    pub enabled: bool,
+    #[prost(uint32, tag = "2")]
+    pub local_as: u32,
+    #[prost(uint32, tag = "3")]
+    pub peer_as: u32,
+    #[prost(uint32, tag = "4")]
+    pub peer_port: u32,
+    #[prost(string, tag = "5")]
+    pub peer_group: ::prost::alloc::string::String,
+    #[prost(string, tag = "6")]
+    pub remote_router_id: ::prost::alloc::string::String,
+    #[prost(enumeration = "BgpNeighborSessionState", tag = "7")]
+    pub session_state: i32,
+    #[prost(uint64, tag = "8")]
+    pub connections_dropped: u64,
+    #[prost(uint64, tag = "9")]
+    pub established_transitions: u64,
+    #[prost(string, tag = "10")]
+    pub last_reset_reason: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "11")]
+    pub messages: ::core::option::Option<BgpMessages>,
+    /// e.g. "IPV4_UNICAST", "IPV6_UNICAST", "L2VPN_EVPN"
+    #[prost(map = "string, message", tag = "12")]
+    pub prefixes: ::std::collections::HashMap<
+        ::prost::alloc::string::String,
+        BgpNeighborPrefixes,
+    >,
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct BgpVrfStatus {
+    /// key: neighbor address (IP string)
+    #[prost(map = "string, message", tag = "1")]
+    pub neighbors: ::std::collections::HashMap<
+        ::prost::alloc::string::String,
+        BgpNeighborStatus,
+    >,
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct BgpStatus {
+    /// key: VRF name
+    #[prost(map = "string, message", tag = "1")]
+    pub vrfs: ::std::collections::HashMap<::prost::alloc::string::String, BgpVrfStatus>,
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct VpcInterfaceStatus {
+    #[prost(string, tag = "1")]
+    pub ifname: ::prost::alloc::string::String,
+    #[prost(enumeration = "InterfaceAdminStatusType", tag = "2")]
+    pub admin_status: i32,
+    #[prost(enumeration = "InterfaceStatusType", tag = "3")]
+    pub oper_status: i32,
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct VpcStatus {
+    /// matches VPC.id
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+    /// matches VPC.name
+    #[prost(string, tag = "2")]
+    pub name: ::prost::alloc::string::String,
+    #[prost(uint32, tag = "3")]
+    pub vni: u32,
+    /// routes inside AF_UNICAST, TODO: add more later
+    #[prost(uint32, tag = "4")]
+    pub route_count: u32,
+    /// key: interface name
+    #[prost(map = "string, message", tag = "7")]
+    pub interfaces: ::std::collections::HashMap<
+        ::prost::alloc::string::String,
+        VpcInterfaceStatus,
+    >,
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct VpcPeeringCounters {
+    #[prost(string, tag = "1")]
+    pub name: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub src_vpc: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub dst_vpc: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "4")]
+    pub packets: u64,
+    #[prost(uint64, tag = "5")]
+    pub bytes: u64,
+    #[prost(uint64, tag = "6")]
+    pub drops: u64,
+    #[prost(double, tag = "7")]
+    pub pps: f64,
+    /// Nice to have thingy if we are doing flow tracking
+    #[prost(uint64, tag = "8")]
+    pub active_flows: u64,
 }
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -89,6 +262,23 @@ pub struct GetDataplaneStatusResponse {
     pub frr_status: ::core::option::Option<FrrStatus>,
     #[prost(message, optional, tag = "3")]
     pub dataplane_status: ::core::option::Option<DataplaneStatusInfo>,
+    /// key: ifname
+    #[prost(map = "string, message", tag = "4")]
+    pub interface_runtime: ::std::collections::HashMap<
+        ::prost::alloc::string::String,
+        InterfaceRuntimeStatus,
+    >,
+    #[prost(message, optional, tag = "5")]
+    pub bgp: ::core::option::Option<BgpStatus>,
+    /// key: VPC name
+    #[prost(map = "string, message", tag = "6")]
+    pub vpcs: ::std::collections::HashMap<::prost::alloc::string::String, VpcStatus>,
+    /// key: peering name
+    #[prost(map = "string, message", tag = "7")]
+    pub vpc_peering_counters: ::std::collections::HashMap<
+        ::prost::alloc::string::String,
+        VpcPeeringCounters,
+    >,
 }
 /// Defines a logical interface. May correlate with physical representation
 #[derive(::serde::Deserialize, ::serde::Serialize)]
@@ -534,29 +724,53 @@ impl InterfaceAdminStatusType {
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
-pub enum FrrStatusType {
-    FrrStatusUnknown = 0,
-    FrrStatusActive = 1,
-    FrrStatusError = 2,
+pub enum ZebraStatusType {
+    ZebraStatusNotConnected = 0,
+    ZebraStatusConnected = 1,
 }
-impl FrrStatusType {
+impl ZebraStatusType {
     /// String value of the enum field names used in the ProtoBuf definition.
     ///
     /// The values are not transformed in any way and thus are considered stable
     /// (if the ProtoBuf definition does not change) and safe for programmatic use.
     pub fn as_str_name(&self) -> &'static str {
         match self {
-            Self::FrrStatusUnknown => "FRR_STATUS_UNKNOWN",
-            Self::FrrStatusActive => "FRR_STATUS_ACTIVE",
-            Self::FrrStatusError => "FRR_STATUS_ERROR",
+            Self::ZebraStatusNotConnected => "ZEBRA_STATUS_NOT_CONNECTED",
+            Self::ZebraStatusConnected => "ZEBRA_STATUS_CONNECTED",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
     pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
         match value {
-            "FRR_STATUS_UNKNOWN" => Some(Self::FrrStatusUnknown),
-            "FRR_STATUS_ACTIVE" => Some(Self::FrrStatusActive),
-            "FRR_STATUS_ERROR" => Some(Self::FrrStatusError),
+            "ZEBRA_STATUS_NOT_CONNECTED" => Some(Self::ZebraStatusNotConnected),
+            "ZEBRA_STATUS_CONNECTED" => Some(Self::ZebraStatusConnected),
+            _ => None,
+        }
+    }
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum FrrAgentStatusType {
+    FrrAgentStatusNotConnected = 0,
+    FrrAgentStatusConnected = 1,
+}
+impl FrrAgentStatusType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::FrrAgentStatusNotConnected => "FRR_AGENT_STATUS_NOT_CONNECTED",
+            Self::FrrAgentStatusConnected => "FRR_AGENT_STATUS_CONNECTED",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "FRR_AGENT_STATUS_NOT_CONNECTED" => Some(Self::FrrAgentStatusNotConnected),
+            "FRR_AGENT_STATUS_CONNECTED" => Some(Self::FrrAgentStatusConnected),
             _ => None,
         }
     }
@@ -590,6 +804,45 @@ impl DataplaneStatusType {
             "DATAPLANE_STATUS_HEALTHY" => Some(Self::DataplaneStatusHealthy),
             "DATAPLANE_STATUS_INIT" => Some(Self::DataplaneStatusInit),
             "DATAPLANE_STATUS_ERROR" => Some(Self::DataplaneStatusError),
+            _ => None,
+        }
+    }
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum BgpNeighborSessionState {
+    BgpStateUnset = 0,
+    BgpStateIdle = 1,
+    BgpStateConnect = 2,
+    BgpStateActive = 3,
+    BgpStateOpen = 4,
+    BgpStateEstablished = 5,
+}
+impl BgpNeighborSessionState {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::BgpStateUnset => "BGP_STATE_UNSET",
+            Self::BgpStateIdle => "BGP_STATE_IDLE",
+            Self::BgpStateConnect => "BGP_STATE_CONNECT",
+            Self::BgpStateActive => "BGP_STATE_ACTIVE",
+            Self::BgpStateOpen => "BGP_STATE_OPEN",
+            Self::BgpStateEstablished => "BGP_STATE_ESTABLISHED",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "BGP_STATE_UNSET" => Some(Self::BgpStateUnset),
+            "BGP_STATE_IDLE" => Some(Self::BgpStateIdle),
+            "BGP_STATE_CONNECT" => Some(Self::BgpStateConnect),
+            "BGP_STATE_ACTIVE" => Some(Self::BgpStateActive),
+            "BGP_STATE_OPEN" => Some(Self::BgpStateOpen),
+            "BGP_STATE_ESTABLISHED" => Some(Self::BgpStateEstablished),
             _ => None,
         }
     }
