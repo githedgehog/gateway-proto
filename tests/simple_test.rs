@@ -5,9 +5,9 @@ use std::net::SocketAddr;
 use tonic::{Request, Response, Status};
 
 use gateway_config::{
-    ConfigService, ConfigServiceClient, ConfigServiceServer, DataplaneStatusType, FrrStatusType,
-    GetConfigGenerationRequest, GetConfigGenerationResponse, GetDataplaneStatusRequest,
-    GetDataplaneStatusResponse,
+    ConfigService, ConfigServiceClient, ConfigServiceServer, DataplaneStatusType,
+    FrrAgentStatusType, GetConfigGenerationRequest, GetConfigGenerationResponse,
+    GetDataplaneStatusRequest, GetDataplaneStatusResponse, ZebraStatusType,
 };
 
 struct SimpleConfigService {
@@ -40,9 +40,12 @@ impl ConfigService for SimpleConfigService {
         Ok(Response::new(GetDataplaneStatusResponse {
             interface_statuses: vec![],
             frr_status: Some(gateway_config::FrrStatus {
-                status: FrrStatusType::FrrStatusActive as i32,
+                zebra_status: ZebraStatusType::ZebraStatusConnected as i32,
+                frr_agent_status: FrrAgentStatusType::FrrAgentStatusConnected as i32,
                 restarts: 0,
                 applied_config_gen: 1,
+                applied_configs: 1,
+                failed_configs: 0,
             }),
             dataplane_status: Some(gateway_config::DataplaneStatusInfo {
                 status: DataplaneStatusType::DataplaneStatusHealthy as i32,
