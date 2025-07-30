@@ -3,8 +3,9 @@
 
 use crate::bolero::support::{LinuxIfName, choose};
 use crate::config::{
-    DataplaneStatusInfo, DataplaneStatusType, FrrStatus, FrrStatusType, GetDataplaneStatusRequest,
-    GetDataplaneStatusResponse, InterfaceAdminStatusType, InterfaceStatus, InterfaceStatusType,
+    DataplaneStatusInfo, DataplaneStatusType, FrrAgentStatusType, FrrStatus,
+    GetDataplaneStatusRequest, GetDataplaneStatusResponse, InterfaceAdminStatusType,
+    InterfaceStatus, InterfaceStatusType, ZebraStatusType,
 };
 use bolero::{Driver, TypeGenerator};
 use std::ops::Bound;
@@ -36,12 +37,23 @@ impl TypeGenerator for InterfaceAdminStatusType {
     }
 }
 
-impl TypeGenerator for FrrStatusType {
+impl TypeGenerator for ZebraStatusType {
     fn generate<D: Driver>(d: &mut D) -> Option<Self> {
         let variants = [
-            FrrStatusType::FrrStatusUnknown,
-            FrrStatusType::FrrStatusActive,
-            FrrStatusType::FrrStatusError,
+            ZebraStatusType::ZebraStatusNotConnected,
+            ZebraStatusType::ZebraStatusConnected,
+        ];
+
+        let index = d.gen_usize(Bound::Included(&0), Bound::Included(&(variants.len() - 1)))?;
+        Some(variants[index])
+    }
+}
+
+impl TypeGenerator for FrrAgentStatusType {
+    fn generate<D: Driver>(d: &mut D) -> Option<Self> {
+        let variants = [
+            FrrAgentStatusType::FrrAgentStatusNotConnected,
+            FrrAgentStatusType::FrrAgentStatusConnected,
         ];
 
         let index = d.gen_usize(Bound::Included(&0), Bound::Included(&(variants.len() - 1)))?;
@@ -92,9 +104,12 @@ impl TypeGenerator for FrrStatus {
         };
 
         Some(FrrStatus {
-            status: d.produce::<FrrStatusType>()?.into(),
+            zebra_status: d.produce::<ZebraStatusType>()?.into(),
+            frr_agent_status: d.produce::<FrrAgentStatusType>()?.into(),
             applied_config_gen: d.produce::<u32>()?,
             restarts,
+            applied_configs: d.produce::<u32>()?,
+            failed_configs: d.produce::<u32>()?,
         })
     }
 }
@@ -161,10 +176,20 @@ mod test {
     #[test]
     fn test_frr_status_type() {
         bolero::check!()
-            .with_type::<FrrStatusType>()
-            .for_each(|frr_status_type| {
-                let status_num = i32::from(*frr_status_type);
-                assert!((0..=3).contains(&status_num));
+            .with_type::<ZebraStatusType>()
+            .for_each(|zebra_status_type| {
+                let status_num = i32::from(*zebra_status_type);
+                assert!((0..=1).contains(&status_num));
+            });
+    }
+
+    #[test]
+    fn test_frr_agent_status_type() {
+        bolero::check!()
+            .with_type::<FrrAgentStatusType>()
+            .for_each(|frr_agent_status_type| {
+                let status_num = i32::from(*frr_agent_status_type);
+                assert!((0..=1).contains(&status_num));
             });
     }
 
@@ -204,7 +229,7 @@ mod test {
         bolero::check!()
             .with_type::<FrrStatus>()
             .for_each(|frr_status| {
-                assert!((0..=3).contains(&frr_status.status));
+                assert!((0..=1).contains(&frr_status.zebra_status));
                 // The upper limit of 1000 for frr_status.restarts is chosen as a conservative
                 // estimate to ensure reasonable behavior. This value is based on expected
                 // operational constraints and typical restart counts observed in similar systems.
@@ -212,6 +237,8 @@ mod test {
                 if frr_status.restarts > 0 {
                     some_restarts = true;
                 }
+                assert!((0..=1).contains(&frr_status.frr_agent_status));
+                assert!(frr_status.applied_config_gen > 0);
             });
         assert!(some_restarts);
     }
@@ -267,7 +294,8 @@ mod test {
                 if response.frr_status.is_some() {
                     some_frr_status = true;
                     let frr = response.frr_status.as_ref().unwrap();
-                    assert!((0..=3).contains(&frr.status));
+                    assert!((0..=1).contains(&frr.zebra_status));
+                    assert!((0..=1).contains(&frr.frr_agent_status));
                     assert!(frr.restarts <= 1000);
                 } else {
                     missing_frr_status = true;

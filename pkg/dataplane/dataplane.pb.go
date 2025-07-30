@@ -233,53 +233,96 @@ func (InterfaceAdminStatusType) EnumDescriptor() ([]byte, []int) {
 
 // TODO: Consider adding additional states such as FRR_STATUS_STARTING, FRR_STATUS_STOPPING,
 // or other states that might be relevant for tracking the lifecycle of FRR processes.
-type FrrStatusType int32
+type ZebraStatusType int32
 
 const (
-	FrrStatusType_FRR_STATUS_UNKNOWN FrrStatusType = 0
-	FrrStatusType_FRR_STATUS_ACTIVE  FrrStatusType = 1
-	FrrStatusType_FRR_STATUS_ERROR   FrrStatusType = 2
+	ZebraStatusType_ZEBRA_STATUS_NOT_CONNECTED ZebraStatusType = 0
+	ZebraStatusType_ZEBRA_STATUS_CONNECTED     ZebraStatusType = 1
 )
 
-// Enum value maps for FrrStatusType.
+// Enum value maps for ZebraStatusType.
 var (
-	FrrStatusType_name = map[int32]string{
-		0: "FRR_STATUS_UNKNOWN",
-		1: "FRR_STATUS_ACTIVE",
-		2: "FRR_STATUS_ERROR",
+	ZebraStatusType_name = map[int32]string{
+		0: "ZEBRA_STATUS_NOT_CONNECTED",
+		1: "ZEBRA_STATUS_CONNECTED",
 	}
-	FrrStatusType_value = map[string]int32{
-		"FRR_STATUS_UNKNOWN": 0,
-		"FRR_STATUS_ACTIVE":  1,
-		"FRR_STATUS_ERROR":   2,
+	ZebraStatusType_value = map[string]int32{
+		"ZEBRA_STATUS_NOT_CONNECTED": 0,
+		"ZEBRA_STATUS_CONNECTED":     1,
 	}
 )
 
-func (x FrrStatusType) Enum() *FrrStatusType {
-	p := new(FrrStatusType)
+func (x ZebraStatusType) Enum() *ZebraStatusType {
+	p := new(ZebraStatusType)
 	*p = x
 	return p
 }
 
-func (x FrrStatusType) String() string {
+func (x ZebraStatusType) String() string {
 	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
 }
 
-func (FrrStatusType) Descriptor() protoreflect.EnumDescriptor {
+func (ZebraStatusType) Descriptor() protoreflect.EnumDescriptor {
 	return file_proto_dataplane_proto_enumTypes[4].Descriptor()
 }
 
-func (FrrStatusType) Type() protoreflect.EnumType {
+func (ZebraStatusType) Type() protoreflect.EnumType {
 	return &file_proto_dataplane_proto_enumTypes[4]
 }
 
-func (x FrrStatusType) Number() protoreflect.EnumNumber {
+func (x ZebraStatusType) Number() protoreflect.EnumNumber {
 	return protoreflect.EnumNumber(x)
 }
 
-// Deprecated: Use FrrStatusType.Descriptor instead.
-func (FrrStatusType) EnumDescriptor() ([]byte, []int) {
+// Deprecated: Use ZebraStatusType.Descriptor instead.
+func (ZebraStatusType) EnumDescriptor() ([]byte, []int) {
 	return file_proto_dataplane_proto_rawDescGZIP(), []int{4}
+}
+
+type FrrAgentStatusType int32
+
+const (
+	FrrAgentStatusType_FRR_AGENT_STATUS_NOT_CONNECTED FrrAgentStatusType = 0
+	FrrAgentStatusType_FRR_AGENT_STATUS_CONNECTED     FrrAgentStatusType = 1
+)
+
+// Enum value maps for FrrAgentStatusType.
+var (
+	FrrAgentStatusType_name = map[int32]string{
+		0: "FRR_AGENT_STATUS_NOT_CONNECTED",
+		1: "FRR_AGENT_STATUS_CONNECTED",
+	}
+	FrrAgentStatusType_value = map[string]int32{
+		"FRR_AGENT_STATUS_NOT_CONNECTED": 0,
+		"FRR_AGENT_STATUS_CONNECTED":     1,
+	}
+)
+
+func (x FrrAgentStatusType) Enum() *FrrAgentStatusType {
+	p := new(FrrAgentStatusType)
+	*p = x
+	return p
+}
+
+func (x FrrAgentStatusType) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (FrrAgentStatusType) Descriptor() protoreflect.EnumDescriptor {
+	return file_proto_dataplane_proto_enumTypes[5].Descriptor()
+}
+
+func (FrrAgentStatusType) Type() protoreflect.EnumType {
+	return &file_proto_dataplane_proto_enumTypes[5]
+}
+
+func (x FrrAgentStatusType) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use FrrAgentStatusType.Descriptor instead.
+func (FrrAgentStatusType) EnumDescriptor() ([]byte, []int) {
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{5}
 }
 
 type DataplaneStatusType int32
@@ -318,11 +361,11 @@ func (x DataplaneStatusType) String() string {
 }
 
 func (DataplaneStatusType) Descriptor() protoreflect.EnumDescriptor {
-	return file_proto_dataplane_proto_enumTypes[5].Descriptor()
+	return file_proto_dataplane_proto_enumTypes[6].Descriptor()
 }
 
 func (DataplaneStatusType) Type() protoreflect.EnumType {
-	return &file_proto_dataplane_proto_enumTypes[5]
+	return &file_proto_dataplane_proto_enumTypes[6]
 }
 
 func (x DataplaneStatusType) Number() protoreflect.EnumNumber {
@@ -331,7 +374,65 @@ func (x DataplaneStatusType) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use DataplaneStatusType.Descriptor instead.
 func (DataplaneStatusType) EnumDescriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{5}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{6}
+}
+
+type BgpNeighborSessionState int32
+
+const (
+	BgpNeighborSessionState_BGP_STATE_UNSET       BgpNeighborSessionState = 0
+	BgpNeighborSessionState_BGP_STATE_IDLE        BgpNeighborSessionState = 1
+	BgpNeighborSessionState_BGP_STATE_CONNECT     BgpNeighborSessionState = 2
+	BgpNeighborSessionState_BGP_STATE_ACTIVE      BgpNeighborSessionState = 3
+	BgpNeighborSessionState_BGP_STATE_OPEN        BgpNeighborSessionState = 4
+	BgpNeighborSessionState_BGP_STATE_ESTABLISHED BgpNeighborSessionState = 5
+)
+
+// Enum value maps for BgpNeighborSessionState.
+var (
+	BgpNeighborSessionState_name = map[int32]string{
+		0: "BGP_STATE_UNSET",
+		1: "BGP_STATE_IDLE",
+		2: "BGP_STATE_CONNECT",
+		3: "BGP_STATE_ACTIVE",
+		4: "BGP_STATE_OPEN",
+		5: "BGP_STATE_ESTABLISHED",
+	}
+	BgpNeighborSessionState_value = map[string]int32{
+		"BGP_STATE_UNSET":       0,
+		"BGP_STATE_IDLE":        1,
+		"BGP_STATE_CONNECT":     2,
+		"BGP_STATE_ACTIVE":      3,
+		"BGP_STATE_OPEN":        4,
+		"BGP_STATE_ESTABLISHED": 5,
+	}
+)
+
+func (x BgpNeighborSessionState) Enum() *BgpNeighborSessionState {
+	p := new(BgpNeighborSessionState)
+	*p = x
+	return p
+}
+
+func (x BgpNeighborSessionState) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (BgpNeighborSessionState) Descriptor() protoreflect.EnumDescriptor {
+	return file_proto_dataplane_proto_enumTypes[7].Descriptor()
+}
+
+func (BgpNeighborSessionState) Type() protoreflect.EnumType {
+	return &file_proto_dataplane_proto_enumTypes[7]
+}
+
+func (x BgpNeighborSessionState) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use BgpNeighborSessionState.Descriptor instead.
+func (BgpNeighborSessionState) EnumDescriptor() ([]byte, []int) {
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{7}
 }
 
 // Defines interface representation on the Gateway
@@ -371,11 +472,11 @@ func (x IfType) String() string {
 }
 
 func (IfType) Descriptor() protoreflect.EnumDescriptor {
-	return file_proto_dataplane_proto_enumTypes[6].Descriptor()
+	return file_proto_dataplane_proto_enumTypes[8].Descriptor()
 }
 
 func (IfType) Type() protoreflect.EnumType {
-	return &file_proto_dataplane_proto_enumTypes[6]
+	return &file_proto_dataplane_proto_enumTypes[8]
 }
 
 func (x IfType) Number() protoreflect.EnumNumber {
@@ -384,7 +485,7 @@ func (x IfType) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use IfType.Descriptor instead.
 func (IfType) EnumDescriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{6}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{8}
 }
 
 // For physical interface - fabric-facing or external-facing
@@ -418,11 +519,11 @@ func (x IfRole) String() string {
 }
 
 func (IfRole) Descriptor() protoreflect.EnumDescriptor {
-	return file_proto_dataplane_proto_enumTypes[7].Descriptor()
+	return file_proto_dataplane_proto_enumTypes[9].Descriptor()
 }
 
 func (IfRole) Type() protoreflect.EnumType {
-	return &file_proto_dataplane_proto_enumTypes[7]
+	return &file_proto_dataplane_proto_enumTypes[9]
 }
 
 func (x IfRole) Number() protoreflect.EnumNumber {
@@ -431,7 +532,7 @@ func (x IfRole) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use IfRole.Descriptor instead.
 func (IfRole) EnumDescriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{7}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{9}
 }
 
 // AFIs supported for BGP peering
@@ -468,11 +569,11 @@ func (x BgpAF) String() string {
 }
 
 func (BgpAF) Descriptor() protoreflect.EnumDescriptor {
-	return file_proto_dataplane_proto_enumTypes[8].Descriptor()
+	return file_proto_dataplane_proto_enumTypes[10].Descriptor()
 }
 
 func (BgpAF) Type() protoreflect.EnumType {
-	return &file_proto_dataplane_proto_enumTypes[8]
+	return &file_proto_dataplane_proto_enumTypes[10]
 }
 
 func (x BgpAF) Number() protoreflect.EnumNumber {
@@ -481,7 +582,7 @@ func (x BgpAF) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use BgpAF.Descriptor instead.
 func (BgpAF) EnumDescriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{8}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{10}
 }
 
 // Log-level for dataplane and DPDK
@@ -527,11 +628,11 @@ func (x LogLevel) String() string {
 }
 
 func (LogLevel) Descriptor() protoreflect.EnumDescriptor {
-	return file_proto_dataplane_proto_enumTypes[9].Descriptor()
+	return file_proto_dataplane_proto_enumTypes[11].Descriptor()
 }
 
 func (LogLevel) Type() protoreflect.EnumType {
-	return &file_proto_dataplane_proto_enumTypes[9]
+	return &file_proto_dataplane_proto_enumTypes[11]
 }
 
 func (x LogLevel) Number() protoreflect.EnumNumber {
@@ -540,7 +641,7 @@ func (x LogLevel) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use LogLevel.Descriptor instead.
 func (LogLevel) EnumDescriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{9}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{11}
 }
 
 // Backend driver for packet processing
@@ -574,11 +675,11 @@ func (x PacketDriver) String() string {
 }
 
 func (PacketDriver) Descriptor() protoreflect.EnumDescriptor {
-	return file_proto_dataplane_proto_enumTypes[10].Descriptor()
+	return file_proto_dataplane_proto_enumTypes[12].Descriptor()
 }
 
 func (PacketDriver) Type() protoreflect.EnumType {
-	return &file_proto_dataplane_proto_enumTypes[10]
+	return &file_proto_dataplane_proto_enumTypes[12]
 }
 
 func (x PacketDriver) Number() protoreflect.EnumNumber {
@@ -587,7 +688,7 @@ func (x PacketDriver) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use PacketDriver.Descriptor instead.
 func (PacketDriver) EnumDescriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{10}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{12}
 }
 
 type GetConfigRequest struct {
@@ -1023,9 +1124,12 @@ func (x *InterfaceStatus) GetAdminStatus() InterfaceAdminStatusType {
 
 type FrrStatus struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
-	Status           FrrStatusType          `protobuf:"varint,1,opt,name=status,proto3,enum=config.FrrStatusType" json:"status,omitempty"`
-	AppliedConfigGen uint32                 `protobuf:"varint,2,opt,name=applied_config_gen,json=appliedConfigGen,proto3" json:"applied_config_gen,omitempty"`
-	Restarts         uint32                 `protobuf:"varint,3,opt,name=restarts,proto3" json:"restarts,omitempty"`
+	ZebraStatus      ZebraStatusType        `protobuf:"varint,1,opt,name=zebra_status,json=zebraStatus,proto3,enum=config.ZebraStatusType" json:"zebra_status,omitempty"`
+	FrrAgentStatus   FrrAgentStatusType     `protobuf:"varint,2,opt,name=frr_agent_status,json=frrAgentStatus,proto3,enum=config.FrrAgentStatusType" json:"frr_agent_status,omitempty"`
+	AppliedConfigGen uint32                 `protobuf:"varint,3,opt,name=applied_config_gen,json=appliedConfigGen,proto3" json:"applied_config_gen,omitempty"`
+	Restarts         uint32                 `protobuf:"varint,4,opt,name=restarts,proto3" json:"restarts,omitempty"`
+	AppliedConfigs   uint32                 `protobuf:"varint,5,opt,name=applied_configs,json=appliedConfigs,proto3" json:"applied_configs,omitempty"`
+	FailedConfigs    uint32                 `protobuf:"varint,6,opt,name=failed_configs,json=failedConfigs,proto3" json:"failed_configs,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -1060,11 +1164,18 @@ func (*FrrStatus) Descriptor() ([]byte, []int) {
 	return file_proto_dataplane_proto_rawDescGZIP(), []int{9}
 }
 
-func (x *FrrStatus) GetStatus() FrrStatusType {
+func (x *FrrStatus) GetZebraStatus() ZebraStatusType {
 	if x != nil {
-		return x.Status
+		return x.ZebraStatus
 	}
-	return FrrStatusType_FRR_STATUS_UNKNOWN
+	return ZebraStatusType_ZEBRA_STATUS_NOT_CONNECTED
+}
+
+func (x *FrrStatus) GetFrrAgentStatus() FrrAgentStatusType {
+	if x != nil {
+		return x.FrrAgentStatus
+	}
+	return FrrAgentStatusType_FRR_AGENT_STATUS_NOT_CONNECTED
 }
 
 func (x *FrrStatus) GetAppliedConfigGen() uint32 {
@@ -1077,6 +1188,20 @@ func (x *FrrStatus) GetAppliedConfigGen() uint32 {
 func (x *FrrStatus) GetRestarts() uint32 {
 	if x != nil {
 		return x.Restarts
+	}
+	return 0
+}
+
+func (x *FrrStatus) GetAppliedConfigs() uint32 {
+	if x != nil {
+		return x.AppliedConfigs
+	}
+	return 0
+}
+
+func (x *FrrStatus) GetFailedConfigs() uint32 {
+	if x != nil {
+		return x.FailedConfigs
 	}
 	return 0
 }
@@ -1125,18 +1250,841 @@ func (x *DataplaneStatusInfo) GetStatus() DataplaneStatusType {
 	return DataplaneStatusType_DATAPLANE_STATUS_UNKNOWN
 }
 
+type InterfaceCounters struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TxBits        uint64                 `protobuf:"varint,1,opt,name=tx_bits,json=txBits,proto3" json:"tx_bits,omitempty"`
+	TxBps         float64                `protobuf:"fixed64,2,opt,name=tx_bps,json=txBps,proto3" json:"tx_bps,omitempty"` // Maybe don't include that
+	TxErrors      uint64                 `protobuf:"varint,3,opt,name=tx_errors,json=txErrors,proto3" json:"tx_errors,omitempty"`
+	RxBits        uint64                 `protobuf:"varint,4,opt,name=rx_bits,json=rxBits,proto3" json:"rx_bits,omitempty"`
+	RxBps         float64                `protobuf:"fixed64,5,opt,name=rx_bps,json=rxBps,proto3" json:"rx_bps,omitempty"` // Here as well
+	RxErrors      uint64                 `protobuf:"varint,6,opt,name=rx_errors,json=rxErrors,proto3" json:"rx_errors,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *InterfaceCounters) Reset() {
+	*x = InterfaceCounters{}
+	mi := &file_proto_dataplane_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *InterfaceCounters) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*InterfaceCounters) ProtoMessage() {}
+
+func (x *InterfaceCounters) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_dataplane_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use InterfaceCounters.ProtoReflect.Descriptor instead.
+func (*InterfaceCounters) Descriptor() ([]byte, []int) {
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *InterfaceCounters) GetTxBits() uint64 {
+	if x != nil {
+		return x.TxBits
+	}
+	return 0
+}
+
+func (x *InterfaceCounters) GetTxBps() float64 {
+	if x != nil {
+		return x.TxBps
+	}
+	return 0
+}
+
+func (x *InterfaceCounters) GetTxErrors() uint64 {
+	if x != nil {
+		return x.TxErrors
+	}
+	return 0
+}
+
+func (x *InterfaceCounters) GetRxBits() uint64 {
+	if x != nil {
+		return x.RxBits
+	}
+	return 0
+}
+
+func (x *InterfaceCounters) GetRxBps() float64 {
+	if x != nil {
+		return x.RxBps
+	}
+	return 0
+}
+
+func (x *InterfaceCounters) GetRxErrors() uint64 {
+	if x != nil {
+		return x.RxErrors
+	}
+	return 0
+}
+
+type InterfaceRuntimeStatus struct {
+	state         protoimpl.MessageState   `protogen:"open.v1"`
+	AdminStatus   InterfaceAdminStatusType `protobuf:"varint,1,opt,name=admin_status,json=adminStatus,proto3,enum=config.InterfaceAdminStatusType" json:"admin_status,omitempty"`
+	OperStatus    InterfaceStatusType      `protobuf:"varint,2,opt,name=oper_status,json=operStatus,proto3,enum=config.InterfaceStatusType" json:"oper_status,omitempty"`
+	Mac           string                   `protobuf:"bytes,3,opt,name=mac,proto3" json:"mac,omitempty"`
+	Mtu           uint32                   `protobuf:"varint,4,opt,name=mtu,proto3" json:"mtu,omitempty"`
+	Counters      *InterfaceCounters       `protobuf:"bytes,5,opt,name=counters,proto3" json:"counters,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *InterfaceRuntimeStatus) Reset() {
+	*x = InterfaceRuntimeStatus{}
+	mi := &file_proto_dataplane_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *InterfaceRuntimeStatus) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*InterfaceRuntimeStatus) ProtoMessage() {}
+
+func (x *InterfaceRuntimeStatus) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_dataplane_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use InterfaceRuntimeStatus.ProtoReflect.Descriptor instead.
+func (*InterfaceRuntimeStatus) Descriptor() ([]byte, []int) {
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *InterfaceRuntimeStatus) GetAdminStatus() InterfaceAdminStatusType {
+	if x != nil {
+		return x.AdminStatus
+	}
+	return InterfaceAdminStatusType_INTERFACE_ADMIN_STATUS_UNKNOWN
+}
+
+func (x *InterfaceRuntimeStatus) GetOperStatus() InterfaceStatusType {
+	if x != nil {
+		return x.OperStatus
+	}
+	return InterfaceStatusType_INTERFACE_STATUS_UNKNOWN
+}
+
+func (x *InterfaceRuntimeStatus) GetMac() string {
+	if x != nil {
+		return x.Mac
+	}
+	return ""
+}
+
+func (x *InterfaceRuntimeStatus) GetMtu() uint32 {
+	if x != nil {
+		return x.Mtu
+	}
+	return 0
+}
+
+func (x *InterfaceRuntimeStatus) GetCounters() *InterfaceCounters {
+	if x != nil {
+		return x.Counters
+	}
+	return nil
+}
+
+type BgpMessageCounters struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Capability    uint64                 `protobuf:"varint,1,opt,name=capability,proto3" json:"capability,omitempty"`
+	Keepalive     uint64                 `protobuf:"varint,2,opt,name=keepalive,proto3" json:"keepalive,omitempty"`
+	Notification  uint64                 `protobuf:"varint,3,opt,name=notification,proto3" json:"notification,omitempty"`
+	Open          uint64                 `protobuf:"varint,4,opt,name=open,proto3" json:"open,omitempty"`
+	RouteRefresh  uint64                 `protobuf:"varint,5,opt,name=route_refresh,json=routeRefresh,proto3" json:"route_refresh,omitempty"`
+	Update        uint64                 `protobuf:"varint,6,opt,name=update,proto3" json:"update,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BgpMessageCounters) Reset() {
+	*x = BgpMessageCounters{}
+	mi := &file_proto_dataplane_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BgpMessageCounters) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BgpMessageCounters) ProtoMessage() {}
+
+func (x *BgpMessageCounters) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_dataplane_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BgpMessageCounters.ProtoReflect.Descriptor instead.
+func (*BgpMessageCounters) Descriptor() ([]byte, []int) {
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *BgpMessageCounters) GetCapability() uint64 {
+	if x != nil {
+		return x.Capability
+	}
+	return 0
+}
+
+func (x *BgpMessageCounters) GetKeepalive() uint64 {
+	if x != nil {
+		return x.Keepalive
+	}
+	return 0
+}
+
+func (x *BgpMessageCounters) GetNotification() uint64 {
+	if x != nil {
+		return x.Notification
+	}
+	return 0
+}
+
+func (x *BgpMessageCounters) GetOpen() uint64 {
+	if x != nil {
+		return x.Open
+	}
+	return 0
+}
+
+func (x *BgpMessageCounters) GetRouteRefresh() uint64 {
+	if x != nil {
+		return x.RouteRefresh
+	}
+	return 0
+}
+
+func (x *BgpMessageCounters) GetUpdate() uint64 {
+	if x != nil {
+		return x.Update
+	}
+	return 0
+}
+
+type BgpMessages struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Received      *BgpMessageCounters    `protobuf:"bytes,1,opt,name=received,proto3" json:"received,omitempty"`
+	Sent          *BgpMessageCounters    `protobuf:"bytes,2,opt,name=sent,proto3" json:"sent,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BgpMessages) Reset() {
+	*x = BgpMessages{}
+	mi := &file_proto_dataplane_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BgpMessages) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BgpMessages) ProtoMessage() {}
+
+func (x *BgpMessages) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_dataplane_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BgpMessages.ProtoReflect.Descriptor instead.
+func (*BgpMessages) Descriptor() ([]byte, []int) {
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *BgpMessages) GetReceived() *BgpMessageCounters {
+	if x != nil {
+		return x.Received
+	}
+	return nil
+}
+
+func (x *BgpMessages) GetSent() *BgpMessageCounters {
+	if x != nil {
+		return x.Sent
+	}
+	return nil
+}
+
+type BgpNeighborPrefixes struct {
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	Received          uint32                 `protobuf:"varint,1,opt,name=received,proto3" json:"received,omitempty"`
+	ReceivedPrePolicy uint32                 `protobuf:"varint,2,opt,name=received_pre_policy,json=receivedPrePolicy,proto3" json:"received_pre_policy,omitempty"`
+	Sent              uint32                 `protobuf:"varint,3,opt,name=sent,proto3" json:"sent,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *BgpNeighborPrefixes) Reset() {
+	*x = BgpNeighborPrefixes{}
+	mi := &file_proto_dataplane_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BgpNeighborPrefixes) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BgpNeighborPrefixes) ProtoMessage() {}
+
+func (x *BgpNeighborPrefixes) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_dataplane_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BgpNeighborPrefixes.ProtoReflect.Descriptor instead.
+func (*BgpNeighborPrefixes) Descriptor() ([]byte, []int) {
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *BgpNeighborPrefixes) GetReceived() uint32 {
+	if x != nil {
+		return x.Received
+	}
+	return 0
+}
+
+func (x *BgpNeighborPrefixes) GetReceivedPrePolicy() uint32 {
+	if x != nil {
+		return x.ReceivedPrePolicy
+	}
+	return 0
+}
+
+func (x *BgpNeighborPrefixes) GetSent() uint32 {
+	if x != nil {
+		return x.Sent
+	}
+	return 0
+}
+
+type BgpNeighborStatus struct {
+	state                  protoimpl.MessageState  `protogen:"open.v1"`
+	Enabled                bool                    `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	LocalAs                uint32                  `protobuf:"varint,2,opt,name=local_as,json=localAs,proto3" json:"local_as,omitempty"`
+	PeerAs                 uint32                  `protobuf:"varint,3,opt,name=peer_as,json=peerAs,proto3" json:"peer_as,omitempty"`
+	PeerPort               uint32                  `protobuf:"varint,4,opt,name=peer_port,json=peerPort,proto3" json:"peer_port,omitempty"`
+	PeerGroup              string                  `protobuf:"bytes,5,opt,name=peer_group,json=peerGroup,proto3" json:"peer_group,omitempty"`
+	RemoteRouterId         string                  `protobuf:"bytes,6,opt,name=remote_router_id,json=remoteRouterId,proto3" json:"remote_router_id,omitempty"`
+	SessionState           BgpNeighborSessionState `protobuf:"varint,7,opt,name=session_state,json=sessionState,proto3,enum=config.BgpNeighborSessionState" json:"session_state,omitempty"`
+	ConnectionsDropped     uint64                  `protobuf:"varint,8,opt,name=connections_dropped,json=connectionsDropped,proto3" json:"connections_dropped,omitempty"`
+	EstablishedTransitions uint64                  `protobuf:"varint,9,opt,name=established_transitions,json=establishedTransitions,proto3" json:"established_transitions,omitempty"`
+	LastResetReason        string                  `protobuf:"bytes,10,opt,name=last_reset_reason,json=lastResetReason,proto3" json:"last_reset_reason,omitempty"`
+	Messages               *BgpMessages            `protobuf:"bytes,11,opt,name=messages,proto3" json:"messages,omitempty"`
+	// e.g. "IPV4_UNICAST", "IPV6_UNICAST", "L2VPN_EVPN"
+	Prefixes      map[string]*BgpNeighborPrefixes `protobuf:"bytes,12,rep,name=prefixes,proto3" json:"prefixes,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BgpNeighborStatus) Reset() {
+	*x = BgpNeighborStatus{}
+	mi := &file_proto_dataplane_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BgpNeighborStatus) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BgpNeighborStatus) ProtoMessage() {}
+
+func (x *BgpNeighborStatus) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_dataplane_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BgpNeighborStatus.ProtoReflect.Descriptor instead.
+func (*BgpNeighborStatus) Descriptor() ([]byte, []int) {
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *BgpNeighborStatus) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+func (x *BgpNeighborStatus) GetLocalAs() uint32 {
+	if x != nil {
+		return x.LocalAs
+	}
+	return 0
+}
+
+func (x *BgpNeighborStatus) GetPeerAs() uint32 {
+	if x != nil {
+		return x.PeerAs
+	}
+	return 0
+}
+
+func (x *BgpNeighborStatus) GetPeerPort() uint32 {
+	if x != nil {
+		return x.PeerPort
+	}
+	return 0
+}
+
+func (x *BgpNeighborStatus) GetPeerGroup() string {
+	if x != nil {
+		return x.PeerGroup
+	}
+	return ""
+}
+
+func (x *BgpNeighborStatus) GetRemoteRouterId() string {
+	if x != nil {
+		return x.RemoteRouterId
+	}
+	return ""
+}
+
+func (x *BgpNeighborStatus) GetSessionState() BgpNeighborSessionState {
+	if x != nil {
+		return x.SessionState
+	}
+	return BgpNeighborSessionState_BGP_STATE_UNSET
+}
+
+func (x *BgpNeighborStatus) GetConnectionsDropped() uint64 {
+	if x != nil {
+		return x.ConnectionsDropped
+	}
+	return 0
+}
+
+func (x *BgpNeighborStatus) GetEstablishedTransitions() uint64 {
+	if x != nil {
+		return x.EstablishedTransitions
+	}
+	return 0
+}
+
+func (x *BgpNeighborStatus) GetLastResetReason() string {
+	if x != nil {
+		return x.LastResetReason
+	}
+	return ""
+}
+
+func (x *BgpNeighborStatus) GetMessages() *BgpMessages {
+	if x != nil {
+		return x.Messages
+	}
+	return nil
+}
+
+func (x *BgpNeighborStatus) GetPrefixes() map[string]*BgpNeighborPrefixes {
+	if x != nil {
+		return x.Prefixes
+	}
+	return nil
+}
+
+type BgpVrfStatus struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// key: neighbor address (IP string)
+	Neighbors     map[string]*BgpNeighborStatus `protobuf:"bytes,1,rep,name=neighbors,proto3" json:"neighbors,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BgpVrfStatus) Reset() {
+	*x = BgpVrfStatus{}
+	mi := &file_proto_dataplane_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BgpVrfStatus) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BgpVrfStatus) ProtoMessage() {}
+
+func (x *BgpVrfStatus) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_dataplane_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BgpVrfStatus.ProtoReflect.Descriptor instead.
+func (*BgpVrfStatus) Descriptor() ([]byte, []int) {
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *BgpVrfStatus) GetNeighbors() map[string]*BgpNeighborStatus {
+	if x != nil {
+		return x.Neighbors
+	}
+	return nil
+}
+
+type BgpStatus struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// key: VRF name
+	Vrfs          map[string]*BgpVrfStatus `protobuf:"bytes,1,rep,name=vrfs,proto3" json:"vrfs,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BgpStatus) Reset() {
+	*x = BgpStatus{}
+	mi := &file_proto_dataplane_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BgpStatus) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BgpStatus) ProtoMessage() {}
+
+func (x *BgpStatus) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_dataplane_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BgpStatus.ProtoReflect.Descriptor instead.
+func (*BgpStatus) Descriptor() ([]byte, []int) {
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *BgpStatus) GetVrfs() map[string]*BgpVrfStatus {
+	if x != nil {
+		return x.Vrfs
+	}
+	return nil
+}
+
+type VpcInterfaceStatus struct {
+	state         protoimpl.MessageState   `protogen:"open.v1"`
+	Ifname        string                   `protobuf:"bytes,1,opt,name=ifname,proto3" json:"ifname,omitempty"`
+	AdminStatus   InterfaceAdminStatusType `protobuf:"varint,2,opt,name=admin_status,json=adminStatus,proto3,enum=config.InterfaceAdminStatusType" json:"admin_status,omitempty"`
+	OperStatus    InterfaceStatusType      `protobuf:"varint,3,opt,name=oper_status,json=operStatus,proto3,enum=config.InterfaceStatusType" json:"oper_status,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *VpcInterfaceStatus) Reset() {
+	*x = VpcInterfaceStatus{}
+	mi := &file_proto_dataplane_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *VpcInterfaceStatus) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*VpcInterfaceStatus) ProtoMessage() {}
+
+func (x *VpcInterfaceStatus) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_dataplane_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use VpcInterfaceStatus.ProtoReflect.Descriptor instead.
+func (*VpcInterfaceStatus) Descriptor() ([]byte, []int) {
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *VpcInterfaceStatus) GetIfname() string {
+	if x != nil {
+		return x.Ifname
+	}
+	return ""
+}
+
+func (x *VpcInterfaceStatus) GetAdminStatus() InterfaceAdminStatusType {
+	if x != nil {
+		return x.AdminStatus
+	}
+	return InterfaceAdminStatusType_INTERFACE_ADMIN_STATUS_UNKNOWN
+}
+
+func (x *VpcInterfaceStatus) GetOperStatus() InterfaceStatusType {
+	if x != nil {
+		return x.OperStatus
+	}
+	return InterfaceStatusType_INTERFACE_STATUS_UNKNOWN
+}
+
+type VpcStatus struct {
+	state      protoimpl.MessageState `protogen:"open.v1"`
+	Id         string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`     // matches VPC.id
+	Name       string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"` // matches VPC.name
+	Vni        uint32                 `protobuf:"varint,3,opt,name=vni,proto3" json:"vni,omitempty"`
+	RouteCount uint32                 `protobuf:"varint,4,opt,name=route_count,json=routeCount,proto3" json:"route_count,omitempty"` // routes inside AF_UNICAST, TODO: add more later
+	// key: interface name
+	Interfaces    map[string]*VpcInterfaceStatus `protobuf:"bytes,7,rep,name=interfaces,proto3" json:"interfaces,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *VpcStatus) Reset() {
+	*x = VpcStatus{}
+	mi := &file_proto_dataplane_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *VpcStatus) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*VpcStatus) ProtoMessage() {}
+
+func (x *VpcStatus) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_dataplane_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use VpcStatus.ProtoReflect.Descriptor instead.
+func (*VpcStatus) Descriptor() ([]byte, []int) {
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *VpcStatus) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *VpcStatus) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *VpcStatus) GetVni() uint32 {
+	if x != nil {
+		return x.Vni
+	}
+	return 0
+}
+
+func (x *VpcStatus) GetRouteCount() uint32 {
+	if x != nil {
+		return x.RouteCount
+	}
+	return 0
+}
+
+func (x *VpcStatus) GetInterfaces() map[string]*VpcInterfaceStatus {
+	if x != nil {
+		return x.Interfaces
+	}
+	return nil
+}
+
+type VpcPeeringCounters struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	SrcVpc        string                 `protobuf:"bytes,2,opt,name=src_vpc,json=srcVpc,proto3" json:"src_vpc,omitempty"`
+	DstVpc        string                 `protobuf:"bytes,3,opt,name=dst_vpc,json=dstVpc,proto3" json:"dst_vpc,omitempty"`
+	Packets       uint64                 `protobuf:"varint,4,opt,name=packets,proto3" json:"packets,omitempty"`
+	Bytes         uint64                 `protobuf:"varint,5,opt,name=bytes,proto3" json:"bytes,omitempty"`
+	Drops         uint64                 `protobuf:"varint,6,opt,name=drops,proto3" json:"drops,omitempty"`
+	Pps           float64                `protobuf:"fixed64,7,opt,name=pps,proto3" json:"pps,omitempty"`
+	ActiveFlows   uint64                 `protobuf:"varint,8,opt,name=active_flows,json=activeFlows,proto3" json:"active_flows,omitempty"` // Nice to have thingy if we are doing flow tracking
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *VpcPeeringCounters) Reset() {
+	*x = VpcPeeringCounters{}
+	mi := &file_proto_dataplane_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *VpcPeeringCounters) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*VpcPeeringCounters) ProtoMessage() {}
+
+func (x *VpcPeeringCounters) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_dataplane_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use VpcPeeringCounters.ProtoReflect.Descriptor instead.
+func (*VpcPeeringCounters) Descriptor() ([]byte, []int) {
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *VpcPeeringCounters) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *VpcPeeringCounters) GetSrcVpc() string {
+	if x != nil {
+		return x.SrcVpc
+	}
+	return ""
+}
+
+func (x *VpcPeeringCounters) GetDstVpc() string {
+	if x != nil {
+		return x.DstVpc
+	}
+	return ""
+}
+
+func (x *VpcPeeringCounters) GetPackets() uint64 {
+	if x != nil {
+		return x.Packets
+	}
+	return 0
+}
+
+func (x *VpcPeeringCounters) GetBytes() uint64 {
+	if x != nil {
+		return x.Bytes
+	}
+	return 0
+}
+
+func (x *VpcPeeringCounters) GetDrops() uint64 {
+	if x != nil {
+		return x.Drops
+	}
+	return 0
+}
+
+func (x *VpcPeeringCounters) GetPps() float64 {
+	if x != nil {
+		return x.Pps
+	}
+	return 0
+}
+
+func (x *VpcPeeringCounters) GetActiveFlows() uint64 {
+	if x != nil {
+		return x.ActiveFlows
+	}
+	return 0
+}
+
 type GetDataplaneStatusResponse struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
 	InterfaceStatuses []*InterfaceStatus     `protobuf:"bytes,1,rep,name=interface_statuses,json=interfaceStatuses,proto3" json:"interface_statuses,omitempty"`
 	FrrStatus         *FrrStatus             `protobuf:"bytes,2,opt,name=frr_status,json=frrStatus,proto3" json:"frr_status,omitempty"`
 	DataplaneStatus   *DataplaneStatusInfo   `protobuf:"bytes,3,opt,name=dataplane_status,json=dataplaneStatus,proto3" json:"dataplane_status,omitempty"`
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	// key: ifname
+	InterfaceRuntime map[string]*InterfaceRuntimeStatus `protobuf:"bytes,4,rep,name=interface_runtime,json=interfaceRuntime,proto3" json:"interface_runtime,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Bgp              *BgpStatus                         `protobuf:"bytes,5,opt,name=bgp,proto3" json:"bgp,omitempty"`
+	// key: VPC name
+	Vpcs map[string]*VpcStatus `protobuf:"bytes,6,rep,name=vpcs,proto3" json:"vpcs,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	// key: peering name
+	VpcPeeringCounters map[string]*VpcPeeringCounters `protobuf:"bytes,7,rep,name=vpc_peering_counters,json=vpcPeeringCounters,proto3" json:"vpc_peering_counters,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
 }
 
 func (x *GetDataplaneStatusResponse) Reset() {
 	*x = GetDataplaneStatusResponse{}
-	mi := &file_proto_dataplane_proto_msgTypes[11]
+	mi := &file_proto_dataplane_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1148,7 +2096,7 @@ func (x *GetDataplaneStatusResponse) String() string {
 func (*GetDataplaneStatusResponse) ProtoMessage() {}
 
 func (x *GetDataplaneStatusResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[11]
+	mi := &file_proto_dataplane_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1161,7 +2109,7 @@ func (x *GetDataplaneStatusResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetDataplaneStatusResponse.ProtoReflect.Descriptor instead.
 func (*GetDataplaneStatusResponse) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{11}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *GetDataplaneStatusResponse) GetInterfaceStatuses() []*InterfaceStatus {
@@ -1185,6 +2133,34 @@ func (x *GetDataplaneStatusResponse) GetDataplaneStatus() *DataplaneStatusInfo {
 	return nil
 }
 
+func (x *GetDataplaneStatusResponse) GetInterfaceRuntime() map[string]*InterfaceRuntimeStatus {
+	if x != nil {
+		return x.InterfaceRuntime
+	}
+	return nil
+}
+
+func (x *GetDataplaneStatusResponse) GetBgp() *BgpStatus {
+	if x != nil {
+		return x.Bgp
+	}
+	return nil
+}
+
+func (x *GetDataplaneStatusResponse) GetVpcs() map[string]*VpcStatus {
+	if x != nil {
+		return x.Vpcs
+	}
+	return nil
+}
+
+func (x *GetDataplaneStatusResponse) GetVpcPeeringCounters() map[string]*VpcPeeringCounters {
+	if x != nil {
+		return x.VpcPeeringCounters
+	}
+	return nil
+}
+
 // Defines a logical interface. May correlate with physical representation
 type Interface struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -1203,7 +2179,7 @@ type Interface struct {
 
 func (x *Interface) Reset() {
 	*x = Interface{}
-	mi := &file_proto_dataplane_proto_msgTypes[12]
+	mi := &file_proto_dataplane_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1215,7 +2191,7 @@ func (x *Interface) String() string {
 func (*Interface) ProtoMessage() {}
 
 func (x *Interface) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[12]
+	mi := &file_proto_dataplane_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1228,7 +2204,7 @@ func (x *Interface) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Interface.ProtoReflect.Descriptor instead.
 func (*Interface) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{12}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *Interface) GetName() string {
@@ -1308,7 +2284,7 @@ type PeeringIPs struct {
 
 func (x *PeeringIPs) Reset() {
 	*x = PeeringIPs{}
-	mi := &file_proto_dataplane_proto_msgTypes[13]
+	mi := &file_proto_dataplane_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1320,7 +2296,7 @@ func (x *PeeringIPs) String() string {
 func (*PeeringIPs) ProtoMessage() {}
 
 func (x *PeeringIPs) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[13]
+	mi := &file_proto_dataplane_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1333,7 +2309,7 @@ func (x *PeeringIPs) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PeeringIPs.ProtoReflect.Descriptor instead.
 func (*PeeringIPs) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{13}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *PeeringIPs) GetRule() isPeeringIPs_Rule {
@@ -1391,7 +2367,7 @@ type PeeringAs struct {
 
 func (x *PeeringAs) Reset() {
 	*x = PeeringAs{}
-	mi := &file_proto_dataplane_proto_msgTypes[14]
+	mi := &file_proto_dataplane_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1403,7 +2379,7 @@ func (x *PeeringAs) String() string {
 func (*PeeringAs) ProtoMessage() {}
 
 func (x *PeeringAs) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[14]
+	mi := &file_proto_dataplane_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1416,7 +2392,7 @@ func (x *PeeringAs) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PeeringAs.ProtoReflect.Descriptor instead.
 func (*PeeringAs) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{14}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *PeeringAs) GetRule() isPeeringAs_Rule {
@@ -1468,7 +2444,7 @@ type PeeringStatelessNAT struct {
 
 func (x *PeeringStatelessNAT) Reset() {
 	*x = PeeringStatelessNAT{}
-	mi := &file_proto_dataplane_proto_msgTypes[15]
+	mi := &file_proto_dataplane_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1480,7 +2456,7 @@ func (x *PeeringStatelessNAT) String() string {
 func (*PeeringStatelessNAT) ProtoMessage() {}
 
 func (x *PeeringStatelessNAT) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[15]
+	mi := &file_proto_dataplane_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1493,7 +2469,7 @@ func (x *PeeringStatelessNAT) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PeeringStatelessNAT.ProtoReflect.Descriptor instead.
 func (*PeeringStatelessNAT) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{15}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{26}
 }
 
 type PeeringStatefulNAT struct {
@@ -1505,7 +2481,7 @@ type PeeringStatefulNAT struct {
 
 func (x *PeeringStatefulNAT) Reset() {
 	*x = PeeringStatefulNAT{}
-	mi := &file_proto_dataplane_proto_msgTypes[16]
+	mi := &file_proto_dataplane_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1517,7 +2493,7 @@ func (x *PeeringStatefulNAT) String() string {
 func (*PeeringStatefulNAT) ProtoMessage() {}
 
 func (x *PeeringStatefulNAT) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[16]
+	mi := &file_proto_dataplane_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1530,7 +2506,7 @@ func (x *PeeringStatefulNAT) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PeeringStatefulNAT.ProtoReflect.Descriptor instead.
 func (*PeeringStatefulNAT) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{16}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *PeeringStatefulNAT) GetIdleTimeout() *durationpb.Duration {
@@ -1556,7 +2532,7 @@ type Expose struct {
 
 func (x *Expose) Reset() {
 	*x = Expose{}
-	mi := &file_proto_dataplane_proto_msgTypes[17]
+	mi := &file_proto_dataplane_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1568,7 +2544,7 @@ func (x *Expose) String() string {
 func (*Expose) ProtoMessage() {}
 
 func (x *Expose) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[17]
+	mi := &file_proto_dataplane_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1581,7 +2557,7 @@ func (x *Expose) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Expose.ProtoReflect.Descriptor instead.
 func (*Expose) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{17}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *Expose) GetIps() []*PeeringIPs {
@@ -1650,7 +2626,7 @@ type PeeringEntryFor struct {
 
 func (x *PeeringEntryFor) Reset() {
 	*x = PeeringEntryFor{}
-	mi := &file_proto_dataplane_proto_msgTypes[18]
+	mi := &file_proto_dataplane_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1662,7 +2638,7 @@ func (x *PeeringEntryFor) String() string {
 func (*PeeringEntryFor) ProtoMessage() {}
 
 func (x *PeeringEntryFor) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[18]
+	mi := &file_proto_dataplane_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1675,7 +2651,7 @@ func (x *PeeringEntryFor) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PeeringEntryFor.ProtoReflect.Descriptor instead.
 func (*PeeringEntryFor) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{18}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *PeeringEntryFor) GetVpc() string {
@@ -1703,7 +2679,7 @@ type VpcPeering struct {
 
 func (x *VpcPeering) Reset() {
 	*x = VpcPeering{}
-	mi := &file_proto_dataplane_proto_msgTypes[19]
+	mi := &file_proto_dataplane_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1715,7 +2691,7 @@ func (x *VpcPeering) String() string {
 func (*VpcPeering) ProtoMessage() {}
 
 func (x *VpcPeering) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[19]
+	mi := &file_proto_dataplane_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1728,7 +2704,7 @@ func (x *VpcPeering) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VpcPeering.ProtoReflect.Descriptor instead.
 func (*VpcPeering) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{19}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *VpcPeering) GetName() string {
@@ -1757,7 +2733,7 @@ type VPC struct {
 
 func (x *VPC) Reset() {
 	*x = VPC{}
-	mi := &file_proto_dataplane_proto_msgTypes[20]
+	mi := &file_proto_dataplane_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1769,7 +2745,7 @@ func (x *VPC) String() string {
 func (*VPC) ProtoMessage() {}
 
 func (x *VPC) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[20]
+	mi := &file_proto_dataplane_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1782,7 +2758,7 @@ func (x *VPC) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VPC.ProtoReflect.Descriptor instead.
 func (*VPC) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{20}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *VPC) GetId() string {
@@ -1824,7 +2800,7 @@ type Overlay struct {
 
 func (x *Overlay) Reset() {
 	*x = Overlay{}
-	mi := &file_proto_dataplane_proto_msgTypes[21]
+	mi := &file_proto_dataplane_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1836,7 +2812,7 @@ func (x *Overlay) String() string {
 func (*Overlay) ProtoMessage() {}
 
 func (x *Overlay) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[21]
+	mi := &file_proto_dataplane_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1849,7 +2825,7 @@ func (x *Overlay) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Overlay.ProtoReflect.Descriptor instead.
 func (*Overlay) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{21}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{32}
 }
 
 func (x *Overlay) GetVpcs() []*VPC {
@@ -1878,7 +2854,7 @@ type BgpAddressFamilyIPv4 struct {
 
 func (x *BgpAddressFamilyIPv4) Reset() {
 	*x = BgpAddressFamilyIPv4{}
-	mi := &file_proto_dataplane_proto_msgTypes[22]
+	mi := &file_proto_dataplane_proto_msgTypes[33]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1890,7 +2866,7 @@ func (x *BgpAddressFamilyIPv4) String() string {
 func (*BgpAddressFamilyIPv4) ProtoMessage() {}
 
 func (x *BgpAddressFamilyIPv4) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[22]
+	mi := &file_proto_dataplane_proto_msgTypes[33]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1903,7 +2879,7 @@ func (x *BgpAddressFamilyIPv4) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BgpAddressFamilyIPv4.ProtoReflect.Descriptor instead.
 func (*BgpAddressFamilyIPv4) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{22}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{33}
 }
 
 func (x *BgpAddressFamilyIPv4) GetRedistributeConnected() bool {
@@ -1939,7 +2915,7 @@ type BgpAddressFamilyIPv6 struct {
 
 func (x *BgpAddressFamilyIPv6) Reset() {
 	*x = BgpAddressFamilyIPv6{}
-	mi := &file_proto_dataplane_proto_msgTypes[23]
+	mi := &file_proto_dataplane_proto_msgTypes[34]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1951,7 +2927,7 @@ func (x *BgpAddressFamilyIPv6) String() string {
 func (*BgpAddressFamilyIPv6) ProtoMessage() {}
 
 func (x *BgpAddressFamilyIPv6) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[23]
+	mi := &file_proto_dataplane_proto_msgTypes[34]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1964,7 +2940,7 @@ func (x *BgpAddressFamilyIPv6) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BgpAddressFamilyIPv6.ProtoReflect.Descriptor instead.
 func (*BgpAddressFamilyIPv6) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{23}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{34}
 }
 
 func (x *BgpAddressFamilyIPv6) GetRedistributeConnected() bool {
@@ -1998,7 +2974,7 @@ type BgpAddressFamilyL2VpnEvpn struct {
 
 func (x *BgpAddressFamilyL2VpnEvpn) Reset() {
 	*x = BgpAddressFamilyL2VpnEvpn{}
-	mi := &file_proto_dataplane_proto_msgTypes[24]
+	mi := &file_proto_dataplane_proto_msgTypes[35]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2010,7 +2986,7 @@ func (x *BgpAddressFamilyL2VpnEvpn) String() string {
 func (*BgpAddressFamilyL2VpnEvpn) ProtoMessage() {}
 
 func (x *BgpAddressFamilyL2VpnEvpn) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[24]
+	mi := &file_proto_dataplane_proto_msgTypes[35]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2023,7 +2999,7 @@ func (x *BgpAddressFamilyL2VpnEvpn) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BgpAddressFamilyL2VpnEvpn.ProtoReflect.Descriptor instead.
 func (*BgpAddressFamilyL2VpnEvpn) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{24}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{35}
 }
 
 func (x *BgpAddressFamilyL2VpnEvpn) GetAdvertiseAllVni() bool {
@@ -2046,7 +3022,7 @@ type BgpNeighborUpdateSource struct {
 
 func (x *BgpNeighborUpdateSource) Reset() {
 	*x = BgpNeighborUpdateSource{}
-	mi := &file_proto_dataplane_proto_msgTypes[25]
+	mi := &file_proto_dataplane_proto_msgTypes[36]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2058,7 +3034,7 @@ func (x *BgpNeighborUpdateSource) String() string {
 func (*BgpNeighborUpdateSource) ProtoMessage() {}
 
 func (x *BgpNeighborUpdateSource) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[25]
+	mi := &file_proto_dataplane_proto_msgTypes[36]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2071,7 +3047,7 @@ func (x *BgpNeighborUpdateSource) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BgpNeighborUpdateSource.ProtoReflect.Descriptor instead.
 func (*BgpNeighborUpdateSource) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{25}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{36}
 }
 
 func (x *BgpNeighborUpdateSource) GetSource() isBgpNeighborUpdateSource_Source {
@@ -2128,7 +3104,7 @@ type BgpNeighbor struct {
 
 func (x *BgpNeighbor) Reset() {
 	*x = BgpNeighbor{}
-	mi := &file_proto_dataplane_proto_msgTypes[26]
+	mi := &file_proto_dataplane_proto_msgTypes[37]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2140,7 +3116,7 @@ func (x *BgpNeighbor) String() string {
 func (*BgpNeighbor) ProtoMessage() {}
 
 func (x *BgpNeighbor) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[26]
+	mi := &file_proto_dataplane_proto_msgTypes[37]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2153,7 +3129,7 @@ func (x *BgpNeighbor) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BgpNeighbor.ProtoReflect.Descriptor instead.
 func (*BgpNeighbor) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{26}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{37}
 }
 
 func (x *BgpNeighbor) GetAddress() string {
@@ -2197,7 +3173,7 @@ type RouteMap struct {
 
 func (x *RouteMap) Reset() {
 	*x = RouteMap{}
-	mi := &file_proto_dataplane_proto_msgTypes[27]
+	mi := &file_proto_dataplane_proto_msgTypes[38]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2209,7 +3185,7 @@ func (x *RouteMap) String() string {
 func (*RouteMap) ProtoMessage() {}
 
 func (x *RouteMap) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[27]
+	mi := &file_proto_dataplane_proto_msgTypes[38]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2222,7 +3198,7 @@ func (x *RouteMap) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RouteMap.ProtoReflect.Descriptor instead.
 func (*RouteMap) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{27}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{38}
 }
 
 func (x *RouteMap) GetName() string {
@@ -2269,7 +3245,7 @@ type RouterConfig struct {
 
 func (x *RouterConfig) Reset() {
 	*x = RouterConfig{}
-	mi := &file_proto_dataplane_proto_msgTypes[28]
+	mi := &file_proto_dataplane_proto_msgTypes[39]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2281,7 +3257,7 @@ func (x *RouterConfig) String() string {
 func (*RouterConfig) ProtoMessage() {}
 
 func (x *RouterConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[28]
+	mi := &file_proto_dataplane_proto_msgTypes[39]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2294,7 +3270,7 @@ func (x *RouterConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RouterConfig.ProtoReflect.Descriptor instead.
 func (*RouterConfig) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{28}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{39}
 }
 
 func (x *RouterConfig) GetAsn() string {
@@ -2359,7 +3335,7 @@ type VRF struct {
 
 func (x *VRF) Reset() {
 	*x = VRF{}
-	mi := &file_proto_dataplane_proto_msgTypes[29]
+	mi := &file_proto_dataplane_proto_msgTypes[40]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2371,7 +3347,7 @@ func (x *VRF) String() string {
 func (*VRF) ProtoMessage() {}
 
 func (x *VRF) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[29]
+	mi := &file_proto_dataplane_proto_msgTypes[40]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2384,7 +3360,7 @@ func (x *VRF) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VRF.ProtoReflect.Descriptor instead.
 func (*VRF) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{29}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{40}
 }
 
 func (x *VRF) GetName() string {
@@ -2425,7 +3401,7 @@ type Underlay struct {
 
 func (x *Underlay) Reset() {
 	*x = Underlay{}
-	mi := &file_proto_dataplane_proto_msgTypes[30]
+	mi := &file_proto_dataplane_proto_msgTypes[41]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2437,7 +3413,7 @@ func (x *Underlay) String() string {
 func (*Underlay) ProtoMessage() {}
 
 func (x *Underlay) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[30]
+	mi := &file_proto_dataplane_proto_msgTypes[41]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2450,7 +3426,7 @@ func (x *Underlay) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Underlay.ProtoReflect.Descriptor instead.
 func (*Underlay) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{30}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{41}
 }
 
 func (x *Underlay) GetVrfs() []*VRF {
@@ -2471,7 +3447,7 @@ type Ports struct {
 
 func (x *Ports) Reset() {
 	*x = Ports{}
-	mi := &file_proto_dataplane_proto_msgTypes[31]
+	mi := &file_proto_dataplane_proto_msgTypes[42]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2483,7 +3459,7 @@ func (x *Ports) String() string {
 func (*Ports) ProtoMessage() {}
 
 func (x *Ports) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[31]
+	mi := &file_proto_dataplane_proto_msgTypes[42]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2496,7 +3472,7 @@ func (x *Ports) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Ports.ProtoReflect.Descriptor instead.
 func (*Ports) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{31}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{42}
 }
 
 func (x *Ports) GetName() string {
@@ -2522,7 +3498,7 @@ type Eal struct {
 
 func (x *Eal) Reset() {
 	*x = Eal{}
-	mi := &file_proto_dataplane_proto_msgTypes[32]
+	mi := &file_proto_dataplane_proto_msgTypes[43]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2534,7 +3510,7 @@ func (x *Eal) String() string {
 func (*Eal) ProtoMessage() {}
 
 func (x *Eal) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[32]
+	mi := &file_proto_dataplane_proto_msgTypes[43]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2547,7 +3523,7 @@ func (x *Eal) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Eal.ProtoReflect.Descriptor instead.
 func (*Eal) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{32}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{43}
 }
 
 type TracingConfig struct {
@@ -2560,7 +3536,7 @@ type TracingConfig struct {
 
 func (x *TracingConfig) Reset() {
 	*x = TracingConfig{}
-	mi := &file_proto_dataplane_proto_msgTypes[33]
+	mi := &file_proto_dataplane_proto_msgTypes[44]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2572,7 +3548,7 @@ func (x *TracingConfig) String() string {
 func (*TracingConfig) ProtoMessage() {}
 
 func (x *TracingConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[33]
+	mi := &file_proto_dataplane_proto_msgTypes[44]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2585,7 +3561,7 @@ func (x *TracingConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TracingConfig.ProtoReflect.Descriptor instead.
 func (*TracingConfig) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{33}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{44}
 }
 
 func (x *TracingConfig) GetDefault() LogLevel {
@@ -2616,7 +3592,7 @@ type Device struct {
 
 func (x *Device) Reset() {
 	*x = Device{}
-	mi := &file_proto_dataplane_proto_msgTypes[34]
+	mi := &file_proto_dataplane_proto_msgTypes[45]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2628,7 +3604,7 @@ func (x *Device) String() string {
 func (*Device) ProtoMessage() {}
 
 func (x *Device) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[34]
+	mi := &file_proto_dataplane_proto_msgTypes[45]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2641,7 +3617,7 @@ func (x *Device) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Device.ProtoReflect.Descriptor instead.
 func (*Device) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{34}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{45}
 }
 
 func (x *Device) GetDriver() PacketDriver {
@@ -2692,7 +3668,7 @@ type GatewayConfig struct {
 
 func (x *GatewayConfig) Reset() {
 	*x = GatewayConfig{}
-	mi := &file_proto_dataplane_proto_msgTypes[35]
+	mi := &file_proto_dataplane_proto_msgTypes[46]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2704,7 +3680,7 @@ func (x *GatewayConfig) String() string {
 func (*GatewayConfig) ProtoMessage() {}
 
 func (x *GatewayConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[35]
+	mi := &file_proto_dataplane_proto_msgTypes[46]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2717,7 +3693,7 @@ func (x *GatewayConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GatewayConfig.ProtoReflect.Descriptor instead.
 func (*GatewayConfig) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{35}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{46}
 }
 
 func (x *GatewayConfig) GetGeneration() int64 {
@@ -2780,18 +3756,118 @@ const file_proto_dataplane_proto_rawDesc = "" +
 	"\x0fInterfaceStatus\x12\x16\n" +
 	"\x06ifname\x18\x01 \x01(\tR\x06ifname\x123\n" +
 	"\x06status\x18\x02 \x01(\x0e2\x1b.config.InterfaceStatusTypeR\x06status\x12C\n" +
-	"\fadmin_status\x18\x03 \x01(\x0e2 .config.InterfaceAdminStatusTypeR\vadminStatus\"\x84\x01\n" +
-	"\tFrrStatus\x12-\n" +
-	"\x06status\x18\x01 \x01(\x0e2\x15.config.FrrStatusTypeR\x06status\x12,\n" +
-	"\x12applied_config_gen\x18\x02 \x01(\rR\x10appliedConfigGen\x12\x1a\n" +
-	"\brestarts\x18\x03 \x01(\rR\brestarts\"J\n" +
+	"\fadmin_status\x18\x03 \x01(\x0e2 .config.InterfaceAdminStatusTypeR\vadminStatus\"\xa7\x02\n" +
+	"\tFrrStatus\x12:\n" +
+	"\fzebra_status\x18\x01 \x01(\x0e2\x17.config.ZebraStatusTypeR\vzebraStatus\x12D\n" +
+	"\x10frr_agent_status\x18\x02 \x01(\x0e2\x1a.config.FrrAgentStatusTypeR\x0efrrAgentStatus\x12,\n" +
+	"\x12applied_config_gen\x18\x03 \x01(\rR\x10appliedConfigGen\x12\x1a\n" +
+	"\brestarts\x18\x04 \x01(\rR\brestarts\x12'\n" +
+	"\x0fapplied_configs\x18\x05 \x01(\rR\x0eappliedConfigs\x12%\n" +
+	"\x0efailed_configs\x18\x06 \x01(\rR\rfailedConfigs\"J\n" +
 	"\x13DataplaneStatusInfo\x123\n" +
-	"\x06status\x18\x01 \x01(\x0e2\x1b.config.DataplaneStatusTypeR\x06status\"\xde\x01\n" +
+	"\x06status\x18\x01 \x01(\x0e2\x1b.config.DataplaneStatusTypeR\x06status\"\xad\x01\n" +
+	"\x11InterfaceCounters\x12\x17\n" +
+	"\atx_bits\x18\x01 \x01(\x04R\x06txBits\x12\x15\n" +
+	"\x06tx_bps\x18\x02 \x01(\x01R\x05txBps\x12\x1b\n" +
+	"\ttx_errors\x18\x03 \x01(\x04R\btxErrors\x12\x17\n" +
+	"\arx_bits\x18\x04 \x01(\x04R\x06rxBits\x12\x15\n" +
+	"\x06rx_bps\x18\x05 \x01(\x01R\x05rxBps\x12\x1b\n" +
+	"\trx_errors\x18\x06 \x01(\x04R\brxErrors\"\xf6\x01\n" +
+	"\x16InterfaceRuntimeStatus\x12C\n" +
+	"\fadmin_status\x18\x01 \x01(\x0e2 .config.InterfaceAdminStatusTypeR\vadminStatus\x12<\n" +
+	"\voper_status\x18\x02 \x01(\x0e2\x1b.config.InterfaceStatusTypeR\n" +
+	"operStatus\x12\x10\n" +
+	"\x03mac\x18\x03 \x01(\tR\x03mac\x12\x10\n" +
+	"\x03mtu\x18\x04 \x01(\rR\x03mtu\x125\n" +
+	"\bcounters\x18\x05 \x01(\v2\x19.config.InterfaceCountersR\bcounters\"\xc7\x01\n" +
+	"\x12BgpMessageCounters\x12\x1e\n" +
+	"\n" +
+	"capability\x18\x01 \x01(\x04R\n" +
+	"capability\x12\x1c\n" +
+	"\tkeepalive\x18\x02 \x01(\x04R\tkeepalive\x12\"\n" +
+	"\fnotification\x18\x03 \x01(\x04R\fnotification\x12\x12\n" +
+	"\x04open\x18\x04 \x01(\x04R\x04open\x12#\n" +
+	"\rroute_refresh\x18\x05 \x01(\x04R\frouteRefresh\x12\x16\n" +
+	"\x06update\x18\x06 \x01(\x04R\x06update\"u\n" +
+	"\vBgpMessages\x126\n" +
+	"\breceived\x18\x01 \x01(\v2\x1a.config.BgpMessageCountersR\breceived\x12.\n" +
+	"\x04sent\x18\x02 \x01(\v2\x1a.config.BgpMessageCountersR\x04sent\"u\n" +
+	"\x13BgpNeighborPrefixes\x12\x1a\n" +
+	"\breceived\x18\x01 \x01(\rR\breceived\x12.\n" +
+	"\x13received_pre_policy\x18\x02 \x01(\rR\x11receivedPrePolicy\x12\x12\n" +
+	"\x04sent\x18\x03 \x01(\rR\x04sent\"\xf3\x04\n" +
+	"\x11BgpNeighborStatus\x12\x18\n" +
+	"\aenabled\x18\x01 \x01(\bR\aenabled\x12\x19\n" +
+	"\blocal_as\x18\x02 \x01(\rR\alocalAs\x12\x17\n" +
+	"\apeer_as\x18\x03 \x01(\rR\x06peerAs\x12\x1b\n" +
+	"\tpeer_port\x18\x04 \x01(\rR\bpeerPort\x12\x1d\n" +
+	"\n" +
+	"peer_group\x18\x05 \x01(\tR\tpeerGroup\x12(\n" +
+	"\x10remote_router_id\x18\x06 \x01(\tR\x0eremoteRouterId\x12D\n" +
+	"\rsession_state\x18\a \x01(\x0e2\x1f.config.BgpNeighborSessionStateR\fsessionState\x12/\n" +
+	"\x13connections_dropped\x18\b \x01(\x04R\x12connectionsDropped\x127\n" +
+	"\x17established_transitions\x18\t \x01(\x04R\x16establishedTransitions\x12*\n" +
+	"\x11last_reset_reason\x18\n" +
+	" \x01(\tR\x0flastResetReason\x12/\n" +
+	"\bmessages\x18\v \x01(\v2\x13.config.BgpMessagesR\bmessages\x12C\n" +
+	"\bprefixes\x18\f \x03(\v2'.config.BgpNeighborStatus.PrefixesEntryR\bprefixes\x1aX\n" +
+	"\rPrefixesEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x121\n" +
+	"\x05value\x18\x02 \x01(\v2\x1b.config.BgpNeighborPrefixesR\x05value:\x028\x01\"\xaa\x01\n" +
+	"\fBgpVrfStatus\x12A\n" +
+	"\tneighbors\x18\x01 \x03(\v2#.config.BgpVrfStatus.NeighborsEntryR\tneighbors\x1aW\n" +
+	"\x0eNeighborsEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12/\n" +
+	"\x05value\x18\x02 \x01(\v2\x19.config.BgpNeighborStatusR\x05value:\x028\x01\"\x8b\x01\n" +
+	"\tBgpStatus\x12/\n" +
+	"\x04vrfs\x18\x01 \x03(\v2\x1b.config.BgpStatus.VrfsEntryR\x04vrfs\x1aM\n" +
+	"\tVrfsEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
+	"\x05value\x18\x02 \x01(\v2\x14.config.BgpVrfStatusR\x05value:\x028\x01\"\xaf\x01\n" +
+	"\x12VpcInterfaceStatus\x12\x16\n" +
+	"\x06ifname\x18\x01 \x01(\tR\x06ifname\x12C\n" +
+	"\fadmin_status\x18\x02 \x01(\x0e2 .config.InterfaceAdminStatusTypeR\vadminStatus\x12<\n" +
+	"\voper_status\x18\x03 \x01(\x0e2\x1b.config.InterfaceStatusTypeR\n" +
+	"operStatus\"\x80\x02\n" +
+	"\tVpcStatus\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x10\n" +
+	"\x03vni\x18\x03 \x01(\rR\x03vni\x12\x1f\n" +
+	"\vroute_count\x18\x04 \x01(\rR\n" +
+	"routeCount\x12A\n" +
+	"\n" +
+	"interfaces\x18\a \x03(\v2!.config.VpcStatus.InterfacesEntryR\n" +
+	"interfaces\x1aY\n" +
+	"\x0fInterfacesEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x120\n" +
+	"\x05value\x18\x02 \x01(\v2\x1a.config.VpcInterfaceStatusR\x05value:\x028\x01\"\xd5\x01\n" +
+	"\x12VpcPeeringCounters\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12\x17\n" +
+	"\asrc_vpc\x18\x02 \x01(\tR\x06srcVpc\x12\x17\n" +
+	"\adst_vpc\x18\x03 \x01(\tR\x06dstVpc\x12\x18\n" +
+	"\apackets\x18\x04 \x01(\x04R\apackets\x12\x14\n" +
+	"\x05bytes\x18\x05 \x01(\x04R\x05bytes\x12\x14\n" +
+	"\x05drops\x18\x06 \x01(\x04R\x05drops\x12\x10\n" +
+	"\x03pps\x18\a \x01(\x01R\x03pps\x12!\n" +
+	"\factive_flows\x18\b \x01(\x04R\vactiveFlows\"\xae\x06\n" +
 	"\x1aGetDataplaneStatusResponse\x12F\n" +
 	"\x12interface_statuses\x18\x01 \x03(\v2\x17.config.InterfaceStatusR\x11interfaceStatuses\x120\n" +
 	"\n" +
 	"frr_status\x18\x02 \x01(\v2\x11.config.FrrStatusR\tfrrStatus\x12F\n" +
-	"\x10dataplane_status\x18\x03 \x01(\v2\x1b.config.DataplaneStatusInfoR\x0fdataplaneStatus\"\xdc\x02\n" +
+	"\x10dataplane_status\x18\x03 \x01(\v2\x1b.config.DataplaneStatusInfoR\x0fdataplaneStatus\x12e\n" +
+	"\x11interface_runtime\x18\x04 \x03(\v28.config.GetDataplaneStatusResponse.InterfaceRuntimeEntryR\x10interfaceRuntime\x12#\n" +
+	"\x03bgp\x18\x05 \x01(\v2\x11.config.BgpStatusR\x03bgp\x12@\n" +
+	"\x04vpcs\x18\x06 \x03(\v2,.config.GetDataplaneStatusResponse.VpcsEntryR\x04vpcs\x12l\n" +
+	"\x14vpc_peering_counters\x18\a \x03(\v2:.config.GetDataplaneStatusResponse.VpcPeeringCountersEntryR\x12vpcPeeringCounters\x1ac\n" +
+	"\x15InterfaceRuntimeEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x124\n" +
+	"\x05value\x18\x02 \x01(\v2\x1e.config.InterfaceRuntimeStatusR\x05value:\x028\x01\x1aJ\n" +
+	"\tVpcsEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12'\n" +
+	"\x05value\x18\x02 \x01(\v2\x11.config.VpcStatusR\x05value:\x028\x01\x1aa\n" +
+	"\x17VpcPeeringCountersEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x120\n" +
+	"\x05value\x18\x02 \x01(\v2\x1a.config.VpcPeeringCountersR\x05value:\x028\x01\"\xdc\x02\n" +
 	"\tInterface\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x18\n" +
 	"\aipaddrs\x18\x02 \x03(\tR\aipaddrs\x12\"\n" +
@@ -2937,16 +4013,25 @@ const file_proto_dataplane_proto_rawDesc = "" +
 	"\x18InterfaceAdminStatusType\x12\"\n" +
 	"\x1eINTERFACE_ADMIN_STATUS_UNKNOWN\x10\x00\x12\x1d\n" +
 	"\x19INTERFACE_ADMIN_STATUS_UP\x10\x01\x12\x1f\n" +
-	"\x1bINTERFACE_ADMIN_STATUS_DOWN\x10\x02*T\n" +
-	"\rFrrStatusType\x12\x16\n" +
-	"\x12FRR_STATUS_UNKNOWN\x10\x00\x12\x15\n" +
-	"\x11FRR_STATUS_ACTIVE\x10\x01\x12\x14\n" +
-	"\x10FRR_STATUS_ERROR\x10\x02*\x88\x01\n" +
+	"\x1bINTERFACE_ADMIN_STATUS_DOWN\x10\x02*M\n" +
+	"\x0fZebraStatusType\x12\x1e\n" +
+	"\x1aZEBRA_STATUS_NOT_CONNECTED\x10\x00\x12\x1a\n" +
+	"\x16ZEBRA_STATUS_CONNECTED\x10\x01*X\n" +
+	"\x12FrrAgentStatusType\x12\"\n" +
+	"\x1eFRR_AGENT_STATUS_NOT_CONNECTED\x10\x00\x12\x1e\n" +
+	"\x1aFRR_AGENT_STATUS_CONNECTED\x10\x01*\x88\x01\n" +
 	"\x13DataplaneStatusType\x12\x1c\n" +
 	"\x18DATAPLANE_STATUS_UNKNOWN\x10\x00\x12\x1c\n" +
 	"\x18DATAPLANE_STATUS_HEALTHY\x10\x01\x12\x19\n" +
 	"\x15DATAPLANE_STATUS_INIT\x10\x02\x12\x1a\n" +
-	"\x16DATAPLANE_STATUS_ERROR\x10\x03*X\n" +
+	"\x16DATAPLANE_STATUS_ERROR\x10\x03*\x9e\x01\n" +
+	"\x17BgpNeighborSessionState\x12\x13\n" +
+	"\x0fBGP_STATE_UNSET\x10\x00\x12\x12\n" +
+	"\x0eBGP_STATE_IDLE\x10\x01\x12\x15\n" +
+	"\x11BGP_STATE_CONNECT\x10\x02\x12\x14\n" +
+	"\x10BGP_STATE_ACTIVE\x10\x03\x12\x12\n" +
+	"\x0eBGP_STATE_OPEN\x10\x04\x12\x19\n" +
+	"\x15BGP_STATE_ESTABLISHED\x10\x05*X\n" +
 	"\x06IfType\x12\x14\n" +
 	"\x10IF_TYPE_ETHERNET\x10\x00\x12\x10\n" +
 	"\fIF_TYPE_VLAN\x10\x01\x12\x14\n" +
@@ -2989,117 +4074,162 @@ func file_proto_dataplane_proto_rawDescGZIP() []byte {
 	return file_proto_dataplane_proto_rawDescData
 }
 
-var file_proto_dataplane_proto_enumTypes = make([]protoimpl.EnumInfo, 11)
-var file_proto_dataplane_proto_msgTypes = make([]protoimpl.MessageInfo, 37)
+var file_proto_dataplane_proto_enumTypes = make([]protoimpl.EnumInfo, 13)
+var file_proto_dataplane_proto_msgTypes = make([]protoimpl.MessageInfo, 55)
 var file_proto_dataplane_proto_goTypes = []any{
 	(Error)(0),                          // 0: config.Error
 	(OspfNetworkType)(0),                // 1: config.OspfNetworkType
 	(InterfaceStatusType)(0),            // 2: config.InterfaceStatusType
 	(InterfaceAdminStatusType)(0),       // 3: config.InterfaceAdminStatusType
-	(FrrStatusType)(0),                  // 4: config.FrrStatusType
-	(DataplaneStatusType)(0),            // 5: config.DataplaneStatusType
-	(IfType)(0),                         // 6: config.IfType
-	(IfRole)(0),                         // 7: config.IfRole
-	(BgpAF)(0),                          // 8: config.BgpAF
-	(LogLevel)(0),                       // 9: config.LogLevel
-	(PacketDriver)(0),                   // 10: config.PacketDriver
-	(*GetConfigRequest)(nil),            // 11: config.GetConfigRequest
-	(*UpdateConfigRequest)(nil),         // 12: config.UpdateConfigRequest
-	(*UpdateConfigResponse)(nil),        // 13: config.UpdateConfigResponse
-	(*GetConfigGenerationRequest)(nil),  // 14: config.GetConfigGenerationRequest
-	(*GetConfigGenerationResponse)(nil), // 15: config.GetConfigGenerationResponse
-	(*OspfInterface)(nil),               // 16: config.OspfInterface
-	(*OspfConfig)(nil),                  // 17: config.OspfConfig
-	(*GetDataplaneStatusRequest)(nil),   // 18: config.GetDataplaneStatusRequest
-	(*InterfaceStatus)(nil),             // 19: config.InterfaceStatus
-	(*FrrStatus)(nil),                   // 20: config.FrrStatus
-	(*DataplaneStatusInfo)(nil),         // 21: config.DataplaneStatusInfo
-	(*GetDataplaneStatusResponse)(nil),  // 22: config.GetDataplaneStatusResponse
-	(*Interface)(nil),                   // 23: config.Interface
-	(*PeeringIPs)(nil),                  // 24: config.PeeringIPs
-	(*PeeringAs)(nil),                   // 25: config.PeeringAs
-	(*PeeringStatelessNAT)(nil),         // 26: config.PeeringStatelessNAT
-	(*PeeringStatefulNAT)(nil),          // 27: config.PeeringStatefulNAT
-	(*Expose)(nil),                      // 28: config.Expose
-	(*PeeringEntryFor)(nil),             // 29: config.PeeringEntryFor
-	(*VpcPeering)(nil),                  // 30: config.VpcPeering
-	(*VPC)(nil),                         // 31: config.VPC
-	(*Overlay)(nil),                     // 32: config.Overlay
-	(*BgpAddressFamilyIPv4)(nil),        // 33: config.BgpAddressFamilyIPv4
-	(*BgpAddressFamilyIPv6)(nil),        // 34: config.BgpAddressFamilyIPv6
-	(*BgpAddressFamilyL2VpnEvpn)(nil),   // 35: config.BgpAddressFamilyL2vpnEvpn
-	(*BgpNeighborUpdateSource)(nil),     // 36: config.BgpNeighborUpdateSource
-	(*BgpNeighbor)(nil),                 // 37: config.BgpNeighbor
-	(*RouteMap)(nil),                    // 38: config.RouteMap
-	(*RouterConfig)(nil),                // 39: config.RouterConfig
-	(*VRF)(nil),                         // 40: config.VRF
-	(*Underlay)(nil),                    // 41: config.Underlay
-	(*Ports)(nil),                       // 42: config.Ports
-	(*Eal)(nil),                         // 43: config.Eal
-	(*TracingConfig)(nil),               // 44: config.TracingConfig
-	(*Device)(nil),                      // 45: config.Device
-	(*GatewayConfig)(nil),               // 46: config.GatewayConfig
-	nil,                                 // 47: config.TracingConfig.TaglevelEntry
-	(*durationpb.Duration)(nil),         // 48: google.protobuf.Duration
+	(ZebraStatusType)(0),                // 4: config.ZebraStatusType
+	(FrrAgentStatusType)(0),             // 5: config.FrrAgentStatusType
+	(DataplaneStatusType)(0),            // 6: config.DataplaneStatusType
+	(BgpNeighborSessionState)(0),        // 7: config.BgpNeighborSessionState
+	(IfType)(0),                         // 8: config.IfType
+	(IfRole)(0),                         // 9: config.IfRole
+	(BgpAF)(0),                          // 10: config.BgpAF
+	(LogLevel)(0),                       // 11: config.LogLevel
+	(PacketDriver)(0),                   // 12: config.PacketDriver
+	(*GetConfigRequest)(nil),            // 13: config.GetConfigRequest
+	(*UpdateConfigRequest)(nil),         // 14: config.UpdateConfigRequest
+	(*UpdateConfigResponse)(nil),        // 15: config.UpdateConfigResponse
+	(*GetConfigGenerationRequest)(nil),  // 16: config.GetConfigGenerationRequest
+	(*GetConfigGenerationResponse)(nil), // 17: config.GetConfigGenerationResponse
+	(*OspfInterface)(nil),               // 18: config.OspfInterface
+	(*OspfConfig)(nil),                  // 19: config.OspfConfig
+	(*GetDataplaneStatusRequest)(nil),   // 20: config.GetDataplaneStatusRequest
+	(*InterfaceStatus)(nil),             // 21: config.InterfaceStatus
+	(*FrrStatus)(nil),                   // 22: config.FrrStatus
+	(*DataplaneStatusInfo)(nil),         // 23: config.DataplaneStatusInfo
+	(*InterfaceCounters)(nil),           // 24: config.InterfaceCounters
+	(*InterfaceRuntimeStatus)(nil),      // 25: config.InterfaceRuntimeStatus
+	(*BgpMessageCounters)(nil),          // 26: config.BgpMessageCounters
+	(*BgpMessages)(nil),                 // 27: config.BgpMessages
+	(*BgpNeighborPrefixes)(nil),         // 28: config.BgpNeighborPrefixes
+	(*BgpNeighborStatus)(nil),           // 29: config.BgpNeighborStatus
+	(*BgpVrfStatus)(nil),                // 30: config.BgpVrfStatus
+	(*BgpStatus)(nil),                   // 31: config.BgpStatus
+	(*VpcInterfaceStatus)(nil),          // 32: config.VpcInterfaceStatus
+	(*VpcStatus)(nil),                   // 33: config.VpcStatus
+	(*VpcPeeringCounters)(nil),          // 34: config.VpcPeeringCounters
+	(*GetDataplaneStatusResponse)(nil),  // 35: config.GetDataplaneStatusResponse
+	(*Interface)(nil),                   // 36: config.Interface
+	(*PeeringIPs)(nil),                  // 37: config.PeeringIPs
+	(*PeeringAs)(nil),                   // 38: config.PeeringAs
+	(*PeeringStatelessNAT)(nil),         // 39: config.PeeringStatelessNAT
+	(*PeeringStatefulNAT)(nil),          // 40: config.PeeringStatefulNAT
+	(*Expose)(nil),                      // 41: config.Expose
+	(*PeeringEntryFor)(nil),             // 42: config.PeeringEntryFor
+	(*VpcPeering)(nil),                  // 43: config.VpcPeering
+	(*VPC)(nil),                         // 44: config.VPC
+	(*Overlay)(nil),                     // 45: config.Overlay
+	(*BgpAddressFamilyIPv4)(nil),        // 46: config.BgpAddressFamilyIPv4
+	(*BgpAddressFamilyIPv6)(nil),        // 47: config.BgpAddressFamilyIPv6
+	(*BgpAddressFamilyL2VpnEvpn)(nil),   // 48: config.BgpAddressFamilyL2vpnEvpn
+	(*BgpNeighborUpdateSource)(nil),     // 49: config.BgpNeighborUpdateSource
+	(*BgpNeighbor)(nil),                 // 50: config.BgpNeighbor
+	(*RouteMap)(nil),                    // 51: config.RouteMap
+	(*RouterConfig)(nil),                // 52: config.RouterConfig
+	(*VRF)(nil),                         // 53: config.VRF
+	(*Underlay)(nil),                    // 54: config.Underlay
+	(*Ports)(nil),                       // 55: config.Ports
+	(*Eal)(nil),                         // 56: config.Eal
+	(*TracingConfig)(nil),               // 57: config.TracingConfig
+	(*Device)(nil),                      // 58: config.Device
+	(*GatewayConfig)(nil),               // 59: config.GatewayConfig
+	nil,                                 // 60: config.BgpNeighborStatus.PrefixesEntry
+	nil,                                 // 61: config.BgpVrfStatus.NeighborsEntry
+	nil,                                 // 62: config.BgpStatus.VrfsEntry
+	nil,                                 // 63: config.VpcStatus.InterfacesEntry
+	nil,                                 // 64: config.GetDataplaneStatusResponse.InterfaceRuntimeEntry
+	nil,                                 // 65: config.GetDataplaneStatusResponse.VpcsEntry
+	nil,                                 // 66: config.GetDataplaneStatusResponse.VpcPeeringCountersEntry
+	nil,                                 // 67: config.TracingConfig.TaglevelEntry
+	(*durationpb.Duration)(nil),         // 68: google.protobuf.Duration
 }
 var file_proto_dataplane_proto_depIdxs = []int32{
-	46, // 0: config.UpdateConfigRequest.config:type_name -> config.GatewayConfig
+	59, // 0: config.UpdateConfigRequest.config:type_name -> config.GatewayConfig
 	0,  // 1: config.UpdateConfigResponse.error:type_name -> config.Error
 	1,  // 2: config.OspfInterface.network_type:type_name -> config.OspfNetworkType
 	2,  // 3: config.InterfaceStatus.status:type_name -> config.InterfaceStatusType
 	3,  // 4: config.InterfaceStatus.admin_status:type_name -> config.InterfaceAdminStatusType
-	4,  // 5: config.FrrStatus.status:type_name -> config.FrrStatusType
-	5,  // 6: config.DataplaneStatusInfo.status:type_name -> config.DataplaneStatusType
-	19, // 7: config.GetDataplaneStatusResponse.interface_statuses:type_name -> config.InterfaceStatus
-	20, // 8: config.GetDataplaneStatusResponse.frr_status:type_name -> config.FrrStatus
-	21, // 9: config.GetDataplaneStatusResponse.dataplane_status:type_name -> config.DataplaneStatusInfo
-	6,  // 10: config.Interface.type:type_name -> config.IfType
-	7,  // 11: config.Interface.role:type_name -> config.IfRole
-	16, // 12: config.Interface.ospf:type_name -> config.OspfInterface
-	48, // 13: config.PeeringStatefulNAT.idleTimeout:type_name -> google.protobuf.Duration
-	24, // 14: config.Expose.ips:type_name -> config.PeeringIPs
-	25, // 15: config.Expose.as:type_name -> config.PeeringAs
-	26, // 16: config.Expose.stateless:type_name -> config.PeeringStatelessNAT
-	27, // 17: config.Expose.stateful:type_name -> config.PeeringStatefulNAT
-	28, // 18: config.PeeringEntryFor.expose:type_name -> config.Expose
-	29, // 19: config.VpcPeering.for:type_name -> config.PeeringEntryFor
-	23, // 20: config.VPC.interfaces:type_name -> config.Interface
-	31, // 21: config.Overlay.vpcs:type_name -> config.VPC
-	30, // 22: config.Overlay.peerings:type_name -> config.VpcPeering
-	8,  // 23: config.BgpNeighbor.af_activate:type_name -> config.BgpAF
-	36, // 24: config.BgpNeighbor.update_source:type_name -> config.BgpNeighborUpdateSource
-	37, // 25: config.RouterConfig.neighbors:type_name -> config.BgpNeighbor
-	33, // 26: config.RouterConfig.ipv4_unicast:type_name -> config.BgpAddressFamilyIPv4
-	34, // 27: config.RouterConfig.ipv6_unicast:type_name -> config.BgpAddressFamilyIPv6
-	35, // 28: config.RouterConfig.l2vpn_evpn:type_name -> config.BgpAddressFamilyL2vpnEvpn
-	38, // 29: config.RouterConfig.route_maps:type_name -> config.RouteMap
-	23, // 30: config.VRF.interfaces:type_name -> config.Interface
-	39, // 31: config.VRF.router:type_name -> config.RouterConfig
-	17, // 32: config.VRF.ospf:type_name -> config.OspfConfig
-	40, // 33: config.Underlay.vrfs:type_name -> config.VRF
-	9,  // 34: config.TracingConfig.default:type_name -> config.LogLevel
-	47, // 35: config.TracingConfig.taglevel:type_name -> config.TracingConfig.TaglevelEntry
-	10, // 36: config.Device.driver:type_name -> config.PacketDriver
-	43, // 37: config.Device.eal:type_name -> config.Eal
-	42, // 38: config.Device.ports:type_name -> config.Ports
-	44, // 39: config.Device.tracing:type_name -> config.TracingConfig
-	45, // 40: config.GatewayConfig.device:type_name -> config.Device
-	41, // 41: config.GatewayConfig.underlay:type_name -> config.Underlay
-	32, // 42: config.GatewayConfig.overlay:type_name -> config.Overlay
-	9,  // 43: config.TracingConfig.TaglevelEntry.value:type_name -> config.LogLevel
-	11, // 44: config.ConfigService.GetConfig:input_type -> config.GetConfigRequest
-	14, // 45: config.ConfigService.GetConfigGeneration:input_type -> config.GetConfigGenerationRequest
-	12, // 46: config.ConfigService.UpdateConfig:input_type -> config.UpdateConfigRequest
-	18, // 47: config.ConfigService.GetDataplaneStatus:input_type -> config.GetDataplaneStatusRequest
-	46, // 48: config.ConfigService.GetConfig:output_type -> config.GatewayConfig
-	15, // 49: config.ConfigService.GetConfigGeneration:output_type -> config.GetConfigGenerationResponse
-	13, // 50: config.ConfigService.UpdateConfig:output_type -> config.UpdateConfigResponse
-	22, // 51: config.ConfigService.GetDataplaneStatus:output_type -> config.GetDataplaneStatusResponse
-	48, // [48:52] is the sub-list for method output_type
-	44, // [44:48] is the sub-list for method input_type
-	44, // [44:44] is the sub-list for extension type_name
-	44, // [44:44] is the sub-list for extension extendee
-	0,  // [0:44] is the sub-list for field type_name
+	4,  // 5: config.FrrStatus.zebra_status:type_name -> config.ZebraStatusType
+	5,  // 6: config.FrrStatus.frr_agent_status:type_name -> config.FrrAgentStatusType
+	6,  // 7: config.DataplaneStatusInfo.status:type_name -> config.DataplaneStatusType
+	3,  // 8: config.InterfaceRuntimeStatus.admin_status:type_name -> config.InterfaceAdminStatusType
+	2,  // 9: config.InterfaceRuntimeStatus.oper_status:type_name -> config.InterfaceStatusType
+	24, // 10: config.InterfaceRuntimeStatus.counters:type_name -> config.InterfaceCounters
+	26, // 11: config.BgpMessages.received:type_name -> config.BgpMessageCounters
+	26, // 12: config.BgpMessages.sent:type_name -> config.BgpMessageCounters
+	7,  // 13: config.BgpNeighborStatus.session_state:type_name -> config.BgpNeighborSessionState
+	27, // 14: config.BgpNeighborStatus.messages:type_name -> config.BgpMessages
+	60, // 15: config.BgpNeighborStatus.prefixes:type_name -> config.BgpNeighborStatus.PrefixesEntry
+	61, // 16: config.BgpVrfStatus.neighbors:type_name -> config.BgpVrfStatus.NeighborsEntry
+	62, // 17: config.BgpStatus.vrfs:type_name -> config.BgpStatus.VrfsEntry
+	3,  // 18: config.VpcInterfaceStatus.admin_status:type_name -> config.InterfaceAdminStatusType
+	2,  // 19: config.VpcInterfaceStatus.oper_status:type_name -> config.InterfaceStatusType
+	63, // 20: config.VpcStatus.interfaces:type_name -> config.VpcStatus.InterfacesEntry
+	21, // 21: config.GetDataplaneStatusResponse.interface_statuses:type_name -> config.InterfaceStatus
+	22, // 22: config.GetDataplaneStatusResponse.frr_status:type_name -> config.FrrStatus
+	23, // 23: config.GetDataplaneStatusResponse.dataplane_status:type_name -> config.DataplaneStatusInfo
+	64, // 24: config.GetDataplaneStatusResponse.interface_runtime:type_name -> config.GetDataplaneStatusResponse.InterfaceRuntimeEntry
+	31, // 25: config.GetDataplaneStatusResponse.bgp:type_name -> config.BgpStatus
+	65, // 26: config.GetDataplaneStatusResponse.vpcs:type_name -> config.GetDataplaneStatusResponse.VpcsEntry
+	66, // 27: config.GetDataplaneStatusResponse.vpc_peering_counters:type_name -> config.GetDataplaneStatusResponse.VpcPeeringCountersEntry
+	8,  // 28: config.Interface.type:type_name -> config.IfType
+	9,  // 29: config.Interface.role:type_name -> config.IfRole
+	18, // 30: config.Interface.ospf:type_name -> config.OspfInterface
+	68, // 31: config.PeeringStatefulNAT.idleTimeout:type_name -> google.protobuf.Duration
+	37, // 32: config.Expose.ips:type_name -> config.PeeringIPs
+	38, // 33: config.Expose.as:type_name -> config.PeeringAs
+	39, // 34: config.Expose.stateless:type_name -> config.PeeringStatelessNAT
+	40, // 35: config.Expose.stateful:type_name -> config.PeeringStatefulNAT
+	41, // 36: config.PeeringEntryFor.expose:type_name -> config.Expose
+	42, // 37: config.VpcPeering.for:type_name -> config.PeeringEntryFor
+	36, // 38: config.VPC.interfaces:type_name -> config.Interface
+	44, // 39: config.Overlay.vpcs:type_name -> config.VPC
+	43, // 40: config.Overlay.peerings:type_name -> config.VpcPeering
+	10, // 41: config.BgpNeighbor.af_activate:type_name -> config.BgpAF
+	49, // 42: config.BgpNeighbor.update_source:type_name -> config.BgpNeighborUpdateSource
+	50, // 43: config.RouterConfig.neighbors:type_name -> config.BgpNeighbor
+	46, // 44: config.RouterConfig.ipv4_unicast:type_name -> config.BgpAddressFamilyIPv4
+	47, // 45: config.RouterConfig.ipv6_unicast:type_name -> config.BgpAddressFamilyIPv6
+	48, // 46: config.RouterConfig.l2vpn_evpn:type_name -> config.BgpAddressFamilyL2vpnEvpn
+	51, // 47: config.RouterConfig.route_maps:type_name -> config.RouteMap
+	36, // 48: config.VRF.interfaces:type_name -> config.Interface
+	52, // 49: config.VRF.router:type_name -> config.RouterConfig
+	19, // 50: config.VRF.ospf:type_name -> config.OspfConfig
+	53, // 51: config.Underlay.vrfs:type_name -> config.VRF
+	11, // 52: config.TracingConfig.default:type_name -> config.LogLevel
+	67, // 53: config.TracingConfig.taglevel:type_name -> config.TracingConfig.TaglevelEntry
+	12, // 54: config.Device.driver:type_name -> config.PacketDriver
+	56, // 55: config.Device.eal:type_name -> config.Eal
+	55, // 56: config.Device.ports:type_name -> config.Ports
+	57, // 57: config.Device.tracing:type_name -> config.TracingConfig
+	58, // 58: config.GatewayConfig.device:type_name -> config.Device
+	54, // 59: config.GatewayConfig.underlay:type_name -> config.Underlay
+	45, // 60: config.GatewayConfig.overlay:type_name -> config.Overlay
+	28, // 61: config.BgpNeighborStatus.PrefixesEntry.value:type_name -> config.BgpNeighborPrefixes
+	29, // 62: config.BgpVrfStatus.NeighborsEntry.value:type_name -> config.BgpNeighborStatus
+	30, // 63: config.BgpStatus.VrfsEntry.value:type_name -> config.BgpVrfStatus
+	32, // 64: config.VpcStatus.InterfacesEntry.value:type_name -> config.VpcInterfaceStatus
+	25, // 65: config.GetDataplaneStatusResponse.InterfaceRuntimeEntry.value:type_name -> config.InterfaceRuntimeStatus
+	33, // 66: config.GetDataplaneStatusResponse.VpcsEntry.value:type_name -> config.VpcStatus
+	34, // 67: config.GetDataplaneStatusResponse.VpcPeeringCountersEntry.value:type_name -> config.VpcPeeringCounters
+	11, // 68: config.TracingConfig.TaglevelEntry.value:type_name -> config.LogLevel
+	13, // 69: config.ConfigService.GetConfig:input_type -> config.GetConfigRequest
+	16, // 70: config.ConfigService.GetConfigGeneration:input_type -> config.GetConfigGenerationRequest
+	14, // 71: config.ConfigService.UpdateConfig:input_type -> config.UpdateConfigRequest
+	20, // 72: config.ConfigService.GetDataplaneStatus:input_type -> config.GetDataplaneStatusRequest
+	59, // 73: config.ConfigService.GetConfig:output_type -> config.GatewayConfig
+	17, // 74: config.ConfigService.GetConfigGeneration:output_type -> config.GetConfigGenerationResponse
+	15, // 75: config.ConfigService.UpdateConfig:output_type -> config.UpdateConfigResponse
+	35, // 76: config.ConfigService.GetDataplaneStatus:output_type -> config.GetDataplaneStatusResponse
+	73, // [73:77] is the sub-list for method output_type
+	69, // [69:73] is the sub-list for method input_type
+	69, // [69:69] is the sub-list for extension type_name
+	69, // [69:69] is the sub-list for extension extendee
+	0,  // [0:69] is the sub-list for field type_name
 }
 
 func init() { file_proto_dataplane_proto_init() }
@@ -3109,32 +4239,32 @@ func file_proto_dataplane_proto_init() {
 	}
 	file_proto_dataplane_proto_msgTypes[5].OneofWrappers = []any{}
 	file_proto_dataplane_proto_msgTypes[6].OneofWrappers = []any{}
-	file_proto_dataplane_proto_msgTypes[12].OneofWrappers = []any{}
-	file_proto_dataplane_proto_msgTypes[13].OneofWrappers = []any{
+	file_proto_dataplane_proto_msgTypes[23].OneofWrappers = []any{}
+	file_proto_dataplane_proto_msgTypes[24].OneofWrappers = []any{
 		(*PeeringIPs_Cidr)(nil),
 		(*PeeringIPs_Not)(nil),
 	}
-	file_proto_dataplane_proto_msgTypes[14].OneofWrappers = []any{
+	file_proto_dataplane_proto_msgTypes[25].OneofWrappers = []any{
 		(*PeeringAs_Cidr)(nil),
 		(*PeeringAs_Not)(nil),
 	}
-	file_proto_dataplane_proto_msgTypes[17].OneofWrappers = []any{
+	file_proto_dataplane_proto_msgTypes[28].OneofWrappers = []any{
 		(*Expose_Stateless)(nil),
 		(*Expose_Stateful)(nil),
 	}
-	file_proto_dataplane_proto_msgTypes[25].OneofWrappers = []any{
+	file_proto_dataplane_proto_msgTypes[36].OneofWrappers = []any{
 		(*BgpNeighborUpdateSource_Address)(nil),
 		(*BgpNeighborUpdateSource_Interface)(nil),
 	}
-	file_proto_dataplane_proto_msgTypes[28].OneofWrappers = []any{}
-	file_proto_dataplane_proto_msgTypes[29].OneofWrappers = []any{}
+	file_proto_dataplane_proto_msgTypes[39].OneofWrappers = []any{}
+	file_proto_dataplane_proto_msgTypes[40].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_dataplane_proto_rawDesc), len(file_proto_dataplane_proto_rawDesc)),
-			NumEnums:      11,
-			NumMessages:   37,
+			NumEnums:      13,
+			NumMessages:   55,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
