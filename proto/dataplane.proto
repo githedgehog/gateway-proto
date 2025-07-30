@@ -86,10 +86,14 @@ enum InterfaceAdminStatusType {
 
 /* TODO: Consider adding additional states such as FRR_STATUS_STARTING, FRR_STATUS_STOPPING, 
    or other states that might be relevant for tracking the lifecycle of FRR processes. */
-enum FrrStatusType {
-  FRR_STATUS_UNKNOWN = 0;
-  FRR_STATUS_ACTIVE = 1;
-  FRR_STATUS_ERROR = 2;
+enum ZebraStatusType {
+  ZEBRA_STATUS_NOT_CONNECTED = 0;
+  ZEBRA_STATUS_CONNECTED = 1;
+}
+
+enum FrrAgentStatusType {
+  FRR_AGENT_STATUS_NOT_CONNECTED = 0;
+  FRR_AGENT_STATUS_CONNECTED = 1;
 }
 
 enum DataplaneStatusType {
@@ -110,9 +114,12 @@ message InterfaceStatus {
 }
 
 message FrrStatus {
-  FrrStatusType status = 1;
-  uint32 applied_config_gen = 2;
-  uint32 restarts = 3;
+  ZebraStatusType zebra_status = 1;
+  FrrAgentStatusType frr_agent_status = 2;
+  uint32 applied_config_gen = 3;
+  uint32 restarts = 4;
+  uint32 applied_configs = 5;
+  uint32 failed_configs = 6;
 }
 
 message DataplaneStatusInfo {

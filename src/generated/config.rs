@@ -67,12 +67,18 @@ pub struct InterfaceStatus {
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct FrrStatus {
-    #[prost(enumeration = "FrrStatusType", tag = "1")]
-    pub status: i32,
-    #[prost(uint32, tag = "2")]
-    pub applied_config_gen: u32,
+    #[prost(enumeration = "ZebraStatusType", tag = "1")]
+    pub zebra_status: i32,
+    #[prost(enumeration = "FrrAgentStatusType", tag = "2")]
+    pub frr_agent_status: i32,
     #[prost(uint32, tag = "3")]
+    pub applied_config_gen: u32,
+    #[prost(uint32, tag = "4")]
     pub restarts: u32,
+    #[prost(uint32, tag = "5")]
+    pub applied_configs: u32,
+    #[prost(uint32, tag = "6")]
+    pub failed_configs: u32,
 }
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
@@ -504,29 +510,53 @@ impl InterfaceAdminStatusType {
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
-pub enum FrrStatusType {
-    FrrStatusUnknown = 0,
-    FrrStatusActive = 1,
-    FrrStatusError = 2,
+pub enum ZebraStatusType {
+    ZebraStatusNotConnected = 0,
+    ZebraStatusConnected = 1,
 }
-impl FrrStatusType {
+impl ZebraStatusType {
     /// String value of the enum field names used in the ProtoBuf definition.
     ///
     /// The values are not transformed in any way and thus are considered stable
     /// (if the ProtoBuf definition does not change) and safe for programmatic use.
     pub fn as_str_name(&self) -> &'static str {
         match self {
-            Self::FrrStatusUnknown => "FRR_STATUS_UNKNOWN",
-            Self::FrrStatusActive => "FRR_STATUS_ACTIVE",
-            Self::FrrStatusError => "FRR_STATUS_ERROR",
+            Self::ZebraStatusNotConnected => "ZEBRA_STATUS_NOT_CONNECTED",
+            Self::ZebraStatusConnected => "ZEBRA_STATUS_CONNECTED",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
     pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
         match value {
-            "FRR_STATUS_UNKNOWN" => Some(Self::FrrStatusUnknown),
-            "FRR_STATUS_ACTIVE" => Some(Self::FrrStatusActive),
-            "FRR_STATUS_ERROR" => Some(Self::FrrStatusError),
+            "ZEBRA_STATUS_NOT_CONNECTED" => Some(Self::ZebraStatusNotConnected),
+            "ZEBRA_STATUS_CONNECTED" => Some(Self::ZebraStatusConnected),
+            _ => None,
+        }
+    }
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum FrrAgentStatusType {
+    FrrAgentStatusNotConnected = 0,
+    FrrAgentStatusConnected = 1,
+}
+impl FrrAgentStatusType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::FrrAgentStatusNotConnected => "FRR_AGENT_STATUS_NOT_CONNECTED",
+            Self::FrrAgentStatusConnected => "FRR_AGENT_STATUS_CONNECTED",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "FRR_AGENT_STATUS_NOT_CONNECTED" => Some(Self::FrrAgentStatusNotConnected),
+            "FRR_AGENT_STATUS_CONNECTED" => Some(Self::FrrAgentStatusConnected),
             _ => None,
         }
     }
