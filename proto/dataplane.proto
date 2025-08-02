@@ -11,6 +11,7 @@ service ConfigService {
   rpc GetConfig (GetConfigRequest) returns (GatewayConfig);
   rpc GetConfigGeneration (GetConfigGenerationRequest) returns (GetConfigGenerationResponse);
   rpc UpdateConfig (UpdateConfigRequest) returns (UpdateConfigResponse);
+  rpc GetDataplaneStatus (GetDataplaneStatusRequest) returns (GetDataplaneStatusResponse);
 }
 
 message GetConfigRequest {
@@ -63,6 +64,72 @@ message OspfInterface {
 message OspfConfig {
   string router_id = 1;
   optional string vrf = 2;
+}
+
+/* ========================== */
+/* ==== Dataplane Status ==== */
+/* ========================== */
+
+enum InterfaceStatusType {
+  INTERFACE_STATUS_UNKNOWN = 0;
+  INTERFACE_STATUS_OPER_UP = 1;
+  INTERFACE_STATUS_OPER_DOWN = 2;
+  INTERFACE_STATUS_ERROR = 3;
+}
+
+enum InterfaceAdminStatusType {
+  INTERFACE_ADMIN_STATUS_UNKNOWN = 0;
+  INTERFACE_ADMIN_STATUS_UP = 1;
+  INTERFACE_ADMIN_STATUS_DOWN = 2;
+}
+
+
+/* TODO: Consider adding additional states such as FRR_STATUS_STARTING, FRR_STATUS_STOPPING, 
+   or other states that might be relevant for tracking the lifecycle of FRR processes. */
+enum ZebraStatusType {
+  ZEBRA_STATUS_NOT_CONNECTED = 0;
+  ZEBRA_STATUS_CONNECTED = 1;
+}
+
+enum FrrAgentStatusType {
+  FRR_AGENT_STATUS_NOT_CONNECTED = 0;
+  FRR_AGENT_STATUS_CONNECTED = 1;
+}
+
+enum DataplaneStatusType {
+  DATAPLANE_STATUS_UNKNOWN = 0;
+  DATAPLANE_STATUS_HEALTHY = 1;
+  DATAPLANE_STATUS_INIT = 2;
+  DATAPLANE_STATUS_ERROR = 3;
+}
+
+message GetDataplaneStatusRequest {
+}
+
+/* TODO: Consider adding an optional string field to InterfaceStatus for additional error messages or descriptions. */
+message InterfaceStatus {
+  string ifname = 1;
+  InterfaceStatusType status = 2;
+  InterfaceAdminStatusType admin_status = 3;
+}
+
+message FrrStatus {
+  ZebraStatusType zebra_status = 1;
+  FrrAgentStatusType frr_agent_status = 2;
+  uint32 applied_config_gen = 3;
+  uint32 restarts = 4;
+  uint32 applied_configs = 5;
+  uint32 failed_configs = 6;
+}
+
+message DataplaneStatusInfo {
+  DataplaneStatusType status = 1;
+}
+
+message GetDataplaneStatusResponse {
+  repeated InterfaceStatus interface_statuses = 1;
+  FrrStatus frr_status = 2;
+  DataplaneStatusInfo dataplane_status = 3;
 }
 
 /* ================================================ */
