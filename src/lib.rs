@@ -16,6 +16,8 @@ pub use config::{
     BgpAddressFamilyL2vpnEvpn,
     BgpAf,
     BgpNeighbor,
+    DataplaneStatusInfo,
+    DataplaneStatusType,
     // Device related types
     Device,
     Eal,
@@ -23,15 +25,21 @@ pub use config::{
     Error,
 
     Expose,
+    FrrAgentStatusType,
+    FrrStatus,
     GatewayConfig,
     GetConfigGenerationRequest,
     GetConfigGenerationResponse,
     // Request/Response types
     GetConfigRequest,
+    GetDataplaneStatusRequest,
+    GetDataplaneStatusResponse,
     IfRole,
     IfType,
     // Interface related types
     Interface,
+    InterfaceStatus,
+    InterfaceStatusType,
     LogLevel,
     OspfConfig,
     OspfInterface,
@@ -55,6 +63,7 @@ pub use config::{
     Vpc,
     VpcPeering,
     Vrf,
+    ZebraStatusType,
     config_service_client::ConfigServiceClient,
 
     // Service definitions
