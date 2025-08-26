@@ -6,7 +6,7 @@ require (
 	github.com/lmittmann/tint v1.1.2
 	github.com/mattn/go-isatty v0.0.20
 	github.com/samber/lo v1.51.0
-	github.com/stretchr/testify v1.10.0
+	github.com/stretchr/testify v1.11.0
 	github.com/urfave/cli/v2 v2.27.7
 	google.golang.org/grpc v1.74.2
 	google.golang.org/protobuf v1.36.7
