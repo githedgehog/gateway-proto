@@ -40,7 +40,7 @@ jobs:
         uses: extractions/setup-just@v3
 
       - name: Setup Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: stable
           cache: true
@@ -103,7 +103,7 @@ jobs:
         uses: extractions/setup-just@v3
 
       - name: Setup Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: stable
           cache: true
