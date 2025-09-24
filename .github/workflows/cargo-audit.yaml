@@ -4,7 +4,7 @@ on:
   push:
     paths:
       # Run if workflow changes
-      - '.github/workflows/audit.yml'
+      - '.github/workflows/cargo-audit.yaml'
       # Run on changed dependencies
       - '**/Cargo.toml'
       - '**/Cargo.lock'
