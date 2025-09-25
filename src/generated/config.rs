@@ -50,6 +50,242 @@ pub struct OspfConfig {
     #[prost(string, optional, tag = "2")]
     pub vrf: ::core::option::Option<::prost::alloc::string::String>,
 }
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetDataplaneStatusRequest {}
+/// TODO: Consider adding an optional string field to InterfaceStatus for additional error messages or descriptions.
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct InterfaceStatus {
+    #[prost(string, tag = "1")]
+    pub ifname: ::prost::alloc::string::String,
+    #[prost(enumeration = "InterfaceStatusType", tag = "2")]
+    pub status: i32,
+    #[prost(enumeration = "InterfaceAdminStatusType", tag = "3")]
+    pub admin_status: i32,
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct FrrStatus {
+    #[prost(enumeration = "ZebraStatusType", tag = "1")]
+    pub zebra_status: i32,
+    #[prost(enumeration = "FrrAgentStatusType", tag = "2")]
+    pub frr_agent_status: i32,
+    #[prost(uint32, tag = "3")]
+    pub applied_config_gen: u32,
+    #[prost(uint32, tag = "4")]
+    pub restarts: u32,
+    #[prost(uint32, tag = "5")]
+    pub applied_configs: u32,
+    #[prost(uint32, tag = "6")]
+    pub failed_configs: u32,
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct DataplaneStatusInfo {
+    #[prost(enumeration = "DataplaneStatusType", tag = "1")]
+    pub status: i32,
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct InterfaceCounters {
+    #[prost(uint64, tag = "1")]
+    pub tx_bits: u64,
+    /// Maybe don't include that
+    #[prost(double, tag = "2")]
+    pub tx_bps: f64,
+    #[prost(uint64, tag = "3")]
+    pub tx_errors: u64,
+    #[prost(uint64, tag = "4")]
+    pub rx_bits: u64,
+    /// Here as well
+    #[prost(double, tag = "5")]
+    pub rx_bps: f64,
+    #[prost(uint64, tag = "6")]
+    pub rx_errors: u64,
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct InterfaceRuntimeStatus {
+    #[prost(enumeration = "InterfaceAdminStatusType", tag = "1")]
+    pub admin_status: i32,
+    #[prost(enumeration = "InterfaceStatusType", tag = "2")]
+    pub oper_status: i32,
+    #[prost(string, tag = "3")]
+    pub mac: ::prost::alloc::string::String,
+    #[prost(uint32, tag = "4")]
+    pub mtu: u32,
+    #[prost(message, optional, tag = "5")]
+    pub counters: ::core::option::Option<InterfaceCounters>,
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct BgpMessageCounters {
+    #[prost(uint64, tag = "1")]
+    pub capability: u64,
+    #[prost(uint64, tag = "2")]
+    pub keepalive: u64,
+    #[prost(uint64, tag = "3")]
+    pub notification: u64,
+    #[prost(uint64, tag = "4")]
+    pub open: u64,
+    #[prost(uint64, tag = "5")]
+    pub route_refresh: u64,
+    #[prost(uint64, tag = "6")]
+    pub update: u64,
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct BgpMessages {
+    #[prost(message, optional, tag = "1")]
+    pub received: ::core::option::Option<BgpMessageCounters>,
+    #[prost(message, optional, tag = "2")]
+    pub sent: ::core::option::Option<BgpMessageCounters>,
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct BgpNeighborPrefixes {
+    #[prost(uint32, tag = "1")]
+    pub received: u32,
+    #[prost(uint32, tag = "2")]
+    pub received_pre_policy: u32,
+    #[prost(uint32, tag = "3")]
+    pub sent: u32,
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct BgpNeighborStatus {
+    #[prost(bool, tag = "1")]
+    pub enabled: bool,
+    #[prost(uint32, tag = "2")]
+    pub local_as: u32,
+    #[prost(uint32, tag = "3")]
+    pub peer_as: u32,
+    #[prost(uint32, tag = "4")]
+    pub peer_port: u32,
+    #[prost(string, tag = "5")]
+    pub peer_group: ::prost::alloc::string::String,
+    #[prost(string, tag = "6")]
+    pub remote_router_id: ::prost::alloc::string::String,
+    #[prost(enumeration = "BgpNeighborSessionState", tag = "7")]
+    pub session_state: i32,
+    #[prost(uint64, tag = "8")]
+    pub connections_dropped: u64,
+    #[prost(uint64, tag = "9")]
+    pub established_transitions: u64,
+    #[prost(string, tag = "10")]
+    pub last_reset_reason: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "11")]
+    pub messages: ::core::option::Option<BgpMessages>,
+    /// e.g. "IPV4_UNICAST", "IPV6_UNICAST", "L2VPN_EVPN"
+    #[prost(map = "string, message", tag = "16")]
+    pub prefixes: ::std::collections::HashMap<
+        ::prost::alloc::string::String,
+        BgpNeighborPrefixes,
+    >,
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct BgpVrfStatus {
+    /// key: neighbor address (IP string)
+    #[prost(map = "string, message", tag = "1")]
+    pub neighbors: ::std::collections::HashMap<
+        ::prost::alloc::string::String,
+        BgpNeighborStatus,
+    >,
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct BgpStatus {
+    /// key: VRF name
+    #[prost(map = "string, message", tag = "1")]
+    pub vrfs: ::std::collections::HashMap<::prost::alloc::string::String, BgpVrfStatus>,
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct VpcInterfaceStatus {
+    #[prost(string, tag = "1")]
+    pub ifname: ::prost::alloc::string::String,
+    #[prost(enumeration = "InterfaceAdminStatusType", tag = "2")]
+    pub admin_status: i32,
+    #[prost(enumeration = "InterfaceStatusType", tag = "3")]
+    pub oper_status: i32,
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct VpcStatus {
+    /// matches VPC.id
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+    /// matches VPC.name
+    #[prost(string, tag = "2")]
+    pub name: ::prost::alloc::string::String,
+    #[prost(uint32, tag = "3")]
+    pub vni: u32,
+    /// programmed/ready
+    #[prost(bool, tag = "4")]
+    pub active: bool,
+    /// unique endpoints
+    #[prost(uint32, tag = "5")]
+    pub endpoint_count: u32,
+    /// total programmed routes
+    #[prost(uint32, tag = "6")]
+    pub route_count: u32,
+    /// key: interface name
+    #[prost(map = "string, message", tag = "7")]
+    pub interfaces: ::std::collections::HashMap<
+        ::prost::alloc::string::String,
+        VpcInterfaceStatus,
+    >,
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct VpcPeeringCounters {
+    #[prost(string, tag = "1")]
+    pub name: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub src_vpc: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub dst_vpc: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "4")]
+    pub packets: u64,
+    #[prost(uint64, tag = "5")]
+    pub bytes: u64,
+    #[prost(uint64, tag = "6")]
+    pub drops: u64,
+    #[prost(double, tag = "7")]
+    pub pps: f64,
+    /// Nice to have thingy if we are doing flow tracking
+    #[prost(uint64, tag = "8")]
+    pub active_flows: u64,
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetDataplaneStatusResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub interface_statuses: ::prost::alloc::vec::Vec<InterfaceStatus>,
+    #[prost(message, optional, tag = "2")]
+    pub frr_status: ::core::option::Option<FrrStatus>,
+    #[prost(message, optional, tag = "3")]
+    pub dataplane_status: ::core::option::Option<DataplaneStatusInfo>,
+    /// key: ifname
+    #[prost(map = "string, message", tag = "4")]
+    pub interface_runtime: ::std::collections::HashMap<
+        ::prost::alloc::string::String,
+        InterfaceRuntimeStatus,
+    >,
+    #[prost(message, optional, tag = "5")]
+    pub bgp: ::core::option::Option<BgpStatus>,
+    /// key: VPC name
+    #[prost(map = "string, message", tag = "6")]
+    pub vpcs: ::std::collections::HashMap<::prost::alloc::string::String, VpcStatus>,
+    /// key: peering name
+    #[prost(map = "string, message", tag = "7")]
+    pub vpc_peering_counters: ::std::collections::HashMap<
+        ::prost::alloc::string::String,
+        VpcPeeringCounters,
+    >,
+}
 /// Defines a logical interface. May correlate with physical representation
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
@@ -396,6 +632,197 @@ impl OspfNetworkType {
         }
     }
 }
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum InterfaceStatusType {
+    InterfaceStatusUnknown = 0,
+    InterfaceStatusOperUp = 1,
+    InterfaceStatusOperDown = 2,
+    InterfaceStatusError = 3,
+}
+impl InterfaceStatusType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::InterfaceStatusUnknown => "INTERFACE_STATUS_UNKNOWN",
+            Self::InterfaceStatusOperUp => "INTERFACE_STATUS_OPER_UP",
+            Self::InterfaceStatusOperDown => "INTERFACE_STATUS_OPER_DOWN",
+            Self::InterfaceStatusError => "INTERFACE_STATUS_ERROR",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "INTERFACE_STATUS_UNKNOWN" => Some(Self::InterfaceStatusUnknown),
+            "INTERFACE_STATUS_OPER_UP" => Some(Self::InterfaceStatusOperUp),
+            "INTERFACE_STATUS_OPER_DOWN" => Some(Self::InterfaceStatusOperDown),
+            "INTERFACE_STATUS_ERROR" => Some(Self::InterfaceStatusError),
+            _ => None,
+        }
+    }
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum InterfaceAdminStatusType {
+    InterfaceAdminStatusUnknown = 0,
+    InterfaceAdminStatusUp = 1,
+    InterfaceAdminStatusDown = 2,
+}
+impl InterfaceAdminStatusType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::InterfaceAdminStatusUnknown => "INTERFACE_ADMIN_STATUS_UNKNOWN",
+            Self::InterfaceAdminStatusUp => "INTERFACE_ADMIN_STATUS_UP",
+            Self::InterfaceAdminStatusDown => "INTERFACE_ADMIN_STATUS_DOWN",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "INTERFACE_ADMIN_STATUS_UNKNOWN" => Some(Self::InterfaceAdminStatusUnknown),
+            "INTERFACE_ADMIN_STATUS_UP" => Some(Self::InterfaceAdminStatusUp),
+            "INTERFACE_ADMIN_STATUS_DOWN" => Some(Self::InterfaceAdminStatusDown),
+            _ => None,
+        }
+    }
+}
+/// TODO: Consider adding additional states such as FRR_STATUS_STARTING, FRR_STATUS_STOPPING,
+/// or other states that might be relevant for tracking the lifecycle of FRR processes.
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum ZebraStatusType {
+    ZebraStatusNotConnected = 0,
+    ZebraStatusConnected = 1,
+}
+impl ZebraStatusType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::ZebraStatusNotConnected => "ZEBRA_STATUS_NOT_CONNECTED",
+            Self::ZebraStatusConnected => "ZEBRA_STATUS_CONNECTED",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "ZEBRA_STATUS_NOT_CONNECTED" => Some(Self::ZebraStatusNotConnected),
+            "ZEBRA_STATUS_CONNECTED" => Some(Self::ZebraStatusConnected),
+            _ => None,
+        }
+    }
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum FrrAgentStatusType {
+    FrrAgentStatusNotConnected = 0,
+    FrrAgentStatusConnected = 1,
+}
+impl FrrAgentStatusType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::FrrAgentStatusNotConnected => "FRR_AGENT_STATUS_NOT_CONNECTED",
+            Self::FrrAgentStatusConnected => "FRR_AGENT_STATUS_CONNECTED",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "FRR_AGENT_STATUS_NOT_CONNECTED" => Some(Self::FrrAgentStatusNotConnected),
+            "FRR_AGENT_STATUS_CONNECTED" => Some(Self::FrrAgentStatusConnected),
+            _ => None,
+        }
+    }
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum DataplaneStatusType {
+    DataplaneStatusUnknown = 0,
+    DataplaneStatusHealthy = 1,
+    DataplaneStatusInit = 2,
+    DataplaneStatusError = 3,
+}
+impl DataplaneStatusType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::DataplaneStatusUnknown => "DATAPLANE_STATUS_UNKNOWN",
+            Self::DataplaneStatusHealthy => "DATAPLANE_STATUS_HEALTHY",
+            Self::DataplaneStatusInit => "DATAPLANE_STATUS_INIT",
+            Self::DataplaneStatusError => "DATAPLANE_STATUS_ERROR",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "DATAPLANE_STATUS_UNKNOWN" => Some(Self::DataplaneStatusUnknown),
+            "DATAPLANE_STATUS_HEALTHY" => Some(Self::DataplaneStatusHealthy),
+            "DATAPLANE_STATUS_INIT" => Some(Self::DataplaneStatusInit),
+            "DATAPLANE_STATUS_ERROR" => Some(Self::DataplaneStatusError),
+            _ => None,
+        }
+    }
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum BgpNeighborSessionState {
+    BgpStateUnset = 0,
+    BgpStateIdle = 1,
+    BgpStateConnect = 2,
+    BgpStateActive = 3,
+    BgpStateOpen = 4,
+    BgpStateEstablished = 5,
+}
+impl BgpNeighborSessionState {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::BgpStateUnset => "BGP_STATE_UNSET",
+            Self::BgpStateIdle => "BGP_STATE_IDLE",
+            Self::BgpStateConnect => "BGP_STATE_CONNECT",
+            Self::BgpStateActive => "BGP_STATE_ACTIVE",
+            Self::BgpStateOpen => "BGP_STATE_OPEN",
+            Self::BgpStateEstablished => "BGP_STATE_ESTABLISHED",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "BGP_STATE_UNSET" => Some(Self::BgpStateUnset),
+            "BGP_STATE_IDLE" => Some(Self::BgpStateIdle),
+            "BGP_STATE_CONNECT" => Some(Self::BgpStateConnect),
+            "BGP_STATE_ACTIVE" => Some(Self::BgpStateActive),
+            "BGP_STATE_OPEN" => Some(Self::BgpStateOpen),
+            "BGP_STATE_ESTABLISHED" => Some(Self::BgpStateEstablished),
+            _ => None,
+        }
+    }
+}
 /// Defines interface representation on the Gateway
 #[cfg_attr(feature = "bolero", derive(::bolero::TypeGenerator))]
 #[derive(::serde::Deserialize, ::serde::Serialize)]
@@ -719,6 +1146,30 @@ pub mod config_service_client {
                 .insert(GrpcMethod::new("config.ConfigService", "UpdateConfig"));
             self.inner.unary(req, path, codec).await
         }
+        pub async fn get_dataplane_status(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetDataplaneStatusRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetDataplaneStatusResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/config.ConfigService/GetDataplaneStatus",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("config.ConfigService", "GetDataplaneStatus"));
+            self.inner.unary(req, path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -750,6 +1201,13 @@ pub mod config_service_server {
             request: tonic::Request<super::UpdateConfigRequest>,
         ) -> std::result::Result<
             tonic::Response<super::UpdateConfigResponse>,
+            tonic::Status,
+        >;
+        async fn get_dataplane_status(
+            &self,
+            request: tonic::Request<super::GetDataplaneStatusRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetDataplaneStatusResponse>,
             tonic::Status,
         >;
     }
@@ -950,6 +1408,52 @@ pub mod config_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let method = UpdateConfigSvc(inner);
+                        let codec = tonic_prost::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/config.ConfigService/GetDataplaneStatus" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetDataplaneStatusSvc<T: ConfigService>(pub Arc<T>);
+                    impl<
+                        T: ConfigService,
+                    > tonic::server::UnaryService<super::GetDataplaneStatusRequest>
+                    for GetDataplaneStatusSvc<T> {
+                        type Response = super::GetDataplaneStatusResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::GetDataplaneStatusRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as ConfigService>::get_dataplane_status(&inner, request)
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let method = GetDataplaneStatusSvc(inner);
                         let codec = tonic_prost::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
