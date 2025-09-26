@@ -300,6 +300,22 @@ pub struct Ports {
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Eal {}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct TracingTagConfig {
+    #[prost(string, tag = "1")]
+    pub tag: ::prost::alloc::string::String,
+    #[prost(enumeration = "LogLevel", tag = "2")]
+    pub loglevel: i32,
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct TracingConfig {
+    #[prost(enumeration = "LogLevel", tag = "1")]
+    pub default: i32,
+    #[prost(message, repeated, tag = "2")]
+    pub tagconfig: ::prost::alloc::vec::Vec<TracingTagConfig>,
+}
 /// System level config options
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -312,8 +328,8 @@ pub struct Device {
     pub ports: ::prost::alloc::vec::Vec<Ports>,
     #[prost(string, tag = "4")]
     pub hostname: ::prost::alloc::string::String,
-    #[prost(enumeration = "LogLevel", tag = "5")]
-    pub loglevel: i32,
+    #[prost(message, optional, tag = "5")]
+    pub tracing: ::core::option::Option<TracingConfig>,
 }
 /// Complete Gateway config options
 #[derive(::serde::Deserialize, ::serde::Serialize)]
@@ -498,11 +514,12 @@ impl BgpAf {
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum LogLevel {
-    Error = 0,
-    Warning = 1,
-    Info = 2,
-    Debug = 3,
-    Trace = 4,
+    Off = 0,
+    Error = 1,
+    Warning = 2,
+    Info = 3,
+    Debug = 4,
+    Trace = 5,
 }
 impl LogLevel {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -511,6 +528,7 @@ impl LogLevel {
     /// (if the ProtoBuf definition does not change) and safe for programmatic use.
     pub fn as_str_name(&self) -> &'static str {
         match self {
+            Self::Off => "OFF",
             Self::Error => "ERROR",
             Self::Warning => "WARNING",
             Self::Info => "INFO",
@@ -521,6 +539,7 @@ impl LogLevel {
     /// Creates an enum from field names used in the ProtoBuf definition.
     pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
         match value {
+            "OFF" => Some(Self::Off),
             "ERROR" => Some(Self::Error),
             "WARNING" => Some(Self::Warning),
             "INFO" => Some(Self::Info),
