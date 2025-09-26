@@ -283,28 +283,31 @@ func (BgpAF) EnumDescriptor() ([]byte, []int) {
 type LogLevel int32
 
 const (
-	LogLevel_ERROR   LogLevel = 0
-	LogLevel_WARNING LogLevel = 1
-	LogLevel_INFO    LogLevel = 2
-	LogLevel_DEBUG   LogLevel = 3
-	LogLevel_TRACE   LogLevel = 4
+	LogLevel_OFF     LogLevel = 0
+	LogLevel_ERROR   LogLevel = 1
+	LogLevel_WARNING LogLevel = 2
+	LogLevel_INFO    LogLevel = 3
+	LogLevel_DEBUG   LogLevel = 4
+	LogLevel_TRACE   LogLevel = 5
 )
 
 // Enum value maps for LogLevel.
 var (
 	LogLevel_name = map[int32]string{
-		0: "ERROR",
-		1: "WARNING",
-		2: "INFO",
-		3: "DEBUG",
-		4: "TRACE",
+		0: "OFF",
+		1: "ERROR",
+		2: "WARNING",
+		3: "INFO",
+		4: "DEBUG",
+		5: "TRACE",
 	}
 	LogLevel_value = map[string]int32{
-		"ERROR":   0,
-		"WARNING": 1,
-		"INFO":    2,
-		"DEBUG":   3,
-		"TRACE":   4,
+		"OFF":     0,
+		"ERROR":   1,
+		"WARNING": 2,
+		"INFO":    3,
+		"DEBUG":   4,
+		"TRACE":   5,
 	}
 )
 
@@ -1955,6 +1958,102 @@ func (*Eal) Descriptor() ([]byte, []int) {
 	return file_proto_dataplane_proto_rawDescGZIP(), []int{25}
 }
 
+type TracingTagConfig struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Tag           string                 `protobuf:"bytes,1,opt,name=tag,proto3" json:"tag,omitempty"`
+	Loglevel      LogLevel               `protobuf:"varint,2,opt,name=loglevel,proto3,enum=config.LogLevel" json:"loglevel,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TracingTagConfig) Reset() {
+	*x = TracingTagConfig{}
+	mi := &file_proto_dataplane_proto_msgTypes[26]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TracingTagConfig) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TracingTagConfig) ProtoMessage() {}
+
+func (x *TracingTagConfig) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_dataplane_proto_msgTypes[26]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TracingTagConfig.ProtoReflect.Descriptor instead.
+func (*TracingTagConfig) Descriptor() ([]byte, []int) {
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *TracingTagConfig) GetTag() string {
+	if x != nil {
+		return x.Tag
+	}
+	return ""
+}
+
+func (x *TracingTagConfig) GetLoglevel() LogLevel {
+	if x != nil {
+		return x.Loglevel
+	}
+	return LogLevel_OFF
+}
+
+type TracingConfig struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Tagconfig     []*TracingTagConfig    `protobuf:"bytes,1,rep,name=tagconfig,proto3" json:"tagconfig,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TracingConfig) Reset() {
+	*x = TracingConfig{}
+	mi := &file_proto_dataplane_proto_msgTypes[27]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TracingConfig) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TracingConfig) ProtoMessage() {}
+
+func (x *TracingConfig) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_dataplane_proto_msgTypes[27]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TracingConfig.ProtoReflect.Descriptor instead.
+func (*TracingConfig) Descriptor() ([]byte, []int) {
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{27}
+}
+
+func (x *TracingConfig) GetTagconfig() []*TracingTagConfig {
+	if x != nil {
+		return x.Tagconfig
+	}
+	return nil
+}
+
 // System level config options
 type Device struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -1969,7 +2068,7 @@ type Device struct {
 
 func (x *Device) Reset() {
 	*x = Device{}
-	mi := &file_proto_dataplane_proto_msgTypes[26]
+	mi := &file_proto_dataplane_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1981,7 +2080,7 @@ func (x *Device) String() string {
 func (*Device) ProtoMessage() {}
 
 func (x *Device) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[26]
+	mi := &file_proto_dataplane_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1994,7 +2093,7 @@ func (x *Device) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Device.ProtoReflect.Descriptor instead.
 func (*Device) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{26}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *Device) GetDriver() PacketDriver {
@@ -2029,7 +2128,7 @@ func (x *Device) GetLoglevel() LogLevel {
 	if x != nil {
 		return x.Loglevel
 	}
-	return LogLevel_ERROR
+	return LogLevel_OFF
 }
 
 // Complete Gateway config options
@@ -2045,7 +2144,7 @@ type GatewayConfig struct {
 
 func (x *GatewayConfig) Reset() {
 	*x = GatewayConfig{}
-	mi := &file_proto_dataplane_proto_msgTypes[27]
+	mi := &file_proto_dataplane_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2057,7 +2156,7 @@ func (x *GatewayConfig) String() string {
 func (*GatewayConfig) ProtoMessage() {}
 
 func (x *GatewayConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[27]
+	mi := &file_proto_dataplane_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2070,7 +2169,7 @@ func (x *GatewayConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GatewayConfig.ProtoReflect.Descriptor instead.
 func (*GatewayConfig) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{27}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *GatewayConfig) GetGeneration() int64 {
@@ -2229,7 +2328,12 @@ const file_proto_dataplane_proto_rawDesc = "" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x1f\n" +
 	"\vsystem_name\x18\x02 \x01(\tR\n" +
 	"systemName\"\x05\n" +
-	"\x03Eal\"\xc4\x01\n" +
+	"\x03Eal\"R\n" +
+	"\x10TracingTagConfig\x12\x10\n" +
+	"\x03tag\x18\x01 \x01(\tR\x03tag\x12,\n" +
+	"\bloglevel\x18\x02 \x01(\x0e2\x10.config.LogLevelR\bloglevel\"G\n" +
+	"\rTracingConfig\x126\n" +
+	"\ttagconfig\x18\x01 \x03(\v2\x18.config.TracingTagConfigR\ttagconfig\"\xc4\x01\n" +
 	"\x06Device\x12,\n" +
 	"\x06driver\x18\x01 \x01(\x0e2\x14.config.PacketDriverR\x06driver\x12\x1d\n" +
 	"\x03eal\x18\x02 \x01(\v2\v.config.EalR\x03eal\x12#\n" +
@@ -2266,13 +2370,14 @@ const file_proto_dataplane_proto_rawDesc = "" +
 	"\fIPV4_UNICAST\x10\x00\x12\x10\n" +
 	"\fIPV6_UNICAST\x10\x01\x12\x0e\n" +
 	"\n" +
-	"L2VPN_EVPN\x10\x02*B\n" +
-	"\bLogLevel\x12\t\n" +
-	"\x05ERROR\x10\x00\x12\v\n" +
-	"\aWARNING\x10\x01\x12\b\n" +
-	"\x04INFO\x10\x02\x12\t\n" +
-	"\x05DEBUG\x10\x03\x12\t\n" +
-	"\x05TRACE\x10\x04*$\n" +
+	"L2VPN_EVPN\x10\x02*K\n" +
+	"\bLogLevel\x12\a\n" +
+	"\x03OFF\x10\x00\x12\t\n" +
+	"\x05ERROR\x10\x01\x12\v\n" +
+	"\aWARNING\x10\x02\x12\b\n" +
+	"\x04INFO\x10\x03\x12\t\n" +
+	"\x05DEBUG\x10\x04\x12\t\n" +
+	"\x05TRACE\x10\x05*$\n" +
 	"\fPacketDriver\x12\n" +
 	"\n" +
 	"\x06KERNEL\x10\x00\x12\b\n" +
@@ -2295,7 +2400,7 @@ func file_proto_dataplane_proto_rawDescGZIP() []byte {
 }
 
 var file_proto_dataplane_proto_enumTypes = make([]protoimpl.EnumInfo, 7)
-var file_proto_dataplane_proto_msgTypes = make([]protoimpl.MessageInfo, 28)
+var file_proto_dataplane_proto_msgTypes = make([]protoimpl.MessageInfo, 30)
 var file_proto_dataplane_proto_goTypes = []any{
 	(Error)(0),                          // 0: config.Error
 	(OspfNetworkType)(0),                // 1: config.OspfNetworkType
@@ -2330,11 +2435,13 @@ var file_proto_dataplane_proto_goTypes = []any{
 	(*Underlay)(nil),                    // 30: config.Underlay
 	(*Ports)(nil),                       // 31: config.Ports
 	(*Eal)(nil),                         // 32: config.Eal
-	(*Device)(nil),                      // 33: config.Device
-	(*GatewayConfig)(nil),               // 34: config.GatewayConfig
+	(*TracingTagConfig)(nil),            // 33: config.TracingTagConfig
+	(*TracingConfig)(nil),               // 34: config.TracingConfig
+	(*Device)(nil),                      // 35: config.Device
+	(*GatewayConfig)(nil),               // 36: config.GatewayConfig
 }
 var file_proto_dataplane_proto_depIdxs = []int32{
-	34, // 0: config.UpdateConfigRequest.config:type_name -> config.GatewayConfig
+	36, // 0: config.UpdateConfigRequest.config:type_name -> config.GatewayConfig
 	0,  // 1: config.UpdateConfigResponse.error:type_name -> config.Error
 	1,  // 2: config.OspfInterface.network_type:type_name -> config.OspfNetworkType
 	2,  // 3: config.Interface.type:type_name -> config.IfType
@@ -2358,24 +2465,26 @@ var file_proto_dataplane_proto_depIdxs = []int32{
 	28, // 21: config.VRF.router:type_name -> config.RouterConfig
 	13, // 22: config.VRF.ospf:type_name -> config.OspfConfig
 	29, // 23: config.Underlay.vrfs:type_name -> config.VRF
-	6,  // 24: config.Device.driver:type_name -> config.PacketDriver
-	32, // 25: config.Device.eal:type_name -> config.Eal
-	31, // 26: config.Device.ports:type_name -> config.Ports
-	5,  // 27: config.Device.loglevel:type_name -> config.LogLevel
-	33, // 28: config.GatewayConfig.device:type_name -> config.Device
-	30, // 29: config.GatewayConfig.underlay:type_name -> config.Underlay
-	21, // 30: config.GatewayConfig.overlay:type_name -> config.Overlay
-	7,  // 31: config.ConfigService.GetConfig:input_type -> config.GetConfigRequest
-	10, // 32: config.ConfigService.GetConfigGeneration:input_type -> config.GetConfigGenerationRequest
-	8,  // 33: config.ConfigService.UpdateConfig:input_type -> config.UpdateConfigRequest
-	34, // 34: config.ConfigService.GetConfig:output_type -> config.GatewayConfig
-	11, // 35: config.ConfigService.GetConfigGeneration:output_type -> config.GetConfigGenerationResponse
-	9,  // 36: config.ConfigService.UpdateConfig:output_type -> config.UpdateConfigResponse
-	34, // [34:37] is the sub-list for method output_type
-	31, // [31:34] is the sub-list for method input_type
-	31, // [31:31] is the sub-list for extension type_name
-	31, // [31:31] is the sub-list for extension extendee
-	0,  // [0:31] is the sub-list for field type_name
+	5,  // 24: config.TracingTagConfig.loglevel:type_name -> config.LogLevel
+	33, // 25: config.TracingConfig.tagconfig:type_name -> config.TracingTagConfig
+	6,  // 26: config.Device.driver:type_name -> config.PacketDriver
+	32, // 27: config.Device.eal:type_name -> config.Eal
+	31, // 28: config.Device.ports:type_name -> config.Ports
+	5,  // 29: config.Device.loglevel:type_name -> config.LogLevel
+	35, // 30: config.GatewayConfig.device:type_name -> config.Device
+	30, // 31: config.GatewayConfig.underlay:type_name -> config.Underlay
+	21, // 32: config.GatewayConfig.overlay:type_name -> config.Overlay
+	7,  // 33: config.ConfigService.GetConfig:input_type -> config.GetConfigRequest
+	10, // 34: config.ConfigService.GetConfigGeneration:input_type -> config.GetConfigGenerationRequest
+	8,  // 35: config.ConfigService.UpdateConfig:input_type -> config.UpdateConfigRequest
+	36, // 36: config.ConfigService.GetConfig:output_type -> config.GatewayConfig
+	11, // 37: config.ConfigService.GetConfigGeneration:output_type -> config.GetConfigGenerationResponse
+	9,  // 38: config.ConfigService.UpdateConfig:output_type -> config.UpdateConfigResponse
+	36, // [36:39] is the sub-list for method output_type
+	33, // [33:36] is the sub-list for method input_type
+	33, // [33:33] is the sub-list for extension type_name
+	33, // [33:33] is the sub-list for extension extendee
+	0,  // [0:33] is the sub-list for field type_name
 }
 
 func init() { file_proto_dataplane_proto_init() }
@@ -2406,7 +2515,7 @@ func file_proto_dataplane_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_dataplane_proto_rawDesc), len(file_proto_dataplane_proto_rawDesc)),
 			NumEnums:      7,
-			NumMessages:   28,
+			NumMessages:   30,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
