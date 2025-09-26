@@ -247,11 +247,20 @@ message Eal {
 
 /* Log-level for dataplane and DPDK */
 enum LogLevel {
-  ERROR = 0;
-  WARNING = 1;
-  INFO = 2;
-  DEBUG = 3;
-  TRACE = 4;
+  OFF = 0;
+  ERROR = 1;
+  WARNING = 2;
+  INFO = 3;
+  DEBUG = 4;
+  TRACE = 5;
+}
+
+message TracingTagConfig {
+  string tag = 1;
+  LogLevel loglevel = 2;
+}
+message TracingConfig {
+  repeated TracingTagConfig tagconfig = 1;
 }
 
 /* Backend driver for packet processing */
