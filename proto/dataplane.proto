@@ -255,13 +255,9 @@ enum LogLevel {
   TRACE = 5;
 }
 
-message TracingTagConfig {
-  string tag = 1;
-  LogLevel loglevel = 2;
-}
 message TracingConfig {
   LogLevel default = 1;
-  repeated TracingTagConfig tagconfig = 2;
+  map<string, LogLevel> taglevel = 2;
 }
 
 /* Backend driver for packet processing */

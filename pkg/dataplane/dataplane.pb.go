@@ -1958,69 +1958,17 @@ func (*Eal) Descriptor() ([]byte, []int) {
 	return file_proto_dataplane_proto_rawDescGZIP(), []int{25}
 }
 
-type TracingTagConfig struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Tag           string                 `protobuf:"bytes,1,opt,name=tag,proto3" json:"tag,omitempty"`
-	Loglevel      LogLevel               `protobuf:"varint,2,opt,name=loglevel,proto3,enum=config.LogLevel" json:"loglevel,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *TracingTagConfig) Reset() {
-	*x = TracingTagConfig{}
-	mi := &file_proto_dataplane_proto_msgTypes[26]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *TracingTagConfig) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*TracingTagConfig) ProtoMessage() {}
-
-func (x *TracingTagConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[26]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use TracingTagConfig.ProtoReflect.Descriptor instead.
-func (*TracingTagConfig) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{26}
-}
-
-func (x *TracingTagConfig) GetTag() string {
-	if x != nil {
-		return x.Tag
-	}
-	return ""
-}
-
-func (x *TracingTagConfig) GetLoglevel() LogLevel {
-	if x != nil {
-		return x.Loglevel
-	}
-	return LogLevel_OFF
-}
-
 type TracingConfig struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Default       LogLevel               `protobuf:"varint,1,opt,name=default,proto3,enum=config.LogLevel" json:"default,omitempty"`
-	Tagconfig     []*TracingTagConfig    `protobuf:"bytes,2,rep,name=tagconfig,proto3" json:"tagconfig,omitempty"`
+	Taglevel      map[string]LogLevel    `protobuf:"bytes,2,rep,name=taglevel,proto3" json:"taglevel,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"varint,2,opt,name=value,enum=config.LogLevel"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *TracingConfig) Reset() {
 	*x = TracingConfig{}
-	mi := &file_proto_dataplane_proto_msgTypes[27]
+	mi := &file_proto_dataplane_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2032,7 +1980,7 @@ func (x *TracingConfig) String() string {
 func (*TracingConfig) ProtoMessage() {}
 
 func (x *TracingConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[27]
+	mi := &file_proto_dataplane_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2045,7 +1993,7 @@ func (x *TracingConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TracingConfig.ProtoReflect.Descriptor instead.
 func (*TracingConfig) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{27}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *TracingConfig) GetDefault() LogLevel {
@@ -2055,9 +2003,9 @@ func (x *TracingConfig) GetDefault() LogLevel {
 	return LogLevel_OFF
 }
 
-func (x *TracingConfig) GetTagconfig() []*TracingTagConfig {
+func (x *TracingConfig) GetTaglevel() map[string]LogLevel {
 	if x != nil {
-		return x.Tagconfig
+		return x.Taglevel
 	}
 	return nil
 }
@@ -2076,7 +2024,7 @@ type Device struct {
 
 func (x *Device) Reset() {
 	*x = Device{}
-	mi := &file_proto_dataplane_proto_msgTypes[28]
+	mi := &file_proto_dataplane_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2088,7 +2036,7 @@ func (x *Device) String() string {
 func (*Device) ProtoMessage() {}
 
 func (x *Device) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[28]
+	mi := &file_proto_dataplane_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2101,7 +2049,7 @@ func (x *Device) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Device.ProtoReflect.Descriptor instead.
 func (*Device) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{28}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *Device) GetDriver() PacketDriver {
@@ -2152,7 +2100,7 @@ type GatewayConfig struct {
 
 func (x *GatewayConfig) Reset() {
 	*x = GatewayConfig{}
-	mi := &file_proto_dataplane_proto_msgTypes[29]
+	mi := &file_proto_dataplane_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2164,7 +2112,7 @@ func (x *GatewayConfig) String() string {
 func (*GatewayConfig) ProtoMessage() {}
 
 func (x *GatewayConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[29]
+	mi := &file_proto_dataplane_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2177,7 +2125,7 @@ func (x *GatewayConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GatewayConfig.ProtoReflect.Descriptor instead.
 func (*GatewayConfig) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{29}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *GatewayConfig) GetGeneration() int64 {
@@ -2336,13 +2284,13 @@ const file_proto_dataplane_proto_rawDesc = "" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x1f\n" +
 	"\vsystem_name\x18\x02 \x01(\tR\n" +
 	"systemName\"\x05\n" +
-	"\x03Eal\"R\n" +
-	"\x10TracingTagConfig\x12\x10\n" +
-	"\x03tag\x18\x01 \x01(\tR\x03tag\x12,\n" +
-	"\bloglevel\x18\x02 \x01(\x0e2\x10.config.LogLevelR\bloglevel\"s\n" +
+	"\x03Eal\"\xcb\x01\n" +
 	"\rTracingConfig\x12*\n" +
-	"\adefault\x18\x01 \x01(\x0e2\x10.config.LogLevelR\adefault\x126\n" +
-	"\ttagconfig\x18\x02 \x03(\v2\x18.config.TracingTagConfigR\ttagconfig\"\xc7\x01\n" +
+	"\adefault\x18\x01 \x01(\x0e2\x10.config.LogLevelR\adefault\x12?\n" +
+	"\btaglevel\x18\x02 \x03(\v2#.config.TracingConfig.TaglevelEntryR\btaglevel\x1aM\n" +
+	"\rTaglevelEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12&\n" +
+	"\x05value\x18\x02 \x01(\x0e2\x10.config.LogLevelR\x05value:\x028\x01\"\xc7\x01\n" +
 	"\x06Device\x12,\n" +
 	"\x06driver\x18\x01 \x01(\x0e2\x14.config.PacketDriverR\x06driver\x12\x1d\n" +
 	"\x03eal\x18\x02 \x01(\v2\v.config.EalR\x03eal\x12#\n" +
@@ -2444,13 +2392,13 @@ var file_proto_dataplane_proto_goTypes = []any{
 	(*Underlay)(nil),                    // 30: config.Underlay
 	(*Ports)(nil),                       // 31: config.Ports
 	(*Eal)(nil),                         // 32: config.Eal
-	(*TracingTagConfig)(nil),            // 33: config.TracingTagConfig
-	(*TracingConfig)(nil),               // 34: config.TracingConfig
-	(*Device)(nil),                      // 35: config.Device
-	(*GatewayConfig)(nil),               // 36: config.GatewayConfig
+	(*TracingConfig)(nil),               // 33: config.TracingConfig
+	(*Device)(nil),                      // 34: config.Device
+	(*GatewayConfig)(nil),               // 35: config.GatewayConfig
+	nil,                                 // 36: config.TracingConfig.TaglevelEntry
 }
 var file_proto_dataplane_proto_depIdxs = []int32{
-	36, // 0: config.UpdateConfigRequest.config:type_name -> config.GatewayConfig
+	35, // 0: config.UpdateConfigRequest.config:type_name -> config.GatewayConfig
 	0,  // 1: config.UpdateConfigResponse.error:type_name -> config.Error
 	1,  // 2: config.OspfInterface.network_type:type_name -> config.OspfNetworkType
 	2,  // 3: config.Interface.type:type_name -> config.IfType
@@ -2474,20 +2422,20 @@ var file_proto_dataplane_proto_depIdxs = []int32{
 	28, // 21: config.VRF.router:type_name -> config.RouterConfig
 	13, // 22: config.VRF.ospf:type_name -> config.OspfConfig
 	29, // 23: config.Underlay.vrfs:type_name -> config.VRF
-	5,  // 24: config.TracingTagConfig.loglevel:type_name -> config.LogLevel
-	5,  // 25: config.TracingConfig.default:type_name -> config.LogLevel
-	33, // 26: config.TracingConfig.tagconfig:type_name -> config.TracingTagConfig
-	6,  // 27: config.Device.driver:type_name -> config.PacketDriver
-	32, // 28: config.Device.eal:type_name -> config.Eal
-	31, // 29: config.Device.ports:type_name -> config.Ports
-	34, // 30: config.Device.tracing:type_name -> config.TracingConfig
-	35, // 31: config.GatewayConfig.device:type_name -> config.Device
-	30, // 32: config.GatewayConfig.underlay:type_name -> config.Underlay
-	21, // 33: config.GatewayConfig.overlay:type_name -> config.Overlay
+	5,  // 24: config.TracingConfig.default:type_name -> config.LogLevel
+	36, // 25: config.TracingConfig.taglevel:type_name -> config.TracingConfig.TaglevelEntry
+	6,  // 26: config.Device.driver:type_name -> config.PacketDriver
+	32, // 27: config.Device.eal:type_name -> config.Eal
+	31, // 28: config.Device.ports:type_name -> config.Ports
+	33, // 29: config.Device.tracing:type_name -> config.TracingConfig
+	34, // 30: config.GatewayConfig.device:type_name -> config.Device
+	30, // 31: config.GatewayConfig.underlay:type_name -> config.Underlay
+	21, // 32: config.GatewayConfig.overlay:type_name -> config.Overlay
+	5,  // 33: config.TracingConfig.TaglevelEntry.value:type_name -> config.LogLevel
 	7,  // 34: config.ConfigService.GetConfig:input_type -> config.GetConfigRequest
 	10, // 35: config.ConfigService.GetConfigGeneration:input_type -> config.GetConfigGenerationRequest
 	8,  // 36: config.ConfigService.UpdateConfig:input_type -> config.UpdateConfigRequest
-	36, // 37: config.ConfigService.GetConfig:output_type -> config.GatewayConfig
+	35, // 37: config.ConfigService.GetConfig:output_type -> config.GatewayConfig
 	11, // 38: config.ConfigService.GetConfigGeneration:output_type -> config.GetConfigGenerationResponse
 	9,  // 39: config.ConfigService.UpdateConfig:output_type -> config.UpdateConfigResponse
 	37, // [37:40] is the sub-list for method output_type
