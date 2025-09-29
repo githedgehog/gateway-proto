@@ -2,16 +2,32 @@
 // Copyright 2025 Hedgehog
 
 use crate::bolero::support::K8sObjectNameString;
-use crate::config::{Device, PacketDriver, TracingConfig};
+use crate::config;
+use crate::config::{Device, PacketDriver, TracingConfig, TracingTagConfig};
+use std::ops::Bound;
 
 use bolero::{Driver, TypeGenerator};
 
+impl TypeGenerator for TracingTagConfig {
+    fn generate<D: Driver>(d: &mut D) -> Option<Self> {
+        Some(TracingTagConfig {
+            tag: d.produce::<String>()?,
+            loglevel: d.produce::<config::LogLevel>()?.into(),
+        })
+    }
+}
+
 impl TypeGenerator for TracingConfig {
-    fn generate<D: Driver>(_d: &mut D) -> Option<Self> {
-        // empty
+    fn generate<D: Driver>(d: &mut D) -> Option<Self> {
+        let numtags = d.gen_u16(Bound::Included(&1), Bound::Included(&10))?;
+        let tagconfig = (0..numtags)
+            .enumerate()
+            .map(|_| d.produce::<TracingTagConfig>())
+            .collect::<Option<Vec<_>>>()?;
+
         Some(TracingConfig {
-            default: 1,
-            tagconfig: vec![],
+            default: d.produce::<config::LogLevel>()?.into(),
+            tagconfig,
         })
     }
 }
