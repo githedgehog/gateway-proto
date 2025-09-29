@@ -301,20 +301,12 @@ pub struct Ports {
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Eal {}
 #[derive(::serde::Deserialize, ::serde::Serialize)]
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct TracingTagConfig {
-    #[prost(string, tag = "1")]
-    pub tag: ::prost::alloc::string::String,
-    #[prost(enumeration = "LogLevel", tag = "2")]
-    pub loglevel: i32,
-}
-#[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TracingConfig {
     #[prost(enumeration = "LogLevel", tag = "1")]
     pub default: i32,
-    #[prost(message, repeated, tag = "2")]
-    pub tagconfig: ::prost::alloc::vec::Vec<TracingTagConfig>,
+    #[prost(map = "string, enumeration(LogLevel)", tag = "2")]
+    pub taglevel: ::std::collections::HashMap<::prost::alloc::string::String, i32>,
 }
 /// System level config options
 #[derive(::serde::Deserialize, ::serde::Serialize)]

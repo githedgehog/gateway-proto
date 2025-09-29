@@ -3,31 +3,24 @@
 
 use crate::bolero::support::K8sObjectNameString;
 use crate::config;
-use crate::config::{Device, PacketDriver, TracingConfig, TracingTagConfig};
-use std::ops::Bound;
-
+use crate::config::{Device, PacketDriver, TracingConfig};
 use bolero::{Driver, TypeGenerator};
-
-impl TypeGenerator for TracingTagConfig {
-    fn generate<D: Driver>(d: &mut D) -> Option<Self> {
-        Some(TracingTagConfig {
-            tag: d.produce::<String>()?,
-            loglevel: d.produce::<config::LogLevel>()?.into(),
-        })
-    }
-}
+use std::collections::HashMap;
+use std::ops::Bound;
 
 impl TypeGenerator for TracingConfig {
     fn generate<D: Driver>(d: &mut D) -> Option<Self> {
         let numtags = d.gen_u16(Bound::Included(&1), Bound::Included(&10))?;
-        let tagconfig = (0..numtags)
-            .enumerate()
-            .map(|_| d.produce::<TracingTagConfig>())
-            .collect::<Option<Vec<_>>>()?;
-
+        let mut map: HashMap<String, i32> = HashMap::new();
+        let tagbase = d.produce::<String>()?;
+        for k in 1..=numtags {
+            let tag = format!("{tagbase}-{k}");
+            let level: i32 = d.produce::<config::LogLevel>()?.into();
+            map.insert(tag, level);
+        }
         Some(TracingConfig {
             default: d.produce::<config::LogLevel>()?.into(),
-            tagconfig,
+            taglevel: map,
         })
     }
 }
