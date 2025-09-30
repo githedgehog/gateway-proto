@@ -129,24 +129,24 @@ func (OspfNetworkType) EnumDescriptor() ([]byte, []int) {
 	return file_proto_dataplane_proto_rawDescGZIP(), []int{1}
 }
 
-type InterfaceStatusType int32
+type InterfaceOperStatusType int32
 
 const (
-	InterfaceStatusType_INTERFACE_STATUS_UNKNOWN   InterfaceStatusType = 0
-	InterfaceStatusType_INTERFACE_STATUS_OPER_UP   InterfaceStatusType = 1
-	InterfaceStatusType_INTERFACE_STATUS_OPER_DOWN InterfaceStatusType = 2
-	InterfaceStatusType_INTERFACE_STATUS_ERROR     InterfaceStatusType = 3
+	InterfaceOperStatusType_INTERFACE_STATUS_UNKNOWN   InterfaceOperStatusType = 0
+	InterfaceOperStatusType_INTERFACE_STATUS_OPER_UP   InterfaceOperStatusType = 1
+	InterfaceOperStatusType_INTERFACE_STATUS_OPER_DOWN InterfaceOperStatusType = 2
+	InterfaceOperStatusType_INTERFACE_STATUS_ERROR     InterfaceOperStatusType = 3
 )
 
-// Enum value maps for InterfaceStatusType.
+// Enum value maps for InterfaceOperStatusType.
 var (
-	InterfaceStatusType_name = map[int32]string{
+	InterfaceOperStatusType_name = map[int32]string{
 		0: "INTERFACE_STATUS_UNKNOWN",
 		1: "INTERFACE_STATUS_OPER_UP",
 		2: "INTERFACE_STATUS_OPER_DOWN",
 		3: "INTERFACE_STATUS_ERROR",
 	}
-	InterfaceStatusType_value = map[string]int32{
+	InterfaceOperStatusType_value = map[string]int32{
 		"INTERFACE_STATUS_UNKNOWN":   0,
 		"INTERFACE_STATUS_OPER_UP":   1,
 		"INTERFACE_STATUS_OPER_DOWN": 2,
@@ -154,30 +154,30 @@ var (
 	}
 )
 
-func (x InterfaceStatusType) Enum() *InterfaceStatusType {
-	p := new(InterfaceStatusType)
+func (x InterfaceOperStatusType) Enum() *InterfaceOperStatusType {
+	p := new(InterfaceOperStatusType)
 	*p = x
 	return p
 }
 
-func (x InterfaceStatusType) String() string {
+func (x InterfaceOperStatusType) String() string {
 	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
 }
 
-func (InterfaceStatusType) Descriptor() protoreflect.EnumDescriptor {
+func (InterfaceOperStatusType) Descriptor() protoreflect.EnumDescriptor {
 	return file_proto_dataplane_proto_enumTypes[2].Descriptor()
 }
 
-func (InterfaceStatusType) Type() protoreflect.EnumType {
+func (InterfaceOperStatusType) Type() protoreflect.EnumType {
 	return &file_proto_dataplane_proto_enumTypes[2]
 }
 
-func (x InterfaceStatusType) Number() protoreflect.EnumNumber {
+func (x InterfaceOperStatusType) Number() protoreflect.EnumNumber {
 	return protoreflect.EnumNumber(x)
 }
 
-// Deprecated: Use InterfaceStatusType.Descriptor instead.
-func (InterfaceStatusType) EnumDescriptor() ([]byte, []int) {
+// Deprecated: Use InterfaceOperStatusType.Descriptor instead.
+func (InterfaceOperStatusType) EnumDescriptor() ([]byte, []int) {
 	return file_proto_dataplane_proto_rawDescGZIP(), []int{2}
 }
 
@@ -1064,7 +1064,7 @@ func (*GetDataplaneStatusRequest) Descriptor() ([]byte, []int) {
 type InterfaceStatus struct {
 	state         protoimpl.MessageState   `protogen:"open.v1"`
 	Ifname        string                   `protobuf:"bytes,1,opt,name=ifname,proto3" json:"ifname,omitempty"`
-	Status        InterfaceStatusType      `protobuf:"varint,2,opt,name=status,proto3,enum=config.InterfaceStatusType" json:"status,omitempty"`
+	OperStatus    InterfaceOperStatusType  `protobuf:"varint,2,opt,name=oper_status,json=operStatus,proto3,enum=config.InterfaceOperStatusType" json:"oper_status,omitempty"`
 	AdminStatus   InterfaceAdminStatusType `protobuf:"varint,3,opt,name=admin_status,json=adminStatus,proto3,enum=config.InterfaceAdminStatusType" json:"admin_status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -1107,11 +1107,11 @@ func (x *InterfaceStatus) GetIfname() string {
 	return ""
 }
 
-func (x *InterfaceStatus) GetStatus() InterfaceStatusType {
+func (x *InterfaceStatus) GetOperStatus() InterfaceOperStatusType {
 	if x != nil {
-		return x.Status
+		return x.OperStatus
 	}
-	return InterfaceStatusType_INTERFACE_STATUS_UNKNOWN
+	return InterfaceOperStatusType_INTERFACE_STATUS_UNKNOWN
 }
 
 func (x *InterfaceStatus) GetAdminStatus() InterfaceAdminStatusType {
@@ -1336,7 +1336,7 @@ func (x *InterfaceCounters) GetRxErrors() uint64 {
 type InterfaceRuntimeStatus struct {
 	state         protoimpl.MessageState   `protogen:"open.v1"`
 	AdminStatus   InterfaceAdminStatusType `protobuf:"varint,1,opt,name=admin_status,json=adminStatus,proto3,enum=config.InterfaceAdminStatusType" json:"admin_status,omitempty"`
-	OperStatus    InterfaceStatusType      `protobuf:"varint,2,opt,name=oper_status,json=operStatus,proto3,enum=config.InterfaceStatusType" json:"oper_status,omitempty"`
+	OperStatus    InterfaceOperStatusType  `protobuf:"varint,2,opt,name=oper_status,json=operStatus,proto3,enum=config.InterfaceOperStatusType" json:"oper_status,omitempty"`
 	Mac           string                   `protobuf:"bytes,3,opt,name=mac,proto3" json:"mac,omitempty"`
 	Mtu           uint32                   `protobuf:"varint,4,opt,name=mtu,proto3" json:"mtu,omitempty"`
 	Counters      *InterfaceCounters       `protobuf:"bytes,5,opt,name=counters,proto3" json:"counters,omitempty"`
@@ -1381,11 +1381,11 @@ func (x *InterfaceRuntimeStatus) GetAdminStatus() InterfaceAdminStatusType {
 	return InterfaceAdminStatusType_INTERFACE_ADMIN_STATUS_UNKNOWN
 }
 
-func (x *InterfaceRuntimeStatus) GetOperStatus() InterfaceStatusType {
+func (x *InterfaceRuntimeStatus) GetOperStatus() InterfaceOperStatusType {
 	if x != nil {
 		return x.OperStatus
 	}
-	return InterfaceStatusType_INTERFACE_STATUS_UNKNOWN
+	return InterfaceOperStatusType_INTERFACE_STATUS_UNKNOWN
 }
 
 func (x *InterfaceRuntimeStatus) GetMac() string {
@@ -1619,7 +1619,7 @@ type BgpNeighborStatus struct {
 	LastResetReason        string                  `protobuf:"bytes,10,opt,name=last_reset_reason,json=lastResetReason,proto3" json:"last_reset_reason,omitempty"`
 	Messages               *BgpMessages            `protobuf:"bytes,11,opt,name=messages,proto3" json:"messages,omitempty"`
 	// e.g. "IPV4_UNICAST", "IPV6_UNICAST", "L2VPN_EVPN"
-	Prefixes      map[string]*BgpNeighborPrefixes `protobuf:"bytes,16,rep,name=prefixes,proto3" json:"prefixes,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Prefixes      map[string]*BgpNeighborPrefixes `protobuf:"bytes,12,rep,name=prefixes,proto3" json:"prefixes,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1832,7 +1832,7 @@ type VpcInterfaceStatus struct {
 	state         protoimpl.MessageState   `protogen:"open.v1"`
 	Ifname        string                   `protobuf:"bytes,1,opt,name=ifname,proto3" json:"ifname,omitempty"`
 	AdminStatus   InterfaceAdminStatusType `protobuf:"varint,2,opt,name=admin_status,json=adminStatus,proto3,enum=config.InterfaceAdminStatusType" json:"admin_status,omitempty"`
-	OperStatus    InterfaceStatusType      `protobuf:"varint,3,opt,name=oper_status,json=operStatus,proto3,enum=config.InterfaceStatusType" json:"oper_status,omitempty"`
+	OperStatus    InterfaceOperStatusType  `protobuf:"varint,3,opt,name=oper_status,json=operStatus,proto3,enum=config.InterfaceOperStatusType" json:"oper_status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1881,21 +1881,19 @@ func (x *VpcInterfaceStatus) GetAdminStatus() InterfaceAdminStatusType {
 	return InterfaceAdminStatusType_INTERFACE_ADMIN_STATUS_UNKNOWN
 }
 
-func (x *VpcInterfaceStatus) GetOperStatus() InterfaceStatusType {
+func (x *VpcInterfaceStatus) GetOperStatus() InterfaceOperStatusType {
 	if x != nil {
 		return x.OperStatus
 	}
-	return InterfaceStatusType_INTERFACE_STATUS_UNKNOWN
+	return InterfaceOperStatusType_INTERFACE_STATUS_UNKNOWN
 }
 
 type VpcStatus struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`     // matches VPC.id
-	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"` // matches VPC.name
-	Vni           uint32                 `protobuf:"varint,3,opt,name=vni,proto3" json:"vni,omitempty"`
-	Active        bool                   `protobuf:"varint,4,opt,name=active,proto3" json:"active,omitempty"`                                    // programmed/ready
-	EndpointCount uint32                 `protobuf:"varint,5,opt,name=endpoint_count,json=endpointCount,proto3" json:"endpoint_count,omitempty"` // unique endpoints
-	RouteCount    uint32                 `protobuf:"varint,6,opt,name=route_count,json=routeCount,proto3" json:"route_count,omitempty"`          // total programmed routes
+	state      protoimpl.MessageState `protogen:"open.v1"`
+	Id         string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`     // matches VPC.id
+	Name       string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"` // matches VPC.name
+	Vni        uint32                 `protobuf:"varint,3,opt,name=vni,proto3" json:"vni,omitempty"`
+	RouteCount uint32                 `protobuf:"varint,4,opt,name=route_count,json=routeCount,proto3" json:"route_count,omitempty"` // routes inside AF_UNICAST, TODO: add more later
 	// key: interface name
 	Interfaces    map[string]*VpcInterfaceStatus `protobuf:"bytes,7,rep,name=interfaces,proto3" json:"interfaces,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	unknownFields protoimpl.UnknownFields
@@ -1949,20 +1947,6 @@ func (x *VpcStatus) GetName() string {
 func (x *VpcStatus) GetVni() uint32 {
 	if x != nil {
 		return x.Vni
-	}
-	return 0
-}
-
-func (x *VpcStatus) GetActive() bool {
-	if x != nil {
-		return x.Active
-	}
-	return false
-}
-
-func (x *VpcStatus) GetEndpointCount() uint32 {
-	if x != nil {
-		return x.EndpointCount
 	}
 	return 0
 }
@@ -3425,7 +3409,7 @@ type TracingConfig struct {
 
 func (x *TracingConfig) Reset() {
 	*x = TracingConfig{}
-	mi := &file_proto_dataplane_proto_msgTypes[26]
+	mi := &file_proto_dataplane_proto_msgTypes[42]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3437,7 +3421,7 @@ func (x *TracingConfig) String() string {
 func (*TracingConfig) ProtoMessage() {}
 
 func (x *TracingConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[26]
+	mi := &file_proto_dataplane_proto_msgTypes[42]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3450,7 +3434,7 @@ func (x *TracingConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TracingConfig.ProtoReflect.Descriptor instead.
 func (*TracingConfig) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{26}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{42}
 }
 
 func (x *TracingConfig) GetDefault() LogLevel {
@@ -3481,7 +3465,7 @@ type Device struct {
 
 func (x *Device) Reset() {
 	*x = Device{}
-	mi := &file_proto_dataplane_proto_msgTypes[42]
+	mi := &file_proto_dataplane_proto_msgTypes[43]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3493,7 +3477,7 @@ func (x *Device) String() string {
 func (*Device) ProtoMessage() {}
 
 func (x *Device) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[42]
+	mi := &file_proto_dataplane_proto_msgTypes[43]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3506,7 +3490,7 @@ func (x *Device) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Device.ProtoReflect.Descriptor instead.
 func (*Device) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{42}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{43}
 }
 
 func (x *Device) GetDriver() PacketDriver {
@@ -3557,7 +3541,7 @@ type GatewayConfig struct {
 
 func (x *GatewayConfig) Reset() {
 	*x = GatewayConfig{}
-	mi := &file_proto_dataplane_proto_msgTypes[43]
+	mi := &file_proto_dataplane_proto_msgTypes[44]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3569,7 +3553,7 @@ func (x *GatewayConfig) String() string {
 func (*GatewayConfig) ProtoMessage() {}
 
 func (x *GatewayConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_dataplane_proto_msgTypes[43]
+	mi := &file_proto_dataplane_proto_msgTypes[44]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3582,7 +3566,7 @@ func (x *GatewayConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GatewayConfig.ProtoReflect.Descriptor instead.
 func (*GatewayConfig) Descriptor() ([]byte, []int) {
-	return file_proto_dataplane_proto_rawDescGZIP(), []int{43}
+	return file_proto_dataplane_proto_rawDescGZIP(), []int{44}
 }
 
 func (x *GatewayConfig) GetGeneration() int64 {
@@ -3641,10 +3625,11 @@ const file_proto_dataplane_proto_rawDesc = "" +
 	"\trouter_id\x18\x01 \x01(\tR\brouterId\x12\x15\n" +
 	"\x03vrf\x18\x02 \x01(\tH\x00R\x03vrf\x88\x01\x01B\x06\n" +
 	"\x04_vrf\"\x1b\n" +
-	"\x19GetDataplaneStatusRequest\"\xa3\x01\n" +
+	"\x19GetDataplaneStatusRequest\"\xb0\x01\n" +
 	"\x0fInterfaceStatus\x12\x16\n" +
-	"\x06ifname\x18\x01 \x01(\tR\x06ifname\x123\n" +
-	"\x06status\x18\x02 \x01(\x0e2\x1b.config.InterfaceStatusTypeR\x06status\x12C\n" +
+	"\x06ifname\x18\x01 \x01(\tR\x06ifname\x12@\n" +
+	"\voper_status\x18\x02 \x01(\x0e2\x1f.config.InterfaceOperStatusTypeR\n" +
+	"operStatus\x12C\n" +
 	"\fadmin_status\x18\x03 \x01(\x0e2 .config.InterfaceAdminStatusTypeR\vadminStatus\"\xa7\x02\n" +
 	"\tFrrStatus\x12:\n" +
 	"\fzebra_status\x18\x01 \x01(\x0e2\x17.config.ZebraStatusTypeR\vzebraStatus\x12D\n" +
@@ -3661,10 +3646,10 @@ const file_proto_dataplane_proto_rawDesc = "" +
 	"\ttx_errors\x18\x03 \x01(\x04R\btxErrors\x12\x17\n" +
 	"\arx_bits\x18\x04 \x01(\x04R\x06rxBits\x12\x15\n" +
 	"\x06rx_bps\x18\x05 \x01(\x01R\x05rxBps\x12\x1b\n" +
-	"\trx_errors\x18\x06 \x01(\x04R\brxErrors\"\xf6\x01\n" +
+	"\trx_errors\x18\x06 \x01(\x04R\brxErrors\"\xfa\x01\n" +
 	"\x16InterfaceRuntimeStatus\x12C\n" +
-	"\fadmin_status\x18\x01 \x01(\x0e2 .config.InterfaceAdminStatusTypeR\vadminStatus\x12<\n" +
-	"\voper_status\x18\x02 \x01(\x0e2\x1b.config.InterfaceStatusTypeR\n" +
+	"\fadmin_status\x18\x01 \x01(\x0e2 .config.InterfaceAdminStatusTypeR\vadminStatus\x12@\n" +
+	"\voper_status\x18\x02 \x01(\x0e2\x1f.config.InterfaceOperStatusTypeR\n" +
 	"operStatus\x12\x10\n" +
 	"\x03mac\x18\x03 \x01(\tR\x03mac\x12\x10\n" +
 	"\x03mtu\x18\x04 \x01(\rR\x03mtu\x125\n" +
@@ -3699,7 +3684,7 @@ const file_proto_dataplane_proto_rawDesc = "" +
 	"\x11last_reset_reason\x18\n" +
 	" \x01(\tR\x0flastResetReason\x12/\n" +
 	"\bmessages\x18\v \x01(\v2\x13.config.BgpMessagesR\bmessages\x12C\n" +
-	"\bprefixes\x18\x10 \x03(\v2'.config.BgpNeighborStatus.PrefixesEntryR\bprefixes\x1aX\n" +
+	"\bprefixes\x18\f \x03(\v2'.config.BgpNeighborStatus.PrefixesEntryR\bprefixes\x1aX\n" +
 	"\rPrefixesEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x121\n" +
 	"\x05value\x18\x02 \x01(\v2\x1b.config.BgpNeighborPrefixesR\x05value:\x028\x01\"\xaa\x01\n" +
@@ -3712,19 +3697,17 @@ const file_proto_dataplane_proto_rawDesc = "" +
 	"\x04vrfs\x18\x01 \x03(\v2\x1b.config.BgpStatus.VrfsEntryR\x04vrfs\x1aM\n" +
 	"\tVrfsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
-	"\x05value\x18\x02 \x01(\v2\x14.config.BgpVrfStatusR\x05value:\x028\x01\"\xaf\x01\n" +
+	"\x05value\x18\x02 \x01(\v2\x14.config.BgpVrfStatusR\x05value:\x028\x01\"\xb3\x01\n" +
 	"\x12VpcInterfaceStatus\x12\x16\n" +
 	"\x06ifname\x18\x01 \x01(\tR\x06ifname\x12C\n" +
-	"\fadmin_status\x18\x02 \x01(\x0e2 .config.InterfaceAdminStatusTypeR\vadminStatus\x12<\n" +
-	"\voper_status\x18\x03 \x01(\x0e2\x1b.config.InterfaceStatusTypeR\n" +
-	"operStatus\"\xbf\x02\n" +
+	"\fadmin_status\x18\x02 \x01(\x0e2 .config.InterfaceAdminStatusTypeR\vadminStatus\x12@\n" +
+	"\voper_status\x18\x03 \x01(\x0e2\x1f.config.InterfaceOperStatusTypeR\n" +
+	"operStatus\"\x80\x02\n" +
 	"\tVpcStatus\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x10\n" +
-	"\x03vni\x18\x03 \x01(\rR\x03vni\x12\x16\n" +
-	"\x06active\x18\x04 \x01(\bR\x06active\x12%\n" +
-	"\x0eendpoint_count\x18\x05 \x01(\rR\rendpointCount\x12\x1f\n" +
-	"\vroute_count\x18\x06 \x01(\rR\n" +
+	"\x03vni\x18\x03 \x01(\rR\x03vni\x12\x1f\n" +
+	"\vroute_count\x18\x04 \x01(\rR\n" +
 	"routeCount\x12A\n" +
 	"\n" +
 	"interfaces\x18\a \x03(\v2!.config.VpcStatus.InterfacesEntryR\n" +
@@ -3889,8 +3872,8 @@ const file_proto_dataplane_proto_rawDesc = "" +
 	"\tBROADCAST\x10\x00\x12\x11\n" +
 	"\rNON_BROADCAST\x10\x01\x12\x12\n" +
 	"\x0ePOINT_TO_POINT\x10\x02\x12\x17\n" +
-	"\x13POINT_TO_MULTIPOINT\x10\x03*\x8d\x01\n" +
-	"\x13InterfaceStatusType\x12\x1c\n" +
+	"\x13POINT_TO_MULTIPOINT\x10\x03*\x91\x01\n" +
+	"\x17InterfaceOperStatusType\x12\x1c\n" +
 	"\x18INTERFACE_STATUS_UNKNOWN\x10\x00\x12\x1c\n" +
 	"\x18INTERFACE_STATUS_OPER_UP\x10\x01\x12\x1e\n" +
 	"\x1aINTERFACE_STATUS_OPER_DOWN\x10\x02\x12\x1a\n" +
@@ -3960,11 +3943,11 @@ func file_proto_dataplane_proto_rawDescGZIP() []byte {
 }
 
 var file_proto_dataplane_proto_enumTypes = make([]protoimpl.EnumInfo, 13)
-var file_proto_dataplane_proto_msgTypes = make([]protoimpl.MessageInfo, 51)
+var file_proto_dataplane_proto_msgTypes = make([]protoimpl.MessageInfo, 53)
 var file_proto_dataplane_proto_goTypes = []any{
 	(Error)(0),                          // 0: config.Error
 	(OspfNetworkType)(0),                // 1: config.OspfNetworkType
-	(InterfaceStatusType)(0),            // 2: config.InterfaceStatusType
+	(InterfaceOperStatusType)(0),        // 2: config.InterfaceOperStatusType
 	(InterfaceAdminStatusType)(0),       // 3: config.InterfaceAdminStatusType
 	(ZebraStatusType)(0),                // 4: config.ZebraStatusType
 	(FrrAgentStatusType)(0),             // 5: config.FrrAgentStatusType
@@ -4017,45 +4000,47 @@ var file_proto_dataplane_proto_goTypes = []any{
 	(*Underlay)(nil),                    // 52: config.Underlay
 	(*Ports)(nil),                       // 53: config.Ports
 	(*Eal)(nil),                         // 54: config.Eal
-	(*Device)(nil),                      // 55: config.Device
-	(*GatewayConfig)(nil),               // 56: config.GatewayConfig
-	nil,                                 // 57: config.BgpNeighborStatus.PrefixesEntry
-	nil,                                 // 58: config.BgpVrfStatus.NeighborsEntry
-	nil,                                 // 59: config.BgpStatus.VrfsEntry
-	nil,                                 // 60: config.VpcStatus.InterfacesEntry
-	nil,                                 // 61: config.GetDataplaneStatusResponse.InterfaceRuntimeEntry
-	nil,                                 // 62: config.GetDataplaneStatusResponse.VpcsEntry
-	nil,                                 // 63: config.GetDataplaneStatusResponse.VpcPeeringCountersEntry
+	(*TracingConfig)(nil),               // 55: config.TracingConfig
+	(*Device)(nil),                      // 56: config.Device
+	(*GatewayConfig)(nil),               // 57: config.GatewayConfig
+	nil,                                 // 58: config.BgpNeighborStatus.PrefixesEntry
+	nil,                                 // 59: config.BgpVrfStatus.NeighborsEntry
+	nil,                                 // 60: config.BgpStatus.VrfsEntry
+	nil,                                 // 61: config.VpcStatus.InterfacesEntry
+	nil,                                 // 62: config.GetDataplaneStatusResponse.InterfaceRuntimeEntry
+	nil,                                 // 63: config.GetDataplaneStatusResponse.VpcsEntry
+	nil,                                 // 64: config.GetDataplaneStatusResponse.VpcPeeringCountersEntry
+	nil,                                 // 65: config.TracingConfig.TaglevelEntry
 }
 var file_proto_dataplane_proto_depIdxs = []int32{
-	56, // 0: config.UpdateConfigRequest.config:type_name -> config.GatewayConfig
+	57, // 0: config.UpdateConfigRequest.config:type_name -> config.GatewayConfig
 	0,  // 1: config.UpdateConfigResponse.error:type_name -> config.Error
 	1,  // 2: config.OspfInterface.network_type:type_name -> config.OspfNetworkType
-	2,  // 3: config.InterfaceStatus.status:type_name -> config.InterfaceStatusType
+	2,  // 3: config.InterfaceStatus.oper_status:type_name -> config.InterfaceOperStatusType
 	3,  // 4: config.InterfaceStatus.admin_status:type_name -> config.InterfaceAdminStatusType
 	4,  // 5: config.FrrStatus.zebra_status:type_name -> config.ZebraStatusType
 	5,  // 6: config.FrrStatus.frr_agent_status:type_name -> config.FrrAgentStatusType
 	6,  // 7: config.DataplaneStatusInfo.status:type_name -> config.DataplaneStatusType
 	3,  // 8: config.InterfaceRuntimeStatus.admin_status:type_name -> config.InterfaceAdminStatusType
-	2,  // 9: config.InterfaceRuntimeStatus.oper_status:type_name -> config.InterfaceStatusType
+	2,  // 9: config.InterfaceRuntimeStatus.oper_status:type_name -> config.InterfaceOperStatusType
 	24, // 10: config.InterfaceRuntimeStatus.counters:type_name -> config.InterfaceCounters
 	26, // 11: config.BgpMessages.received:type_name -> config.BgpMessageCounters
 	26, // 12: config.BgpMessages.sent:type_name -> config.BgpMessageCounters
 	7,  // 13: config.BgpNeighborStatus.session_state:type_name -> config.BgpNeighborSessionState
 	27, // 14: config.BgpNeighborStatus.messages:type_name -> config.BgpMessages
-	57, // 15: config.BgpNeighborStatus.prefixes:type_name -> config.BgpNeighborStatus.PrefixesEntry
-	58, // 16: config.BgpVrfStatus.neighbors:type_name -> config.BgpVrfStatus.NeighborsEntry
-	59, // 17: config.BgpStatus.vrfs:type_name -> config.BgpStatus.VrfsEntry
+	58, // 15: config.BgpNeighborStatus.prefixes:type_name -> config.BgpNeighborStatus.PrefixesEntry
+	59, // 16: config.BgpVrfStatus.neighbors:type_name -> config.BgpVrfStatus.NeighborsEntry
+	60, // 17: config.BgpStatus.vrfs:type_name -> config.BgpStatus.VrfsEntry
 	3,  // 18: config.VpcInterfaceStatus.admin_status:type_name -> config.InterfaceAdminStatusType
-	2,  // 19: config.VpcInterfaceStatus.oper_status:type_name -> config.InterfaceStatusType
-	60, // 20: config.VpcStatus.interfaces:type_name -> config.VpcStatus.InterfacesEntry
+	2,  // 19: config.VpcInterfaceStatus.oper_status:type_name -> config.InterfaceOperStatusType
+	61, // 20: config.VpcStatus.interfaces:type_name -> config.VpcStatus.InterfacesEntry
 	21, // 21: config.GetDataplaneStatusResponse.interface_statuses:type_name -> config.InterfaceStatus
 	22, // 22: config.GetDataplaneStatusResponse.frr_status:type_name -> config.FrrStatus
 	23, // 23: config.GetDataplaneStatusResponse.dataplane_status:type_name -> config.DataplaneStatusInfo
-	61, // 24: config.GetDataplaneStatusResponse.interface_runtime:type_name -> config.GetDataplaneStatusResponse.InterfaceRuntimeEntry
+	62, // 24: config.GetDataplaneStatusResponse.interface_runtime:type_name -> config.GetDataplaneStatusResponse.InterfaceRuntimeEntry
 	31, // 25: config.GetDataplaneStatusResponse.bgp:type_name -> config.BgpStatus
-	62, // 26: config.GetDataplaneStatusResponse.vpcs:type_name -> config.GetDataplaneStatusResponse.VpcsEntry
-	63, // 27: config.GetDataplaneStatusResponse.vpc_peering_counters:type_name -> config.GetDataplaneStatusResponse.VpcPeeringCountersEntry
+	63, // 26: config.GetDataplaneStatusResponse.vpcs:type_name -> config.GetDataplaneStatusResponse.VpcsEntry
+	64, // 27: config.GetDataplaneStatusResponse.vpc_peering_counters:type_name -> config.GetDataplaneStatusResponse.VpcPeeringCountersEntry
 	8,  // 28: config.Interface.type:type_name -> config.IfType
 	9,  // 29: config.Interface.role:type_name -> config.IfRole
 	18, // 30: config.Interface.ospf:type_name -> config.OspfInterface
@@ -4077,33 +4062,36 @@ var file_proto_dataplane_proto_depIdxs = []int32{
 	50, // 46: config.VRF.router:type_name -> config.RouterConfig
 	19, // 47: config.VRF.ospf:type_name -> config.OspfConfig
 	51, // 48: config.Underlay.vrfs:type_name -> config.VRF
-	12, // 49: config.Device.driver:type_name -> config.PacketDriver
-	54, // 50: config.Device.eal:type_name -> config.Eal
-	53, // 51: config.Device.ports:type_name -> config.Ports
-	11, // 52: config.Device.loglevel:type_name -> config.LogLevel
-	55, // 53: config.GatewayConfig.device:type_name -> config.Device
-	52, // 54: config.GatewayConfig.underlay:type_name -> config.Underlay
-	43, // 55: config.GatewayConfig.overlay:type_name -> config.Overlay
-	28, // 56: config.BgpNeighborStatus.PrefixesEntry.value:type_name -> config.BgpNeighborPrefixes
-	29, // 57: config.BgpVrfStatus.NeighborsEntry.value:type_name -> config.BgpNeighborStatus
-	30, // 58: config.BgpStatus.VrfsEntry.value:type_name -> config.BgpVrfStatus
-	32, // 59: config.VpcStatus.InterfacesEntry.value:type_name -> config.VpcInterfaceStatus
-	25, // 60: config.GetDataplaneStatusResponse.InterfaceRuntimeEntry.value:type_name -> config.InterfaceRuntimeStatus
-	33, // 61: config.GetDataplaneStatusResponse.VpcsEntry.value:type_name -> config.VpcStatus
-	34, // 62: config.GetDataplaneStatusResponse.VpcPeeringCountersEntry.value:type_name -> config.VpcPeeringCounters
-	13, // 63: config.ConfigService.GetConfig:input_type -> config.GetConfigRequest
-	16, // 64: config.ConfigService.GetConfigGeneration:input_type -> config.GetConfigGenerationRequest
-	14, // 65: config.ConfigService.UpdateConfig:input_type -> config.UpdateConfigRequest
-	20, // 66: config.ConfigService.GetDataplaneStatus:input_type -> config.GetDataplaneStatusRequest
-	56, // 67: config.ConfigService.GetConfig:output_type -> config.GatewayConfig
-	17, // 68: config.ConfigService.GetConfigGeneration:output_type -> config.GetConfigGenerationResponse
-	15, // 69: config.ConfigService.UpdateConfig:output_type -> config.UpdateConfigResponse
-	35, // 70: config.ConfigService.GetDataplaneStatus:output_type -> config.GetDataplaneStatusResponse
-	67, // [67:71] is the sub-list for method output_type
-	63, // [63:67] is the sub-list for method input_type
-	63, // [63:63] is the sub-list for extension type_name
-	63, // [63:63] is the sub-list for extension extendee
-	0,  // [0:63] is the sub-list for field type_name
+	11, // 49: config.TracingConfig.default:type_name -> config.LogLevel
+	65, // 50: config.TracingConfig.taglevel:type_name -> config.TracingConfig.TaglevelEntry
+	12, // 51: config.Device.driver:type_name -> config.PacketDriver
+	54, // 52: config.Device.eal:type_name -> config.Eal
+	53, // 53: config.Device.ports:type_name -> config.Ports
+	55, // 54: config.Device.tracing:type_name -> config.TracingConfig
+	56, // 55: config.GatewayConfig.device:type_name -> config.Device
+	52, // 56: config.GatewayConfig.underlay:type_name -> config.Underlay
+	43, // 57: config.GatewayConfig.overlay:type_name -> config.Overlay
+	28, // 58: config.BgpNeighborStatus.PrefixesEntry.value:type_name -> config.BgpNeighborPrefixes
+	29, // 59: config.BgpVrfStatus.NeighborsEntry.value:type_name -> config.BgpNeighborStatus
+	30, // 60: config.BgpStatus.VrfsEntry.value:type_name -> config.BgpVrfStatus
+	32, // 61: config.VpcStatus.InterfacesEntry.value:type_name -> config.VpcInterfaceStatus
+	25, // 62: config.GetDataplaneStatusResponse.InterfaceRuntimeEntry.value:type_name -> config.InterfaceRuntimeStatus
+	33, // 63: config.GetDataplaneStatusResponse.VpcsEntry.value:type_name -> config.VpcStatus
+	34, // 64: config.GetDataplaneStatusResponse.VpcPeeringCountersEntry.value:type_name -> config.VpcPeeringCounters
+	11, // 65: config.TracingConfig.TaglevelEntry.value:type_name -> config.LogLevel
+	13, // 66: config.ConfigService.GetConfig:input_type -> config.GetConfigRequest
+	16, // 67: config.ConfigService.GetConfigGeneration:input_type -> config.GetConfigGenerationRequest
+	14, // 68: config.ConfigService.UpdateConfig:input_type -> config.UpdateConfigRequest
+	20, // 69: config.ConfigService.GetDataplaneStatus:input_type -> config.GetDataplaneStatusRequest
+	57, // 70: config.ConfigService.GetConfig:output_type -> config.GatewayConfig
+	17, // 71: config.ConfigService.GetConfigGeneration:output_type -> config.GetConfigGenerationResponse
+	15, // 72: config.ConfigService.UpdateConfig:output_type -> config.UpdateConfigResponse
+	35, // 73: config.ConfigService.GetDataplaneStatus:output_type -> config.GetDataplaneStatusResponse
+	70, // [70:74] is the sub-list for method output_type
+	66, // [66:70] is the sub-list for method input_type
+	66, // [66:66] is the sub-list for extension type_name
+	66, // [66:66] is the sub-list for extension extendee
+	0,  // [0:66] is the sub-list for field type_name
 }
 
 func init() { file_proto_dataplane_proto_init() }
@@ -4134,7 +4122,7 @@ func file_proto_dataplane_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_dataplane_proto_rawDesc), len(file_proto_dataplane_proto_rawDesc)),
 			NumEnums:      13,
-			NumMessages:   51,
+			NumMessages:   53,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

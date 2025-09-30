@@ -59,8 +59,8 @@ pub struct GetDataplaneStatusRequest {}
 pub struct InterfaceStatus {
     #[prost(string, tag = "1")]
     pub ifname: ::prost::alloc::string::String,
-    #[prost(enumeration = "InterfaceStatusType", tag = "2")]
-    pub status: i32,
+    #[prost(enumeration = "InterfaceOperStatusType", tag = "2")]
+    pub oper_status: i32,
     #[prost(enumeration = "InterfaceAdminStatusType", tag = "3")]
     pub admin_status: i32,
 }
@@ -109,7 +109,7 @@ pub struct InterfaceCounters {
 pub struct InterfaceRuntimeStatus {
     #[prost(enumeration = "InterfaceAdminStatusType", tag = "1")]
     pub admin_status: i32,
-    #[prost(enumeration = "InterfaceStatusType", tag = "2")]
+    #[prost(enumeration = "InterfaceOperStatusType", tag = "2")]
     pub oper_status: i32,
     #[prost(string, tag = "3")]
     pub mac: ::prost::alloc::string::String,
@@ -178,7 +178,7 @@ pub struct BgpNeighborStatus {
     #[prost(message, optional, tag = "11")]
     pub messages: ::core::option::Option<BgpMessages>,
     /// e.g. "IPV4_UNICAST", "IPV6_UNICAST", "L2VPN_EVPN"
-    #[prost(map = "string, message", tag = "16")]
+    #[prost(map = "string, message", tag = "12")]
     pub prefixes: ::std::collections::HashMap<
         ::prost::alloc::string::String,
         BgpNeighborPrefixes,
@@ -208,7 +208,7 @@ pub struct VpcInterfaceStatus {
     pub ifname: ::prost::alloc::string::String,
     #[prost(enumeration = "InterfaceAdminStatusType", tag = "2")]
     pub admin_status: i32,
-    #[prost(enumeration = "InterfaceStatusType", tag = "3")]
+    #[prost(enumeration = "InterfaceOperStatusType", tag = "3")]
     pub oper_status: i32,
 }
 #[derive(::serde::Deserialize, ::serde::Serialize)]
@@ -222,14 +222,8 @@ pub struct VpcStatus {
     pub name: ::prost::alloc::string::String,
     #[prost(uint32, tag = "3")]
     pub vni: u32,
-    /// programmed/ready
-    #[prost(bool, tag = "4")]
-    pub active: bool,
-    /// unique endpoints
-    #[prost(uint32, tag = "5")]
-    pub endpoint_count: u32,
-    /// total programmed routes
-    #[prost(uint32, tag = "6")]
+    /// routes inside AF_UNICAST, TODO: add more later
+    #[prost(uint32, tag = "4")]
     pub route_count: u32,
     /// key: interface name
     #[prost(map = "string, message", tag = "7")]
@@ -643,13 +637,13 @@ impl OspfNetworkType {
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
-pub enum InterfaceStatusType {
+pub enum InterfaceOperStatusType {
     InterfaceStatusUnknown = 0,
     InterfaceStatusOperUp = 1,
     InterfaceStatusOperDown = 2,
     InterfaceStatusError = 3,
 }
-impl InterfaceStatusType {
+impl InterfaceOperStatusType {
     /// String value of the enum field names used in the ProtoBuf definition.
     ///
     /// The values are not transformed in any way and thus are considered stable

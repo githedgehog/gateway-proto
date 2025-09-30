@@ -70,7 +70,7 @@ message OspfConfig {
 /* ==== Dataplane Status ==== */
 /* ========================== */
 
-enum InterfaceStatusType {
+enum InterfaceOperStatusType {
   INTERFACE_STATUS_UNKNOWN = 0;
   INTERFACE_STATUS_OPER_UP = 1;
   INTERFACE_STATUS_OPER_DOWN = 2;
@@ -108,7 +108,7 @@ message GetDataplaneStatusRequest {
 /* TODO: Consider adding an optional string field to InterfaceStatus for additional error messages or descriptions. */
 message InterfaceStatus {
   string ifname = 1;
-  InterfaceStatusType status = 2;
+  InterfaceOperStatusType oper_status = 2;
   InterfaceAdminStatusType admin_status = 3;
 }
 
@@ -142,7 +142,7 @@ message InterfaceCounters {
 
 message InterfaceRuntimeStatus {
   InterfaceAdminStatusType admin_status = 1;
-  InterfaceStatusType oper_status = 2;
+  InterfaceOperStatusType oper_status = 2;
   string mac = 3;
   uint32 mtu = 4;
   InterfaceCounters counters = 5;
@@ -208,7 +208,7 @@ message BgpStatus {
 message VpcInterfaceStatus {
   string ifname = 1;
   InterfaceAdminStatusType admin_status = 2;
-  InterfaceStatusType oper_status = 3;
+  InterfaceOperStatusType oper_status = 3;
 }
 
 message VpcStatus {
