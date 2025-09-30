@@ -59,8 +59,8 @@ pub struct GetDataplaneStatusRequest {}
 pub struct InterfaceStatus {
     #[prost(string, tag = "1")]
     pub ifname: ::prost::alloc::string::String,
-    #[prost(enumeration = "InterfaceStatusType", tag = "2")]
-    pub status: i32,
+    #[prost(enumeration = "InterfaceOperStatusType", tag = "2")]
+    pub oper_status: i32,
     #[prost(enumeration = "InterfaceAdminStatusType", tag = "3")]
     pub admin_status: i32,
 }
@@ -71,8 +71,8 @@ pub struct FrrStatus {
     pub zebra_status: i32,
     #[prost(enumeration = "FrrAgentStatusType", tag = "2")]
     pub frr_agent_status: i32,
-    #[prost(uint32, tag = "3")]
-    pub applied_config_gen: u32,
+    #[prost(int64, tag = "3")]
+    pub applied_config_gen: i64,
     #[prost(uint32, tag = "4")]
     pub restarts: u32,
     #[prost(uint32, tag = "5")]
@@ -91,14 +91,12 @@ pub struct DataplaneStatusInfo {
 pub struct InterfaceCounters {
     #[prost(uint64, tag = "1")]
     pub tx_bits: u64,
-    /// Maybe don't include that
     #[prost(double, tag = "2")]
     pub tx_bps: f64,
     #[prost(uint64, tag = "3")]
     pub tx_errors: u64,
     #[prost(uint64, tag = "4")]
     pub rx_bits: u64,
-    /// Here as well
     #[prost(double, tag = "5")]
     pub rx_bps: f64,
     #[prost(uint64, tag = "6")]
@@ -109,7 +107,7 @@ pub struct InterfaceCounters {
 pub struct InterfaceRuntimeStatus {
     #[prost(enumeration = "InterfaceAdminStatusType", tag = "1")]
     pub admin_status: i32,
-    #[prost(enumeration = "InterfaceStatusType", tag = "2")]
+    #[prost(enumeration = "InterfaceOperStatusType", tag = "2")]
     pub oper_status: i32,
     #[prost(string, tag = "3")]
     pub mac: ::prost::alloc::string::String,
@@ -153,7 +151,7 @@ pub struct BgpNeighborPrefixes {
     pub sent: u32,
 }
 #[derive(::serde::Deserialize, ::serde::Serialize)]
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct BgpNeighborStatus {
     #[prost(bool, tag = "1")]
     pub enabled: bool,
@@ -177,12 +175,12 @@ pub struct BgpNeighborStatus {
     pub last_reset_reason: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "11")]
     pub messages: ::core::option::Option<BgpMessages>,
-    /// e.g. "IPV4_UNICAST", "IPV6_UNICAST", "L2VPN_EVPN"
-    #[prost(map = "string, message", tag = "12")]
-    pub prefixes: ::std::collections::HashMap<
-        ::prost::alloc::string::String,
-        BgpNeighborPrefixes,
-    >,
+    #[prost(message, optional, tag = "12")]
+    pub ipv4_unicast_prefixes: ::core::option::Option<BgpNeighborPrefixes>,
+    #[prost(message, optional, tag = "13")]
+    pub ipv6_unicast_prefixes: ::core::option::Option<BgpNeighborPrefixes>,
+    #[prost(message, optional, tag = "14")]
+    pub l2vpn_evpn_prefixes: ::core::option::Option<BgpNeighborPrefixes>,
 }
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -208,7 +206,7 @@ pub struct VpcInterfaceStatus {
     pub ifname: ::prost::alloc::string::String,
     #[prost(enumeration = "InterfaceAdminStatusType", tag = "2")]
     pub admin_status: i32,
-    #[prost(enumeration = "InterfaceStatusType", tag = "3")]
+    #[prost(enumeration = "InterfaceOperStatusType", tag = "3")]
     pub oper_status: i32,
 }
 #[derive(::serde::Deserialize, ::serde::Serialize)]
@@ -249,9 +247,6 @@ pub struct VpcPeeringCounters {
     pub drops: u64,
     #[prost(double, tag = "7")]
     pub pps: f64,
-    /// Nice to have thingy if we are doing flow tracking
-    #[prost(uint64, tag = "8")]
-    pub active_flows: u64,
 }
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -659,13 +654,13 @@ impl OspfNetworkType {
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
-pub enum InterfaceStatusType {
+pub enum InterfaceOperStatusType {
     InterfaceStatusUnknown = 0,
     InterfaceStatusOperUp = 1,
     InterfaceStatusOperDown = 2,
     InterfaceStatusError = 3,
 }
-impl InterfaceStatusType {
+impl InterfaceOperStatusType {
     /// String value of the enum field names used in the ProtoBuf definition.
     ///
     /// The values are not transformed in any way and thus are considered stable

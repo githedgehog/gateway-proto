@@ -1,13 +1,15 @@
 // Copyright 2025 Hedgehog
 // SPDX-License-Identifier: Apache-2.0
 
+use std::collections::HashMap;
 use std::net::SocketAddr;
 use tonic::{Request, Response, Status};
 
 use gateway_config::{
-    ConfigService, ConfigServiceClient, ConfigServiceServer, DataplaneStatusType,
-    FrrAgentStatusType, GetConfigGenerationRequest, GetConfigGenerationResponse,
-    GetDataplaneStatusRequest, GetDataplaneStatusResponse, ZebraStatusType,
+    BgpStatus, ConfigService, ConfigServiceClient, ConfigServiceServer, DataplaneStatusInfo,
+    DataplaneStatusType, FrrAgentStatusType, FrrStatus, GetConfigGenerationRequest,
+    GetConfigGenerationResponse, GetDataplaneStatusRequest, GetDataplaneStatusResponse,
+    ZebraStatusType,
 };
 
 struct SimpleConfigService {
@@ -38,8 +40,14 @@ impl ConfigService for SimpleConfigService {
     ) -> Result<Response<GetDataplaneStatusResponse>, Status> {
         println!("Server received get_dataplane_status request");
         Ok(Response::new(GetDataplaneStatusResponse {
+            interface_runtime: HashMap::new(),
+            bgp: Some(BgpStatus {
+                vrfs: HashMap::new(),
+            }),
+            vpcs: HashMap::new(),
+            vpc_peering_counters: HashMap::new(),
             interface_statuses: vec![],
-            frr_status: Some(gateway_config::FrrStatus {
+            frr_status: Some(FrrStatus {
                 zebra_status: ZebraStatusType::ZebraStatusConnected as i32,
                 frr_agent_status: FrrAgentStatusType::FrrAgentStatusConnected as i32,
                 restarts: 0,
@@ -47,7 +55,7 @@ impl ConfigService for SimpleConfigService {
                 applied_configs: 1,
                 failed_configs: 0,
             }),
-            dataplane_status: Some(gateway_config::DataplaneStatusInfo {
+            dataplane_status: Some(DataplaneStatusInfo {
                 status: DataplaneStatusType::DataplaneStatusHealthy as i32,
             }),
         }))
@@ -100,7 +108,6 @@ async fn test_simple_generation_request() {
             .unwrap();
     });
 
-    // Give the server a moment to start
     tokio::time::sleep(std::time::Duration::from_millis(100)).await;
 
     println!("Connecting client to: {}", server_uri);

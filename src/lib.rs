@@ -20,58 +20,82 @@ pub use config::{
     BgpAddressFamilyIPv6,
     BgpAddressFamilyL2vpnEvpn,
     BgpAf,
+    BgpMessageCounters,
+    BgpMessages,
     BgpNeighbor,
+    BgpNeighborPrefixes,
+    // BGP runtime
+    BgpNeighborSessionState,
+    BgpNeighborStatus,
+    BgpNeighborUpdateSource,
+    BgpStatus,
+
+    BgpVrfStatus,
     DataplaneStatusInfo,
     DataplaneStatusType,
-    // Device related types
+
+    // ---------- Device-related ----------
     Device,
     Eal,
-    // Common types
+    // ---------- Common / errors ----------
     Error,
 
     Expose,
     FrrAgentStatusType,
     FrrStatus,
+    // ---------- Top-level config ----------
     GatewayConfig,
     GetConfigGenerationRequest,
     GetConfigGenerationResponse,
-    // Request/Response types
+    // ---------- Requests / Responses ----------
     GetConfigRequest,
     GetDataplaneStatusRequest,
     GetDataplaneStatusResponse,
+
     IfRole,
     IfType,
-    // Interface related types
+    // ---------- Overlay ----------
     Interface,
+    InterfaceAdminStatusType,
+    // ---------- NEW: Extended runtime status ----------
+    // Interfaces
+    InterfaceCounters,
+    InterfaceOperStatusType,
+    InterfaceRuntimeStatus,
+
+    // ---------- Dataplane & FRR status (existing) ----------
     InterfaceStatus,
-    InterfaceStatusType,
     LogLevel,
+    // ---------- Underlay ----------
     OspfConfig,
     OspfInterface,
-
-    // Overlay related types
+    OspfNetworkType,
     Overlay,
+
     PacketDriver,
 
     PeeringAs,
     PeeringEntryFor,
     PeeringIPs,
     Ports,
-    RouteMap,
-
     RouterConfig,
-    // Underlay related types
     Underlay,
     UpdateConfigRequest,
     UpdateConfigResponse,
-
     Vpc,
+    // VPC runtime
+    VpcInterfaceStatus,
     VpcPeering,
-    Vrf,
-    ZebraStatusType,
-    config_service_client::ConfigServiceClient,
+    // VPC↔VPC counters
+    VpcPeeringCounters,
 
-    // Service definitions
+    VpcStatus,
+
+    Vrf,
+
+    ZebraStatusType,
+    // ---------- Service definitions ----------
+    config_service_client::ConfigServiceClient,
     config_service_server::{ConfigService, ConfigServiceServer},
 };
 

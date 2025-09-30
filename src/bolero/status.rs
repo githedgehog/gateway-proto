@@ -3,22 +3,23 @@
 
 use crate::bolero::support::{LinuxIfName, choose};
 use crate::config::{
-    DataplaneStatusInfo, DataplaneStatusType, FrrAgentStatusType, FrrStatus,
-    GetDataplaneStatusRequest, GetDataplaneStatusResponse, InterfaceAdminStatusType,
-    InterfaceStatus, InterfaceStatusType, ZebraStatusType,
+    BgpMessageCounters, BgpMessages, BgpNeighborPrefixes, BgpNeighborSessionState,
+    BgpNeighborStatus, BgpStatus, BgpVrfStatus, DataplaneStatusInfo, DataplaneStatusType,
+    FrrAgentStatusType, FrrStatus, GetDataplaneStatusRequest, GetDataplaneStatusResponse,
+    InterfaceAdminStatusType, InterfaceCounters, InterfaceOperStatusType, InterfaceRuntimeStatus,
+    InterfaceStatus, VpcInterfaceStatus, VpcPeeringCounters, VpcStatus, ZebraStatusType,
 };
 use bolero::{Driver, TypeGenerator};
 use std::ops::Bound;
 
-impl TypeGenerator for InterfaceStatusType {
+impl TypeGenerator for InterfaceOperStatusType {
     fn generate<D: Driver>(d: &mut D) -> Option<Self> {
         let variants = [
-            InterfaceStatusType::InterfaceStatusUnknown,
-            InterfaceStatusType::InterfaceStatusOperUp,
-            InterfaceStatusType::InterfaceStatusOperDown,
-            InterfaceStatusType::InterfaceStatusError,
+            InterfaceOperStatusType::InterfaceStatusUnknown,
+            InterfaceOperStatusType::InterfaceStatusOperUp,
+            InterfaceOperStatusType::InterfaceStatusOperDown,
+            InterfaceOperStatusType::InterfaceStatusError,
         ];
-
         let index = d.gen_usize(Bound::Included(&0), Bound::Included(&(variants.len() - 1)))?;
         Some(variants[index])
     }
@@ -31,7 +32,6 @@ impl TypeGenerator for InterfaceAdminStatusType {
             InterfaceAdminStatusType::InterfaceAdminStatusUp,
             InterfaceAdminStatusType::InterfaceAdminStatusDown,
         ];
-
         let index = d.gen_usize(Bound::Included(&0), Bound::Included(&(variants.len() - 1)))?;
         Some(variants[index])
     }
@@ -43,7 +43,6 @@ impl TypeGenerator for ZebraStatusType {
             ZebraStatusType::ZebraStatusNotConnected,
             ZebraStatusType::ZebraStatusConnected,
         ];
-
         let index = d.gen_usize(Bound::Included(&0), Bound::Included(&(variants.len() - 1)))?;
         Some(variants[index])
     }
@@ -55,7 +54,6 @@ impl TypeGenerator for FrrAgentStatusType {
             FrrAgentStatusType::FrrAgentStatusNotConnected,
             FrrAgentStatusType::FrrAgentStatusConnected,
         ];
-
         let index = d.gen_usize(Bound::Included(&0), Bound::Included(&(variants.len() - 1)))?;
         Some(variants[index])
     }
@@ -69,7 +67,6 @@ impl TypeGenerator for DataplaneStatusType {
             DataplaneStatusType::DataplaneStatusInit,
             DataplaneStatusType::DataplaneStatusError,
         ];
-
         let index = d.gen_usize(Bound::Included(&0), Bound::Included(&(variants.len() - 1)))?;
         Some(variants[index])
     }
@@ -77,7 +74,6 @@ impl TypeGenerator for DataplaneStatusType {
 
 impl TypeGenerator for GetDataplaneStatusRequest {
     fn generate<D: Driver>(_d: &mut D) -> Option<Self> {
-        // Empty request message
         Some(GetDataplaneStatusRequest {})
     }
 }
@@ -86,7 +82,7 @@ impl TypeGenerator for InterfaceStatus {
     fn generate<D: Driver>(d: &mut D) -> Option<Self> {
         Some(InterfaceStatus {
             ifname: d.produce::<LinuxIfName>()?.0,
-            status: d.produce::<InterfaceStatusType>()?.into(),
+            oper_status: d.produce::<InterfaceOperStatusType>()?.into(),
             admin_status: d.produce::<InterfaceAdminStatusType>()?.into(),
         })
     }
@@ -94,8 +90,6 @@ impl TypeGenerator for InterfaceStatus {
 
 impl TypeGenerator for FrrStatus {
     fn generate<D: Driver>(d: &mut D) -> Option<Self> {
-        // Generate a weighted distribution for restarts, some random logic to simulate realistic scenarios
-        // More close to Gaussian distribution
         let restart_weight = d.gen_u8(Bound::Included(&0), Bound::Included(&100))?;
         let restarts = match restart_weight {
             0..=80 => d.gen_u32(Bound::Included(&0), Bound::Included(&5))?,
@@ -106,7 +100,7 @@ impl TypeGenerator for FrrStatus {
         Some(FrrStatus {
             zebra_status: d.produce::<ZebraStatusType>()?.into(),
             frr_agent_status: d.produce::<FrrAgentStatusType>()?.into(),
-            applied_config_gen: d.produce::<u32>()?,
+            applied_config_gen: d.produce::<i64>()?,
             restarts,
             applied_configs: d.produce::<u32>()?,
             failed_configs: d.produce::<u32>()?,
@@ -122,12 +116,242 @@ impl TypeGenerator for DataplaneStatusInfo {
     }
 }
 
+#[allow(clippy::cast_precision_loss)]
+impl TypeGenerator for InterfaceCounters {
+    fn generate<D: Driver>(d: &mut D) -> Option<Self> {
+        let rx_bits = d.gen_u64(Bound::Included(&0), Bound::Included(&10_000_000))?;
+        let tx_bits = d.gen_u64(Bound::Included(&0), Bound::Included(&10_000_000))?;
+        let rx_errors = d.gen_u64(Bound::Included(&0), Bound::Included(&10_000))?;
+        let tx_errors = d.gen_u64(Bound::Included(&0), Bound::Included(&10_000))?;
+        let rx_bps = d.gen_u64(Bound::Included(&0), Bound::Included(&5_000_000))? as f64;
+        let tx_bps = d.gen_u64(Bound::Included(&0), Bound::Included(&5_000_000))? as f64;
+
+        Some(InterfaceCounters {
+            tx_bits,
+            tx_bps,
+            tx_errors,
+            rx_bits,
+            rx_bps,
+            rx_errors,
+        })
+    }
+}
+
+impl TypeGenerator for InterfaceRuntimeStatus {
+    fn generate<D: Driver>(d: &mut D) -> Option<Self> {
+        let mtu = d.gen_u32(Bound::Included(&576), Bound::Included(&9216))?;
+        let produced_ic = d.produce::<InterfaceCounters>();
+        let counters_pick = choose(d, &[produced_ic, None])?;
+
+        Some(InterfaceRuntimeStatus {
+            admin_status: d.produce::<InterfaceAdminStatusType>()?.into(),
+            oper_status: d.produce::<InterfaceOperStatusType>()?.into(),
+            mac: format!(
+                "02:{:02x}:{:02x}:{:02x}:{:02x}:{:02x}",
+                d.gen_u8(Bound::Included(&0), Bound::Included(&255))?,
+                d.gen_u8(Bound::Included(&0), Bound::Included(&255))?,
+                d.gen_u8(Bound::Included(&0), Bound::Included(&255))?,
+                d.gen_u8(Bound::Included(&0), Bound::Included(&255))?,
+                d.gen_u8(Bound::Included(&0), Bound::Included(&255))?
+            ),
+            mtu,
+            counters: counters_pick,
+        })
+    }
+}
+
+impl TypeGenerator for BgpNeighborSessionState {
+    fn generate<D: Driver>(d: &mut D) -> Option<Self> {
+        let variants = [
+            BgpNeighborSessionState::BgpStateUnset,
+            BgpNeighborSessionState::BgpStateIdle,
+            BgpNeighborSessionState::BgpStateConnect,
+            BgpNeighborSessionState::BgpStateActive,
+            BgpNeighborSessionState::BgpStateOpen,
+            BgpNeighborSessionState::BgpStateEstablished,
+        ];
+        let idx = d.gen_usize(Bound::Included(&0), Bound::Included(&(variants.len() - 1)))?;
+        Some(variants[idx])
+    }
+}
+
+impl TypeGenerator for BgpMessageCounters {
+    fn generate<D: Driver>(d: &mut D) -> Option<Self> {
+        Some(BgpMessageCounters {
+            capability: d.gen_u64(Bound::Included(&0), Bound::Included(&10_000))?,
+            keepalive: d.gen_u64(Bound::Included(&0), Bound::Included(&10_000))?,
+            notification: d.gen_u64(Bound::Included(&0), Bound::Included(&1_000))?,
+            open: d.gen_u64(Bound::Included(&0), Bound::Included(&5_000))?,
+            route_refresh: d.gen_u64(Bound::Included(&0), Bound::Included(&5_000))?,
+            update: d.gen_u64(Bound::Included(&0), Bound::Included(&50_000))?,
+        })
+    }
+}
+
+impl TypeGenerator for BgpMessages {
+    fn generate<D: Driver>(d: &mut D) -> Option<Self> {
+        Some(BgpMessages {
+            received: Some(d.produce::<BgpMessageCounters>()?),
+            sent: Some(d.produce::<BgpMessageCounters>()?),
+        })
+    }
+}
+
+impl TypeGenerator for BgpNeighborPrefixes {
+    fn generate<D: Driver>(d: &mut D) -> Option<Self> {
+        let received_pre = d.gen_u32(Bound::Included(&0), Bound::Included(&50_000))?;
+        let received = d.gen_u32(Bound::Included(&0), Bound::Included(&received_pre))?;
+        let sent = d.gen_u32(Bound::Included(&0), Bound::Included(&50_000))?;
+        Some(BgpNeighborPrefixes {
+            received,
+            received_pre_policy: received_pre,
+            sent,
+        })
+    }
+}
+
+impl TypeGenerator for BgpNeighborStatus {
+    fn generate<D: Driver>(d: &mut D) -> Option<Self> {
+        let peer_port = d.gen_u32(Bound::Included(&1), Bound::Included(&65535))?;
+        let local_as = d.gen_u32(Bound::Included(&1), Bound::Included(&65_534))?;
+        let peer_as = d.gen_u32(Bound::Included(&1), Bound::Included(&65_534))?;
+
+        Some(BgpNeighborStatus {
+            enabled: d.gen_bool(None)?,
+            local_as,
+            peer_as,
+            peer_port,
+            peer_group: format!(
+                "grp{}",
+                d.gen_u32(Bound::Included(&0), Bound::Included(&1000))?
+            ),
+            remote_router_id: format!(
+                "{}.{}.{}.{}",
+                d.gen_u8(Bound::Included(&1), Bound::Included(&254))?,
+                d.gen_u8(Bound::Included(&0), Bound::Included(&255))?,
+                d.gen_u8(Bound::Included(&0), Bound::Included(&255))?,
+                d.gen_u8(Bound::Included(&1), Bound::Included(&254))?
+            ),
+            session_state: d.produce::<BgpNeighborSessionState>()?.into(),
+            connections_dropped: d.gen_u64(Bound::Included(&0), Bound::Included(&1000))?,
+            established_transitions: d.gen_u64(Bound::Included(&0), Bound::Included(&1000))?,
+            last_reset_reason: "test".into(),
+            messages: Some(d.produce::<BgpMessages>()?),
+            ipv4_unicast_prefixes: Some(d.produce::<BgpNeighborPrefixes>()?),
+            ipv6_unicast_prefixes: Some(d.produce::<BgpNeighborPrefixes>()?),
+            l2vpn_evpn_prefixes: Some(d.produce::<BgpNeighborPrefixes>()?),
+        })
+    }
+}
+
+impl TypeGenerator for BgpVrfStatus {
+    fn generate<D: Driver>(d: &mut D) -> Option<Self> {
+        let n = d.gen_usize(Bound::Included(&0), Bound::Included(&4))?;
+        let mut neighbors = std::collections::HashMap::new();
+        for _ in 0..n {
+            let ip = format!(
+                "10.{}.{}.{}",
+                d.gen_u8(Bound::Included(&0), Bound::Included(&255))?,
+                d.gen_u8(Bound::Included(&0), Bound::Included(&255))?,
+                d.gen_u8(Bound::Included(&1), Bound::Included(&254))?
+            );
+            neighbors
+                .entry(ip)
+                .or_insert_with(|| d.produce::<BgpNeighborStatus>().unwrap());
+        }
+        Some(BgpVrfStatus { neighbors })
+    }
+}
+
+impl TypeGenerator for BgpStatus {
+    fn generate<D: Driver>(d: &mut D) -> Option<Self> {
+        let nvrfs = d.gen_usize(Bound::Included(&0), Bound::Included(&3))?;
+        let mut vrfs = std::collections::HashMap::new();
+        for i in 0..nvrfs {
+            let name = if i == 0 {
+                "default".into()
+            } else {
+                format!("vrf{i}")
+            };
+            vrfs.insert(name, d.produce::<BgpVrfStatus>()?);
+        }
+        Some(BgpStatus { vrfs })
+    }
+}
+
+impl TypeGenerator for VpcInterfaceStatus {
+    fn generate<D: Driver>(d: &mut D) -> Option<Self> {
+        Some(VpcInterfaceStatus {
+            ifname: d.produce::<LinuxIfName>()?.0,
+            admin_status: d.produce::<InterfaceAdminStatusType>()?.into(),
+            oper_status: d.produce::<InterfaceOperStatusType>()?.into(),
+        })
+    }
+}
+
+impl TypeGenerator for VpcStatus {
+    fn generate<D: Driver>(d: &mut D) -> Option<Self> {
+        let name = format!(
+            "vpc-{}",
+            d.gen_u32(Bound::Included(&1), Bound::Included(&128))?
+        );
+        let id = format!(
+            "id-{}",
+            d.gen_u32(Bound::Included(&1), Bound::Included(&10_000))?
+        );
+        let vni = d.gen_u32(Bound::Included(&1), Bound::Included(&16_777_215))?;
+        let route_count = d.gen_u32(Bound::Included(&0), Bound::Included(&50_000))?;
+
+        let nifs = d.gen_usize(Bound::Included(&0), Bound::Included(&4))?;
+        let mut interfaces = std::collections::HashMap::new();
+        for _ in 0..nifs {
+            let s = d.produce::<VpcInterfaceStatus>()?;
+            interfaces.insert(s.ifname.clone(), s);
+        }
+
+        Some(VpcStatus {
+            id,
+            name,
+            vni,
+            route_count,
+            interfaces,
+        })
+    }
+}
+
+#[allow(clippy::cast_precision_loss)]
+impl TypeGenerator for VpcPeeringCounters {
+    fn generate<D: Driver>(d: &mut D) -> Option<Self> {
+        let a = format!(
+            "vpc-{}",
+            d.gen_u32(Bound::Included(&1), Bound::Included(&64))?
+        );
+        let b = format!(
+            "vpc-{}",
+            d.gen_u32(Bound::Included(&1), Bound::Included(&64))?
+        );
+        let (src_vpc, dst_vpc) = if a <= b { (a, b) } else { (b, a) };
+        let packets = d.gen_u64(Bound::Included(&0), Bound::Included(&10_000_000))?;
+        let bytes = packets.saturating_mul(64);
+        let drops = d.gen_u64(Bound::Included(&0), Bound::Included(&packets))?;
+        let pps = d.gen_u64(Bound::Included(&0), Bound::Included(&100_000))? as f64;
+
+        Some(VpcPeeringCounters {
+            name: format!("{src_vpc}--{dst_vpc}"),
+            src_vpc,
+            dst_vpc,
+            packets,
+            bytes,
+            drops,
+            pps,
+        })
+    }
+}
+
 impl TypeGenerator for GetDataplaneStatusResponse {
     fn generate<D: Driver>(d: &mut D) -> Option<Self> {
-        // Generate 0-8 interfaces, probably
+        // 0..=8 interface statuses, unique names
         let ninterfaces = d.gen_usize(Bound::Included(&0), Bound::Included(&8))?;
-
-        // Generate statuses
         let mut interface_statuses = Vec::new();
         let mut used_names = std::collections::HashSet::new();
 
@@ -144,17 +368,55 @@ impl TypeGenerator for GetDataplaneStatusResponse {
             }
         }
 
-        let frr_status = d.produce::<FrrStatus>()?;
-        let dataplane_status = d.produce::<DataplaneStatusInfo>()?;
+        let frr_produced_status = d.produce::<FrrStatus>()?;
+        let frr_status = choose(d, &[Some(frr_produced_status), None])?;
+        let produced_status = d.produce::<DataplaneStatusInfo>()?;
+        let dataplane_status = choose(d, &[Some(produced_status), None])?;
 
-        // Use choose helper to sometimes make optional fields None for testing
-        let frr_status = choose(d, &[Some(frr_status), None])?;
-        let dataplane_status = choose(d, &[Some(dataplane_status), None])?;
+        // Interface runtime map: subset of names + possibly extra ones
+        let mut interface_runtime = std::collections::HashMap::new();
+        let target = d.gen_usize(Bound::Included(&0), Bound::Included(&(ninterfaces + 2)))?;
+
+        let mut pool: Vec<String> = used_names.iter().cloned().collect();
+        let extra = d.gen_usize(Bound::Included(&0), Bound::Included(&2))?;
+        for _ in 0..extra {
+            pool.push(format!(
+                "if{}",
+                d.gen_u32(Bound::Included(&0), Bound::Included(&9999))?
+            ));
+        }
+
+        for name in pool.into_iter().take(target) {
+            interface_runtime.insert(name, d.produce::<InterfaceRuntimeStatus>()?);
+        }
+
+        let bgp_produced = d.produce::<BgpStatus>()?;
+        let bgp = choose(d, &[Some(bgp_produced), None])?;
+
+        // VPCs map (0..=4)
+        let nvpcs = d.gen_usize(Bound::Included(&0), Bound::Included(&4))?;
+        let mut vpcs = std::collections::HashMap::new();
+        for _ in 0..nvpcs {
+            let v = d.produce::<VpcStatus>()?;
+            vpcs.insert(v.name.clone(), v);
+        }
+
+        // VPC peering counters (0..=6)
+        let npeers = d.gen_usize(Bound::Included(&0), Bound::Included(&6))?;
+        let mut vpc_peering_counters = std::collections::HashMap::new();
+        for _ in 0..npeers {
+            let c = d.produce::<VpcPeeringCounters>()?;
+            vpc_peering_counters.insert(c.name.clone(), c);
+        }
 
         Some(GetDataplaneStatusResponse {
             interface_statuses,
             frr_status,
             dataplane_status,
+            interface_runtime,
+            bgp,
+            vpcs,
+            vpc_peering_counters,
         })
     }
 }
@@ -166,10 +428,10 @@ mod test {
     #[test]
     fn test_interface_status_type() {
         bolero::check!()
-            .with_type::<InterfaceStatusType>()
-            .for_each(|interface_status_type| {
-                let status_num = i32::from(*interface_status_type);
-                assert!((0..=4).contains(&status_num));
+            .with_type::<InterfaceOperStatusType>()
+            .for_each(|t| {
+                let n = i32::from(*t);
+                assert!((0..=3).contains(&n));
             });
     }
 
@@ -177,9 +439,9 @@ mod test {
     fn test_frr_status_type() {
         bolero::check!()
             .with_type::<ZebraStatusType>()
-            .for_each(|zebra_status_type| {
-                let status_num = i32::from(*zebra_status_type);
-                assert!((0..=1).contains(&status_num));
+            .for_each(|t| {
+                let n = i32::from(*t);
+                assert!((0..=1).contains(&n));
             });
     }
 
@@ -187,9 +449,9 @@ mod test {
     fn test_frr_agent_status_type() {
         bolero::check!()
             .with_type::<FrrAgentStatusType>()
-            .for_each(|frr_agent_status_type| {
-                let status_num = i32::from(*frr_agent_status_type);
-                assert!((0..=1).contains(&status_num));
+            .for_each(|t| {
+                let n = i32::from(*t);
+                assert!((0..=1).contains(&n));
             });
     }
 
@@ -197,9 +459,9 @@ mod test {
     fn test_interface_admin_status_type() {
         bolero::check!()
             .with_type::<InterfaceAdminStatusType>()
-            .for_each(|interface_admin_status_type| {
-                let status_num = i32::from(*interface_admin_status_type);
-                assert!((0..=3).contains(&status_num));
+            .for_each(|t| {
+                let n = i32::from(*t);
+                assert!((0..=2).contains(&n));
             });
     }
 
@@ -207,9 +469,9 @@ mod test {
     fn test_dataplane_status_type() {
         bolero::check!()
             .with_type::<DataplaneStatusType>()
-            .for_each(|dataplane_status_type| {
-                let status_num = i32::from(*dataplane_status_type);
-                assert!((0..=3).contains(&status_num));
+            .for_each(|t| {
+                let n = i32::from(*t);
+                assert!((0..=3).contains(&n));
             });
     }
 
@@ -217,29 +479,24 @@ mod test {
     fn test_interface_status() {
         bolero::check!()
             .with_type::<InterfaceStatus>()
-            .for_each(|interface_status| {
-                assert!(!interface_status.ifname.is_empty());
-                assert!((0..=4).contains(&interface_status.status));
+            .for_each(|s| {
+                assert!(!s.ifname.is_empty());
+                assert!((0..=3).contains(&s.oper_status));
+                assert!((0..=2).contains(&s.admin_status));
             });
     }
 
     #[test]
     fn test_frr_status() {
         let mut some_restarts = false;
-        bolero::check!()
-            .with_type::<FrrStatus>()
-            .for_each(|frr_status| {
-                assert!((0..=1).contains(&frr_status.zebra_status));
-                // The upper limit of 1000 for frr_status.restarts is chosen as a conservative
-                // estimate to ensure reasonable behavior. This value is based on expected
-                // operational constraints and typical restart counts observed in similar systems.
-                assert!(frr_status.restarts <= 1000);
-                if frr_status.restarts > 0 {
-                    some_restarts = true;
-                }
-                assert!((0..=1).contains(&frr_status.frr_agent_status));
-                assert!(frr_status.applied_config_gen > 0);
-            });
+        bolero::check!().with_type::<FrrStatus>().for_each(|frr| {
+            assert!((0..=1).contains(&frr.zebra_status));
+            assert!((0..=1).contains(&frr.frr_agent_status));
+            assert!(frr.restarts <= 1000);
+            if frr.restarts > 0 {
+                some_restarts = true;
+            }
+        });
         assert!(some_restarts);
     }
 
@@ -247,8 +504,8 @@ mod test {
     fn test_dataplane_status_info() {
         bolero::check!()
             .with_type::<DataplaneStatusInfo>()
-            .for_each(|dataplane_status_info| {
-                assert!((0..=3).contains(&dataplane_status_info.status));
+            .for_each(|dsi| {
+                assert!((0..=3).contains(&dsi.status));
             });
     }
 
@@ -257,8 +514,7 @@ mod test {
         bolero::check!()
             .with_type::<GetDataplaneStatusRequest>()
             .for_each(|_request| {
-                // Empty request should always succeed
-                // No fields to validate
+                // Empty request: nothing to validate
             });
     }
 
@@ -272,28 +528,24 @@ mod test {
 
         bolero::check!()
             .with_type::<GetDataplaneStatusResponse>()
-            .for_each(|response| {
-                assert!(response.interface_statuses.len() <= 8);
+            .for_each(|resp| {
+                assert!(resp.interface_statuses.len() <= 8);
 
-                // Check for unique interface names
-                let mut seen_names = std::collections::HashSet::new();
-                for interface in &response.interface_statuses {
-                    assert!(
-                        seen_names.insert(&interface.ifname),
-                        "Duplicate interface name found: {}",
-                        interface.ifname
-                    );
-                    assert!(!interface.ifname.is_empty());
-                    assert!((0..=4).contains(&interface.status));
+                // unique names
+                let mut seen = std::collections::HashSet::new();
+                for iface in &resp.interface_statuses {
+                    assert!(seen.insert(&iface.ifname), "dup ifname {}", iface.ifname);
+                    assert!(!iface.ifname.is_empty());
+                    assert!((0..=3).contains(&iface.oper_status));
+                    assert!((0..=2).contains(&iface.admin_status));
                 }
-
-                if !response.interface_statuses.is_empty() {
+                if !resp.interface_statuses.is_empty() {
                     some_interfaces = true;
                 }
 
-                if response.frr_status.is_some() {
+                // FRR optional
+                if let Some(frr) = &resp.frr_status {
                     some_frr_status = true;
-                    let frr = response.frr_status.as_ref().unwrap();
                     assert!((0..=1).contains(&frr.zebra_status));
                     assert!((0..=1).contains(&frr.frr_agent_status));
                     assert!(frr.restarts <= 1000);
@@ -301,12 +553,82 @@ mod test {
                     missing_frr_status = true;
                 }
 
-                if response.dataplane_status.is_some() {
+                // Dataplane optional
+                if let Some(dp) = &resp.dataplane_status {
                     some_dataplane_status = true;
-                    let dataplane = response.dataplane_status.as_ref().unwrap();
-                    assert!((0..=3).contains(&dataplane.status));
+                    assert!((0..=3).contains(&dp.status));
                 } else {
                     missing_dataplane_status = true;
+                }
+
+                // interface_runtime values must be sane if present
+                for (k, v) in &resp.interface_runtime {
+                    assert!(!k.is_empty());
+                    assert!((0..=3).contains(&v.oper_status));
+                    assert!((0..=2).contains(&v.admin_status));
+                }
+
+                // bgp (optional)
+                if let Some(bgp) = &resp.bgp {
+                    for (vrf, vrf_status) in &bgp.vrfs {
+                        assert!(!vrf.is_empty());
+                        for (nbr, st) in &vrf_status.neighbors {
+                            assert!(!nbr.is_empty());
+                            assert!(st.peer_port <= 65535);
+                            assert!((0..=5).contains(&st.session_state));
+                            if let Some(msgs) = &st.messages {
+                                if let Some(r) = &msgs.received {
+                                    let _ = (
+                                        r.capability,
+                                        r.keepalive,
+                                        r.notification,
+                                        r.open,
+                                        r.route_refresh,
+                                        r.update,
+                                    );
+                                }
+                                if let Some(s) = &msgs.sent {
+                                    let _ = (
+                                        s.capability,
+                                        s.keepalive,
+                                        s.notification,
+                                        s.open,
+                                        s.route_refresh,
+                                        s.update,
+                                    );
+                                }
+                            }
+                            // check per-AF vectors
+                            let Some(p) = &st.ipv4_unicast_prefixes else {
+                                todo!()
+                            };
+                            assert!(p.received <= p.received_pre_policy);
+                            let Some(p) = &st.ipv6_unicast_prefixes else {
+                                todo!()
+                            };
+                            assert!(p.received <= p.received_pre_policy);
+                            let Some(p) = &st.l2vpn_evpn_prefixes else {
+                                todo!()
+                            };
+                            assert!(p.received <= p.received_pre_policy);
+                        }
+                    }
+                }
+
+                // VPC status map (keys are VPC names)
+                for (k, v) in &resp.vpcs {
+                    assert_eq!(k, &v.name);
+                    assert!(!v.id.is_empty());
+                    assert!((1..=16_777_215).contains(&v.vni));
+                }
+
+                // Peering counters map
+                for (name, c) in &resp.vpc_peering_counters {
+                    assert_eq!(name, &c.name);
+                    assert!(!c.src_vpc.is_empty());
+                    assert!(!c.dst_vpc.is_empty());
+                    assert!(c.packets >= c.drops);
+                    assert!(c.pps >= 0.0);
                 }
             });
 
@@ -336,5 +658,7 @@ mod test {
                     frr_status.restarts
                 ),
             });
+
+        assert!(low_restarts + medium_restarts + high_restarts > 0);
     }
 }

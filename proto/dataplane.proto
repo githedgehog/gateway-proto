@@ -72,7 +72,7 @@ message OspfConfig {
 /* ==== Dataplane Status ==== */
 /* ========================== */
 
-enum InterfaceStatusType {
+enum InterfaceOperStatusType {
   INTERFACE_STATUS_UNKNOWN = 0;
   INTERFACE_STATUS_OPER_UP = 1;
   INTERFACE_STATUS_OPER_DOWN = 2;
@@ -110,14 +110,14 @@ message GetDataplaneStatusRequest {
 /* TODO: Consider adding an optional string field to InterfaceStatus for additional error messages or descriptions. */
 message InterfaceStatus {
   string ifname = 1;
-  InterfaceStatusType status = 2;
+  InterfaceOperStatusType oper_status = 2;
   InterfaceAdminStatusType admin_status = 3;
 }
 
 message FrrStatus {
   ZebraStatusType zebra_status = 1;
   FrrAgentStatusType frr_agent_status = 2;
-  uint32 applied_config_gen = 3;
+  int64 applied_config_gen = 3;
   uint32 restarts = 4;
   uint32 applied_configs = 5;
   uint32 failed_configs = 6;
@@ -135,16 +135,16 @@ message DataplaneStatusInfo {
 
 message InterfaceCounters {
   uint64 tx_bits = 1;
-  double tx_bps = 2; // Maybe don't include that
+  double tx_bps = 2;
   uint64 tx_errors = 3;
   uint64 rx_bits = 4;
-  double rx_bps = 5;  // Here as well
+  double rx_bps = 5;
   uint64 rx_errors = 6;
 }
 
 message InterfaceRuntimeStatus {
   InterfaceAdminStatusType admin_status = 1;
-  InterfaceStatusType oper_status = 2;
+  InterfaceOperStatusType oper_status = 2;
   string mac = 3;
   uint32 mtu = 4;
   InterfaceCounters counters = 5;
@@ -193,8 +193,9 @@ message BgpNeighborStatus {
   uint64 established_transitions = 9;
   string last_reset_reason = 10;
   BgpMessages messages = 11;
-  // e.g. "IPV4_UNICAST", "IPV6_UNICAST", "L2VPN_EVPN"
-  map<string, BgpNeighborPrefixes> prefixes = 12;
+  BgpNeighborPrefixes ipv4_unicast_prefixes = 12;
+  BgpNeighborPrefixes ipv6_unicast_prefixes = 13;
+  BgpNeighborPrefixes l2vpn_evpn_prefixes = 14;
 }
 
 message BgpVrfStatus {
@@ -210,7 +211,7 @@ message BgpStatus {
 message VpcInterfaceStatus {
   string ifname = 1;
   InterfaceAdminStatusType admin_status = 2;
-  InterfaceStatusType oper_status = 3;
+  InterfaceOperStatusType oper_status = 3;
 }
 
 message VpcStatus {
@@ -232,7 +233,6 @@ message VpcPeeringCounters {
   uint64 bytes = 5;
   uint64 drops = 6;
   double pps = 7;
-  uint64 active_flows = 8; // Nice to have thingy if we are doing flow tracking
 }
 
 message GetDataplaneStatusResponse {
