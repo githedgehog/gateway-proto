@@ -41,6 +41,7 @@ fn main() {
             .type_attribute(".", "#[derive(::serde::Deserialize, ::serde::Serialize)]")
             .build_server(true)
             .build_client(true)
+            .compile_well_known_types(true)
             .out_dir("src/generated")
             .compile_protos(&[proto], &["proto"]);
 
