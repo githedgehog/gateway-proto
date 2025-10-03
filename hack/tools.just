@@ -31,7 +31,8 @@ arch_raw := `uname -m`
 os_raw := `uname|tr '[:upper:]' '[:lower:]'`
 
 protoc_version := "30.2"
-protoc := localbin / "protoc" + "-" + protoc_version
+protoc_dir := localbin / "protoc" + "-" + protoc_version
+protoc := protoc_dir / "bin" / "protoc"
 @_protoc: _localbin
   [ -f {{protoc}} ] || just _protoc_install
 
@@ -40,14 +41,12 @@ protoc_os := if os_raw == "darwin" { "osx" } else { os_raw }
 @_protoc_install: _localbin
   echo "Downloading protoc v{{protoc_version}} {{protoc_arch}}/{{protoc_os}}"
 
-  rm -rf {{localbin}}/protoc-tmp.zip {{localbin}}/protoc-tmp || true
+  rm -rf {{localbin}}/protoc-tmp.zip {{localbin}}/protoc-* || true
 
   wget -O {{localbin}}/protoc-tmp.zip "https://github.com/protocolbuffers/protobuf/releases/download/v{{protoc_version}}/protoc-{{protoc_version}}-{{protoc_os}}-{{protoc_arch}}.zip"
-  mkdir {{localbin}}/protoc-tmp
-  unzip {{localbin}}/protoc-tmp.zip -d {{localbin}}/protoc-tmp
-  mv {{localbin}}/protoc-tmp/bin/protoc {{protoc}}
+  unzip {{localbin}}/protoc-tmp.zip -d {{protoc_dir}}
 
-  rm -rf {{localbin}}/protoc-tmp.zip {{localbin}}/protoc-tmp
+  rm -rf {{localbin}}/protoc-tmp.zip
 
   # go install helper
 _goinstall PACKAGE VERSION BINNAME TARGET FLAGS="": _localbin

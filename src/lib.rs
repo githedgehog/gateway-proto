@@ -7,6 +7,11 @@
 pub mod config {
     include!("generated/config.rs");
 }
+pub mod google {
+    pub mod protobuf {
+        include!("generated/google.protobuf.rs");
+    }
+}
 
 // Note(manishv): This is incomplete and not needed really, remove?
 // See https://github.com/githedgehog/gateway-proto/issues/28
