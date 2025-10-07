@@ -30,6 +30,7 @@ fn main() {
             &[
                 "BgpAddressFamilyL2vpnEvpn",
                 "BgpAF",
+                "Duration",
                 "IfType",
                 "IfRole",
                 "LogLevel",
