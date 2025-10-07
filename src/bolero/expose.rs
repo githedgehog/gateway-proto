@@ -5,7 +5,12 @@ use bolero::{Driver, TypeGenerator, ValueGenerator};
 use std::ops::Bound;
 
 use crate::bolero::support::{UniqueV4CidrGenerator, UniqueV6CidrGenerator};
-use crate::config::{Expose, PeeringAs, PeeringIPs, peering_as, peering_i_ps};
+use crate::config::expose::Nat;
+use crate::config::{
+    Expose, PeeringAs, PeeringIPs, PeeringStatefulNat, PeeringStatelessNat, peering_as,
+    peering_i_ps,
+};
+use crate::google::protobuf::Duration;
 
 struct UniquePeeringAs<T: ValueGenerator<Output = Vec<String>>> {
     cidr_producer: T,
@@ -75,6 +80,32 @@ where
     }
 }
 
+impl TypeGenerator for PeeringStatefulNat {
+    fn generate<D: Driver>(d: &mut D) -> Option<Self> {
+        let seconds = d.gen_i64(Bound::Included(&0), Bound::Included(&i64::MAX))?;
+        let nanos = d.gen_i32(Bound::Included(&0), Bound::Included(&999_999_999))?;
+        let idle_timeout = Some(Duration { seconds, nanos });
+        Some(PeeringStatefulNat { idle_timeout })
+    }
+}
+
+impl TypeGenerator for PeeringStatelessNat {
+    fn generate<D: Driver>(_d: &mut D) -> Option<Self> {
+        Some(PeeringStatelessNat {})
+    }
+}
+
+impl TypeGenerator for Nat {
+    fn generate<D: Driver>(d: &mut D) -> Option<Self> {
+        let stateful = d.gen_bool(None)?;
+        if stateful {
+            Some(Nat::Stateful(d.produce()?))
+        } else {
+            Some(Nat::Stateless(d.produce()?))
+        }
+    }
+}
+
 // FIXME(manishv): We should make sure that the number of peering ips and ases are
 // consistent.
 // FIXME(manishv): We should also make sure that the cidrs use not
@@ -96,23 +127,25 @@ impl TypeGenerator for Expose {
         };
 
         let has_as = d.gen_bool(None)?;
-        let r#as = if has_as {
+        let (r#as, nat) = if has_as {
+            let nat = d.produce()?;
             if v4 {
                 let v4_cidr_producer_as =
                     UniquePeeringAs::new(UniqueV4CidrGenerator::new(len, v4_mask));
-                v4_cidr_producer_as.generate(d)?
+                (v4_cidr_producer_as.generate(d)?, Some(nat))
             } else {
                 let v6_cidr_producer_as =
                     UniquePeeringAs::new(UniqueV6CidrGenerator::new(len, v6_mask));
-                v6_cidr_producer_as.generate(d)?
+                (v6_cidr_producer_as.generate(d)?, Some(nat))
             }
         } else {
-            vec![]
+            (vec![], None)
         };
 
         Some(Expose {
             ips: peering_ips,
             r#as,
+            nat,
         })
     }
 }
@@ -122,6 +155,7 @@ mod test {
     use super::*;
     use crate::bolero::test_support::parse_cidr;
     use crate::bolero::test_support::{get_peering_as_ip, get_peering_ip};
+    use crate::config::expose;
     use std::net::IpAddr;
 
     enum IpAddrType {
@@ -171,6 +205,17 @@ mod test {
                         .collect::<Vec<_>>()
                         .as_slice()
                 ));
+                if !expose.r#as.is_empty() {
+                    let Some(nat) = expose.nat else {
+                        panic!("nat is None");
+                    };
+                    match nat {
+                        expose::Nat::Stateless(_s) => {}
+                        expose::Nat::Stateful(s) => {
+                            assert!(s.idle_timeout.is_some());
+                        }
+                    }
+                }
             });
         assert!(more_than_one);
     }

@@ -5,6 +5,8 @@ syntax = "proto3";
 
 package config;
 
+import "google/protobuf/duration.proto";
+
 option go_package = "pkg/dataplane";
 
 service ConfigService {
@@ -116,10 +118,19 @@ message PeeringAs {
   }
 }
 
+message PeeringStatelessNAT {}
+message PeeringStatefulNAT {
+    google.protobuf.Duration idleTimeout = 1;
+}
+
 /* Defines a rule between exposing IP and translated */
 message Expose {
   repeated PeeringIPs ips = 1;
   repeated PeeringAs as = 2;
+  oneof nat {
+    PeeringStatelessNAT stateless = 3;
+    PeeringStatefulNAT stateful = 4;
+  }
 }
 
 /* Defines a list of exposures per VPC */

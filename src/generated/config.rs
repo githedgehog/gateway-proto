@@ -114,6 +114,15 @@ pub mod peering_as {
         Not(::prost::alloc::string::String),
     }
 }
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct PeeringStatelessNat {}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct PeeringStatefulNat {
+    #[prost(message, optional, tag = "1")]
+    pub idle_timeout: ::core::option::Option<super::google::protobuf::Duration>,
+}
 /// Defines a rule between exposing IP and translated
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -122,6 +131,19 @@ pub struct Expose {
     pub ips: ::prost::alloc::vec::Vec<PeeringIPs>,
     #[prost(message, repeated, tag = "2")]
     pub r#as: ::prost::alloc::vec::Vec<PeeringAs>,
+    #[prost(oneof = "expose::Nat", tags = "3, 4")]
+    pub nat: ::core::option::Option<expose::Nat>,
+}
+/// Nested message and enum types in `Expose`.
+pub mod expose {
+    #[derive(::serde::Deserialize, ::serde::Serialize)]
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum Nat {
+        #[prost(message, tag = "3")]
+        Stateless(super::PeeringStatelessNat),
+        #[prost(message, tag = "4")]
+        Stateful(super::PeeringStatefulNat),
+    }
 }
 /// Defines a list of exposures per VPC
 #[derive(::serde::Deserialize, ::serde::Serialize)]
