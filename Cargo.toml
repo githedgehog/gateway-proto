@@ -24,11 +24,17 @@ futures = "0.3"
 async-trait = "0.1"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
+thiserror = "2.0.17"
 
 [dev-dependencies]
 tower = "0.5.2"
 thiserror = { version = "2.0.17", features = ["std"] }
 tokio-stream = { version = "0.1", features = ["net"] }
+bolero = { version = "0.13.4", features = [
+    "alloc",
+    "arbitrary",
+    "std",
+]}
 
 [build-dependencies]
 tonic-build = { version = "0.14", optional = true }
