@@ -66,7 +66,7 @@
 /// encoded in JSON format as "3s", while 3 seconds and 1 nanosecond should
 /// be expressed in JSON format as "3.000000001s", and 3 seconds and 1
 /// microsecond should be expressed in JSON format as "3.000001s".
-#[cfg_attr(feature = "bolero", derive(::bolero::TypeGenerator))]
+#[cfg_attr(any(feature = "bolero", test), derive(::bolero::TypeGenerator))]
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Duration {

@@ -9,7 +9,7 @@ fn add_type_generators(
     types.iter().fold(bld, |bld, t| {
         bld.type_attribute(
             t,
-            "#[cfg_attr(feature = \"bolero\", derive(::bolero::TypeGenerator))]",
+            "#[cfg_attr(any(feature = \"bolero\", test), derive(::bolero::TypeGenerator))]",
         )
     })
 }

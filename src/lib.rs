@@ -75,3 +75,5 @@ pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 #[cfg(feature = "bolero")]
 pub mod bolero;
+
+mod duration;
