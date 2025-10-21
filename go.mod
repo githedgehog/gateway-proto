@@ -1,6 +1,6 @@
 module go.githedgehog.com/gateway-proto
 
-go 1.24.2
+go 1.24.4
 
 require (
 	github.com/lmittmann/tint v1.1.2
