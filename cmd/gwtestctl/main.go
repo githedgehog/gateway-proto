@@ -113,6 +113,7 @@ func Run(ctx context.Context) error {
 			  gwtestctl get-config -t tcp://:5123 > config.yaml     # save current config to file
 			  gwtestctl update-config -t tcp://:5123 -f config.yaml # update config on server
 			  gwtestctl get-config-gen -t tcp://:5123               # read current config generation from server
+			  gwtestctl get-status -t tcp://:5123                   # read current dataplane status from server
 
 			Config is a YAML representation of the GatewayConfig protobuf message, e.g.:
 			  generation: 42
@@ -153,6 +154,19 @@ func Run(ctx context.Context) error {
 						return fmt.Errorf("getting config gen: %w", err)
 					}
 
+					return nil
+				},
+			},
+			{
+				Name:    "get-status",
+				Aliases: []string{"status"},
+				Usage:   "get dataplane status",
+				Flags:   flatten(defaultFlags, targetFlags),
+				Before:  before(true),
+				Action: func(_ *cli.Context) error {
+					if err := gwtestctl.DoGetDataplaneStatus(ctx, target, false); err != nil {
+						return fmt.Errorf("getting dataplane status: %w", err)
+					}
 					return nil
 				},
 			},

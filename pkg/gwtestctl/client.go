@@ -124,6 +124,33 @@ func DoUpdateConfig(ctx context.Context, target, configFile string, wait bool) e
 	return nil
 }
 
+func DoGetDataplaneStatus(ctx context.Context, target string, wait bool) error {
+	if !wait {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, 5*time.Second)
+		defer cancel()
+	}
+
+	slog.Info("Getting dataplane status", "target", target)
+
+	client, close, err := getClient(target)
+	if err != nil {
+		return fmt.Errorf("getting client: %w", err)
+	}
+	defer close()
+
+	resp, err := client.GetDataplaneStatus(ctx, &dataplane.GetDataplaneStatusRequest{}, withOpts(wait)...)
+	slog.Info("Response", "status", status.Code(err))
+	if err != nil {
+		slog.Error("Response", "error", err)
+		return fmt.Errorf("getting dataplane status: %w", err)
+	}
+
+	fmt.Println(resp)
+
+	return nil
+}
+
 func getClient(target string) (dataplane.ConfigServiceClient, func() error, error) {
 	scheme, target, err := parseTarget(target)
 	if err != nil {
