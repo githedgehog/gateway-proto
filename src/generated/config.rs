@@ -302,6 +302,9 @@ pub struct Interface {
     /// MTU for the interface
     #[prost(uint32, optional, tag = "9")]
     pub mtu: ::core::option::Option<u32>,
+    /// PCI address of the interface, e.g. 0000:01:00.0
+    #[prost(string, optional, tag = "10")]
+    pub pci: ::core::option::Option<::prost::alloc::string::String>,
 }
 /// Defines the list of prefixes that VPCs can expose
 #[derive(::serde::Deserialize, ::serde::Serialize)]

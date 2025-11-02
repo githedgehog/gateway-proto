@@ -85,7 +85,7 @@ enum InterfaceAdminStatusType {
   INTERFACE_ADMIN_STATUS_DOWN = 2;
 }
 
-/* TODO: Consider adding additional states such as FRR_STATUS_STARTING, FRR_STATUS_STOPPING, 
+/* TODO: Consider adding additional states such as FRR_STATUS_STARTING, FRR_STATUS_STOPPING,
    or other states that might be relevant for tracking the lifecycle of FRR processes. */
 enum ZebraStatusType {
   ZEBRA_STATUS_NOT_CONNECTED = 0;
@@ -263,6 +263,7 @@ message Interface {
   optional string system_name = 7; /* Parent interface for VLAN devices, only for VLAN role */
   optional OspfInterface ospf = 8; /* OSPF interface configuration if enabled */
   optional uint32 mtu = 9; /* MTU for the interface */
+  optional string pci = 10; /* PCI address of the interface, e.g. 0000:01:00.0 */
 }
 
 /* Defines interface representation on the Gateway */
