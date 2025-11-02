@@ -91,6 +91,7 @@ impl TypeGenerator for Interface {
             ospf,
             mtu,
             system_name: None, // We do not support system names right now
+            pci: None,
         })
     }
 }
