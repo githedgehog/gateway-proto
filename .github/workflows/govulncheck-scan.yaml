@@ -1,8 +1,12 @@
 name: Govulncheck Security Scan
 
 on:
+  push:
+    branches:
+      - master
+      - release/*
   schedule:
-    - cron: '0 13 * * 1'
+    - cron: "0 13 * * 1"
   workflow_dispatch:
 
 permissions:
