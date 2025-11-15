@@ -45,6 +45,7 @@ impl ConfigService for SimpleConfigService {
                 vrfs: HashMap::new(),
             }),
             vpcs: HashMap::new(),
+            vpc_counters: HashMap::new(),
             vpc_peering_counters: HashMap::new(),
             interface_statuses: vec![],
             frr_status: Some(FrrStatus {

@@ -7,7 +7,8 @@ use crate::config::{
     BgpNeighborStatus, BgpStatus, BgpVrfStatus, DataplaneStatusInfo, DataplaneStatusType,
     FrrAgentStatusType, FrrStatus, GetDataplaneStatusRequest, GetDataplaneStatusResponse,
     InterfaceAdminStatusType, InterfaceCounters, InterfaceOperStatusType, InterfaceRuntimeStatus,
-    InterfaceStatus, VpcInterfaceStatus, VpcPeeringCounters, VpcStatus, ZebraStatusType,
+    InterfaceStatus, VpcCounters, VpcInterfaceStatus, VpcPeeringCounters, VpcStatus,
+    ZebraStatusType,
 };
 use bolero::{Driver, TypeGenerator};
 use std::ops::Bound;
@@ -348,6 +349,22 @@ impl TypeGenerator for VpcPeeringCounters {
     }
 }
 
+impl TypeGenerator for VpcCounters {
+    fn generate<D: Driver>(d: &mut D) -> Option<Self> {
+        let name = format!(
+            "vpc-{}",
+            d.gen_u32(Bound::Included(&1), Bound::Included(&128))?
+        );
+        let total_packets = d.gen_u64(Bound::Included(&0), Bound::Included(&100_000_000))?;
+        let total_drops = d.gen_u64(Bound::Included(&0), Bound::Included(&total_packets))?;
+        Some(VpcCounters {
+            name,
+            total_packets: total_packets.to_string(),
+            total_drops: total_drops.to_string(),
+        })
+    }
+}
+
 impl TypeGenerator for GetDataplaneStatusResponse {
     fn generate<D: Driver>(d: &mut D) -> Option<Self> {
         // 0..=8 interface statuses, unique names
@@ -409,6 +426,13 @@ impl TypeGenerator for GetDataplaneStatusResponse {
             vpc_peering_counters.insert(c.name.clone(), c);
         }
 
+        let nvc = d.gen_usize(Bound::Included(&0), Bound::Included(&4))?;
+        let mut vpc_counters = std::collections::HashMap::new();
+        for _ in 0..nvc {
+            let c = d.produce::<VpcCounters>()?;
+            vpc_counters.insert(c.name.clone(), c);
+        }
+
         Some(GetDataplaneStatusResponse {
             interface_statuses,
             frr_status,
@@ -417,6 +441,7 @@ impl TypeGenerator for GetDataplaneStatusResponse {
             bgp,
             vpcs,
             vpc_peering_counters,
+            vpc_counters,
         })
     }
 }
@@ -519,6 +544,7 @@ mod test {
     }
 
     #[test]
+    #[allow(clippy::too_many_lines)]
     fn test_get_dataplane_status_response() {
         let mut some_interfaces = false;
         let mut some_frr_status = false;
@@ -629,6 +655,15 @@ mod test {
                     assert!(!c.dst_vpc.is_empty());
                     assert!(c.packets >= c.drops);
                     assert!(c.pps >= 0.0);
+                }
+
+                for (name, c) in &resp.vpc_counters {
+                    assert_eq!(name, &c.name);
+                    assert!(!c.name.is_empty());
+
+                    let pk: u128 = c.total_packets.parse().expect("total_packets not numeric");
+                    let dr: u128 = c.total_drops.parse().expect("total_drops not numeric");
+                    assert!(pk >= dr, "drops cannot exceed packets");
                 }
             });
 

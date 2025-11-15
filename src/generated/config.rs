@@ -249,6 +249,16 @@ pub struct VpcPeeringCounters {
     pub pps: f64,
 }
 #[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct VpcCounters {
+    #[prost(string, tag = "1")]
+    pub name: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub total_packets: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub total_drops: ::prost::alloc::string::String,
+}
+#[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetDataplaneStatusResponse {
     #[prost(message, repeated, tag = "1")]
@@ -273,6 +283,12 @@ pub struct GetDataplaneStatusResponse {
     pub vpc_peering_counters: ::std::collections::HashMap<
         ::prost::alloc::string::String,
         VpcPeeringCounters,
+    >,
+    /// key: VPC name
+    #[prost(map = "string, message", tag = "8")]
+    pub vpc_counters: ::std::collections::HashMap<
+        ::prost::alloc::string::String,
+        VpcCounters,
     >,
 }
 /// Defines a logical interface. May correlate with physical representation
