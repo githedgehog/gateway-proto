@@ -235,6 +235,12 @@ message VpcPeeringCounters {
   double pps = 7;
 }
 
+message VpcCounters {
+  string name = 1;
+  string total_packets = 2;
+  string total_drops = 3;
+}
+
 message GetDataplaneStatusResponse {
   repeated InterfaceStatus interface_statuses = 1;
   FrrStatus frr_status = 2;
@@ -246,6 +252,8 @@ message GetDataplaneStatusResponse {
   map<string, VpcStatus> vpcs = 6;
   // key: peering name
   map<string, VpcPeeringCounters> vpc_peering_counters = 7;
+  // key: VPC name
+  map<string, VpcCounters> vpc_counters = 8;
 }
 
 /* ================================================ */
