@@ -83,12 +83,13 @@ pub use config::{
     UpdateConfigRequest,
     UpdateConfigResponse,
     Vpc,
+    VpcCounters,
+
     // VPC runtime
     VpcInterfaceStatus,
     VpcPeering,
     // VPC↔VPC counters
     VpcPeeringCounters,
-
     VpcStatus,
 
     Vrf,
