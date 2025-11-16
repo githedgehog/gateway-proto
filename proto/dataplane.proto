@@ -233,6 +233,7 @@ message VpcPeeringCounters {
   uint64 bytes = 5;
   uint64 drops = 6;
   double pps = 7;
+  double bps = 8;
 }
 
 message VpcCounters {

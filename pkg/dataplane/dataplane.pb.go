@@ -1990,6 +1990,7 @@ type VpcPeeringCounters struct {
 	Bytes         uint64                 `protobuf:"varint,5,opt,name=bytes,proto3" json:"bytes,omitempty"`
 	Drops         uint64                 `protobuf:"varint,6,opt,name=drops,proto3" json:"drops,omitempty"`
 	Pps           float64                `protobuf:"fixed64,7,opt,name=pps,proto3" json:"pps,omitempty"`
+	Bps           float64                `protobuf:"fixed64,8,opt,name=bps,proto3" json:"bps,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2069,6 +2070,13 @@ func (x *VpcPeeringCounters) GetDrops() uint64 {
 func (x *VpcPeeringCounters) GetPps() float64 {
 	if x != nil {
 		return x.Pps
+	}
+	return 0
+}
+
+func (x *VpcPeeringCounters) GetBps() float64 {
+	if x != nil {
+		return x.Bps
 	}
 	return 0
 }
@@ -3924,7 +3932,7 @@ const file_proto_dataplane_proto_rawDesc = "" +
 	"interfaces\x1aY\n" +
 	"\x0fInterfacesEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x120\n" +
-	"\x05value\x18\x02 \x01(\v2\x1a.config.VpcInterfaceStatusR\x05value:\x028\x01\"\xb2\x01\n" +
+	"\x05value\x18\x02 \x01(\v2\x1a.config.VpcInterfaceStatusR\x05value:\x028\x01\"\xc4\x01\n" +
 	"\x12VpcPeeringCounters\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x17\n" +
 	"\asrc_vpc\x18\x02 \x01(\tR\x06srcVpc\x12\x17\n" +
@@ -3932,7 +3940,8 @@ const file_proto_dataplane_proto_rawDesc = "" +
 	"\apackets\x18\x04 \x01(\x04R\apackets\x12\x14\n" +
 	"\x05bytes\x18\x05 \x01(\x04R\x05bytes\x12\x14\n" +
 	"\x05drops\x18\x06 \x01(\x04R\x05drops\x12\x10\n" +
-	"\x03pps\x18\a \x01(\x01R\x03pps\"g\n" +
+	"\x03pps\x18\a \x01(\x01R\x03pps\x12\x10\n" +
+	"\x03bps\x18\b \x01(\x01R\x03bps\"g\n" +
 	"\vVpcCounters\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12#\n" +
 	"\rtotal_packets\x18\x02 \x01(\tR\ftotalPackets\x12\x1f\n" +
