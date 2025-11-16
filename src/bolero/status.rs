@@ -336,6 +336,7 @@ impl TypeGenerator for VpcPeeringCounters {
         let bytes = packets.saturating_mul(64);
         let drops = d.gen_u64(Bound::Included(&0), Bound::Included(&packets))?;
         let pps = d.gen_u64(Bound::Included(&0), Bound::Included(&100_000))? as f64;
+        let bps = d.gen_u64(Bound::Included(&0), Bound::Included(&5_000_000))? as f64;
 
         Some(VpcPeeringCounters {
             name: format!("{src_vpc}--{dst_vpc}"),
@@ -345,6 +346,7 @@ impl TypeGenerator for VpcPeeringCounters {
             bytes,
             drops,
             pps,
+            bps,
         })
     }
 }

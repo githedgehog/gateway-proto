@@ -247,6 +247,8 @@ pub struct VpcPeeringCounters {
     pub drops: u64,
     #[prost(double, tag = "7")]
     pub pps: f64,
+    #[prost(double, tag = "8")]
+    pub bps: f64,
 }
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
