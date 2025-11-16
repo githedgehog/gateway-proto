@@ -238,8 +238,9 @@ message VpcPeeringCounters {
 
 message VpcCounters {
   string name = 1;
-  string total_packets = 2;
-  string total_drops = 3;
+  uint64 packets = 2;
+  uint64 drops = 3;
+  uint64 bytes = 4;
 }
 
 message GetDataplaneStatusResponse {
