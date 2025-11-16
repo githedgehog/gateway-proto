@@ -2084,8 +2084,9 @@ func (x *VpcPeeringCounters) GetBps() float64 {
 type VpcCounters struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	TotalPackets  string                 `protobuf:"bytes,2,opt,name=total_packets,json=totalPackets,proto3" json:"total_packets,omitempty"`
-	TotalDrops    string                 `protobuf:"bytes,3,opt,name=total_drops,json=totalDrops,proto3" json:"total_drops,omitempty"`
+	Packets       uint64                 `protobuf:"varint,2,opt,name=packets,proto3" json:"packets,omitempty"`
+	Drops         uint64                 `protobuf:"varint,3,opt,name=drops,proto3" json:"drops,omitempty"`
+	Bytes         uint64                 `protobuf:"varint,4,opt,name=bytes,proto3" json:"bytes,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2127,18 +2128,25 @@ func (x *VpcCounters) GetName() string {
 	return ""
 }
 
-func (x *VpcCounters) GetTotalPackets() string {
+func (x *VpcCounters) GetPackets() uint64 {
 	if x != nil {
-		return x.TotalPackets
+		return x.Packets
 	}
-	return ""
+	return 0
 }
 
-func (x *VpcCounters) GetTotalDrops() string {
+func (x *VpcCounters) GetDrops() uint64 {
 	if x != nil {
-		return x.TotalDrops
+		return x.Drops
 	}
-	return ""
+	return 0
+}
+
+func (x *VpcCounters) GetBytes() uint64 {
+	if x != nil {
+		return x.Bytes
+	}
+	return 0
 }
 
 type GetDataplaneStatusResponse struct {
@@ -3943,10 +3951,10 @@ const file_proto_dataplane_proto_rawDesc = "" +
 	"\x03pps\x18\a \x01(\x01R\x03pps\x12\x10\n" +
 	"\x03bps\x18\b \x01(\x01R\x03bps\"g\n" +
 	"\vVpcCounters\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\x12#\n" +
-	"\rtotal_packets\x18\x02 \x01(\tR\ftotalPackets\x12\x1f\n" +
-	"\vtotal_drops\x18\x03 \x01(\tR\n" +
-	"totalDrops\"\xdb\a\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12\x18\n" +
+	"\apackets\x18\x02 \x01(\x04R\apackets\x12\x14\n" +
+	"\x05drops\x18\x03 \x01(\x04R\x05drops\x12\x14\n" +
+	"\x05bytes\x18\x04 \x01(\x04R\x05bytes\"\xdb\a\n" +
 	"\x1aGetDataplaneStatusResponse\x12F\n" +
 	"\x12interface_statuses\x18\x01 \x03(\v2\x17.config.InterfaceStatusR\x11interfaceStatuses\x120\n" +
 	"\n" +

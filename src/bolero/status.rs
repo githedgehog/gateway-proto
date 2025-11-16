@@ -357,12 +357,14 @@ impl TypeGenerator for VpcCounters {
             "vpc-{}",
             d.gen_u32(Bound::Included(&1), Bound::Included(&128))?
         );
-        let total_packets = d.gen_u64(Bound::Included(&0), Bound::Included(&100_000_000))?;
-        let total_drops = d.gen_u64(Bound::Included(&0), Bound::Included(&total_packets))?;
+        let packets = d.gen_u64(Bound::Included(&0), Bound::Included(&100_000_000))?;
+        let drops = d.gen_u64(Bound::Included(&0), Bound::Included(&packets))?;
+        let bytes = packets.saturating_mul(64);
         Some(VpcCounters {
             name,
-            total_packets: total_packets.to_string(),
-            total_drops: total_drops.to_string(),
+            packets,
+            drops,
+            bytes,
         })
     }
 }
@@ -657,15 +659,13 @@ mod test {
                     assert!(!c.dst_vpc.is_empty());
                     assert!(c.packets >= c.drops);
                     assert!(c.pps >= 0.0);
+                    assert!(c.bps >= 0.0);
                 }
 
                 for (name, c) in &resp.vpc_counters {
                     assert_eq!(name, &c.name);
                     assert!(!c.name.is_empty());
-
-                    let pk: u128 = c.total_packets.parse().expect("total_packets not numeric");
-                    let dr: u128 = c.total_drops.parse().expect("total_drops not numeric");
-                    assert!(pk >= dr, "drops cannot exceed packets");
+                    assert!(c.packets >= c.drops);
                 }
             });
 

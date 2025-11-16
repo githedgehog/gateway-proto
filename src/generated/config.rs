@@ -255,10 +255,12 @@ pub struct VpcPeeringCounters {
 pub struct VpcCounters {
     #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub total_packets: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub total_drops: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "2")]
+    pub packets: u64,
+    #[prost(uint64, tag = "3")]
+    pub drops: u64,
+    #[prost(uint64, tag = "4")]
+    pub bytes: u64,
 }
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, PartialEq, ::prost::Message)]
