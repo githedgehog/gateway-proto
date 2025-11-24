@@ -45,7 +45,7 @@ jobs:
         run: |
           cargo binstall -y cargo-edit # required to make `cargo upgrade` edit the Cargo.toml file
       - name: "Checkout"
-        uses: "actions/checkout@v5"
+        uses: "actions/checkout@v6"
       - name: "cargo upgrade"
         id: upgrade
         run: |
