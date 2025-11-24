@@ -34,7 +34,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Setup Just
         uses: extractions/setup-just@v3
@@ -95,7 +95,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -135,7 +135,7 @@ jobs:
       # Bump gateway-proto in the gateway repository
 
       - name: Checkout gateway repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: githedgehog/gateway
           path: gateway-repo
