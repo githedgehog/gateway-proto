@@ -326,6 +326,27 @@ pub struct Interface {
     #[prost(string, optional, tag = "10")]
     pub pci: ::core::option::Option<::prost::alloc::string::String>,
 }
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GatewayGroupMember {
+    #[prost(string, tag = "1")]
+    pub name: ::prost::alloc::string::String,
+    #[prost(uint32, tag = "2")]
+    pub priority: u32,
+    #[prost(string, tag = "3")]
+    pub ipaddress: ::prost::alloc::string::String,
+}
+/// Defines a redundancy group
+#[derive(::serde::Deserialize, ::serde::Serialize)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GatewayGroup {
+    /// name of group
+    #[prost(string, tag = "1")]
+    pub name: ::prost::alloc::string::String,
+    /// gateway names with priorities
+    #[prost(message, repeated, tag = "2")]
+    pub members: ::prost::alloc::vec::Vec<GatewayGroupMember>,
+}
 /// Defines the list of prefixes that VPCs can expose
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
@@ -412,6 +433,9 @@ pub struct VpcPeering {
     /// it's guaranteed that only two entries are present
     #[prost(message, repeated, tag = "2")]
     pub r#for: ::prost::alloc::vec::Vec<PeeringEntryFor>,
+    /// name of gateway group
+    #[prost(string, tag = "3")]
+    pub gateway_group: ::prost::alloc::string::String,
 }
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -605,6 +629,13 @@ pub struct GatewayConfig {
     pub underlay: ::core::option::Option<Underlay>,
     #[prost(message, optional, tag = "4")]
     pub overlay: ::core::option::Option<Overlay>,
+    #[prost(string, tag = "5")]
+    pub gw_name: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "6")]
+    pub gw_groups: ::prost::alloc::vec::Vec<GatewayGroup>,
+    /// priority to community map
+    #[prost(map = "uint32, string", tag = "7")]
+    pub communities: ::std::collections::HashMap<u32, ::prost::alloc::string::String>,
 }
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
