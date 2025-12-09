@@ -45,6 +45,8 @@ pub use config::{
     FrrStatus,
     // ---------- Top-level config ----------
     GatewayConfig,
+    GatewayGroup,
+    GatewayGroupMember,
     GetConfigGenerationRequest,
     GetConfigGenerationResponse,
     // ---------- Requests / Responses ----------

@@ -294,6 +294,18 @@ enum IfRole {
 /* ==== Overlay ==== */
 /* ================= */
 
+message GatewayGroupMember {
+   string name = 1;
+   uint32 priority = 2;
+   string ipaddress = 3;
+}
+
+/* Defines a redundancy group */
+message GatewayGroup {
+  string name = 1; /* name of group */
+  repeated GatewayGroupMember members = 2; /* gateway names with priorities */
+}
+
 /* Defines the list of prefixes that VPCs can expose */
 message PeeringIPs {
   oneof rule {
@@ -336,6 +348,7 @@ message PeeringEntryFor {
 message VpcPeering {
   string name = 1; /* unique: e.g. VPC-1--VPC-2 */
   repeated PeeringEntryFor for = 2; /* it's guaranteed that only two entries are present */
+  string gateway_group = 3; /* name of gateway group */
 }
 
 message VPC {
@@ -487,4 +500,7 @@ message GatewayConfig {
   Device device = 2;
   Underlay underlay = 3;
   Overlay overlay = 4;
+  string gw_name = 5;
+  repeated GatewayGroup gw_groups = 6;
+  map<uint32, string> communities = 7; // priority to community map
 }

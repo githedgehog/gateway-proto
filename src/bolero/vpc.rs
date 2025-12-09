@@ -21,6 +21,7 @@ impl TypeGenerator for VpcPeering {
             r#for: (0..2)
                 .map(|_| d.produce::<PeeringEntryFor>())
                 .collect::<Option<Vec<_>>>()?,
+            gateway_group: "gw-group".to_string(),
         })
     }
 }

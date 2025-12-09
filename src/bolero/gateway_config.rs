@@ -3,6 +3,7 @@
 
 use crate::config::{Device, GatewayConfig, Overlay, Underlay, Vpc, VpcPeering, Vrf};
 use bolero::{Driver, TypeGenerator};
+use std::collections::HashMap;
 use std::ops::Bound;
 
 // FIXME: Only generate peerings between vpcs named in vpc list
@@ -55,9 +56,13 @@ impl TypeGenerator for GatewayConfig {
             device: Some(d.produce::<Device>()?),
             overlay: Some(d.produce::<Overlay>()?),
             underlay: Some(d.produce::<Underlay>()?),
+            gw_name: "gw-name".to_string(),
+            gw_groups: vec![],
+            communities: HashMap::new(),
         })
     }
 }
+
 #[cfg(test)]
 mod test {
     use crate::config::{Overlay, Underlay};
