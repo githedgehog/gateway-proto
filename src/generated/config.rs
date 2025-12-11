@@ -629,8 +629,6 @@ pub struct GatewayConfig {
     pub underlay: ::core::option::Option<Underlay>,
     #[prost(message, optional, tag = "4")]
     pub overlay: ::core::option::Option<Overlay>,
-    #[prost(string, tag = "5")]
-    pub gw_name: ::prost::alloc::string::String,
     #[prost(message, repeated, tag = "6")]
     pub gw_groups: ::prost::alloc::vec::Vec<GatewayGroup>,
     /// priority to community map

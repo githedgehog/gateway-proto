@@ -500,7 +500,6 @@ message GatewayConfig {
   Device device = 2;
   Underlay underlay = 3;
   Overlay overlay = 4;
-  string gw_name = 5;
   repeated GatewayGroup gw_groups = 6;
   map<uint32, string> communities = 7; // priority to community map
 }
