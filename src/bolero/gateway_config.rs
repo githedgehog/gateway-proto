@@ -56,7 +56,6 @@ impl TypeGenerator for GatewayConfig {
             device: Some(d.produce::<Device>()?),
             overlay: Some(d.produce::<Overlay>()?),
             underlay: Some(d.produce::<Underlay>()?),
-            gw_name: "gw-name".to_string(),
             gw_groups: vec![],
             communities: HashMap::new(),
         })
