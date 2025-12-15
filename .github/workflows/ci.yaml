@@ -157,7 +157,7 @@ jobs:
             gateway
 
       - name: Create Pull Request for gateway
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         id: gateway-pr
         with:
           token: ${{ steps.gateway-app-token.outputs.token }}
