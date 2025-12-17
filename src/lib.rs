@@ -36,7 +36,6 @@ pub use config::{
 
     // ---------- Device-related ----------
     Device,
-    Eal,
     // ---------- Common / errors ----------
     Error,
 
@@ -74,12 +73,9 @@ pub use config::{
     OspfNetworkType,
     Overlay,
 
-    PacketDriver,
-
     PeeringAs,
     PeeringEntryFor,
     PeeringIPs,
-    Ports,
     RouterConfig,
     Underlay,
     UpdateConfigRequest,

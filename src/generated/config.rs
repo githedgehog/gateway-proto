@@ -575,25 +575,6 @@ pub struct Underlay {
     #[prost(message, repeated, tag = "1")]
     pub vrfs: ::prost::alloc::vec::Vec<Vrf>,
 }
-/// Defines physical or system-level device
-#[derive(::serde::Deserialize, ::serde::Serialize)]
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct Ports {
-    #[prost(string, tag = "1")]
-    pub name: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub system_name: ::prost::alloc::string::String,
-}
-/// RTE EAL config options for DPDK
-///
-/// TODO:
-/// rte_eal params
-/// cpu list
-/// cpu affinities ...
-/// huge-pages
-#[derive(::serde::Deserialize, ::serde::Serialize)]
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct Eal {}
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TracingConfig {
@@ -606,14 +587,6 @@ pub struct TracingConfig {
 #[derive(::serde::Deserialize, ::serde::Serialize)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Device {
-    #[prost(enumeration = "PacketDriver", tag = "1")]
-    pub driver: i32,
-    #[prost(message, optional, tag = "2")]
-    pub eal: ::core::option::Option<Eal>,
-    #[prost(message, repeated, tag = "3")]
-    pub ports: ::prost::alloc::vec::Vec<Ports>,
-    #[prost(string, tag = "4")]
-    pub hostname: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "5")]
     pub tracing: ::core::option::Option<TracingConfig>,
 }
@@ -1027,35 +1000,6 @@ impl LogLevel {
             "INFO" => Some(Self::Info),
             "DEBUG" => Some(Self::Debug),
             "TRACE" => Some(Self::Trace),
-            _ => None,
-        }
-    }
-}
-/// Backend driver for packet processing
-#[cfg_attr(any(feature = "bolero", test), derive(::bolero::TypeGenerator))]
-#[derive(::serde::Deserialize, ::serde::Serialize)]
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-pub enum PacketDriver {
-    Kernel = 0,
-    Dpdk = 1,
-}
-impl PacketDriver {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            Self::Kernel => "KERNEL",
-            Self::Dpdk => "DPDK",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
-        match value {
-            "KERNEL" => Some(Self::Kernel),
-            "DPDK" => Some(Self::Dpdk),
             _ => None,
         }
     }

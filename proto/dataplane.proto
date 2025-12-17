@@ -445,21 +445,6 @@ message Underlay {
 /* ==== Device ==== */
 /* ================ */
 
-/* Defines physical or system-level device */
-message Ports {
-  string name = 1;
-  string system_name = 2;
-}
-
-/* RTE EAL config options for DPDK */
-message Eal {
-  // TODO:
-  // rte_eal params
-  // cpu list
-  // cpu affinities ...
-  // huge-pages
-}
-
 /* Log-level for dataplane and DPDK */
 enum LogLevel {
   OFF = 0;
@@ -475,18 +460,8 @@ message TracingConfig {
   map<string, LogLevel> taglevel = 2;
 }
 
-/* Backend driver for packet processing */
-enum PacketDriver {
-  KERNEL = 0;
-  DPDK = 1;
-}
-
 /* System level config options */
 message Device {
-  PacketDriver driver = 1;
-  Eal eal = 2;
-  repeated Ports ports = 3;
-  string hostname = 4;
   TracingConfig tracing = 5;
 }
 
